@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="MECH 501/600 — Computational Turbulence">
+<meta name="dcterms.date" content="2026-09-02">
+
+<title>Tutorial 0: Prerequisites – MECH 501/600 — Computational Turbulence</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/logo.svg" rel="icon" type="image/svg+xml">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8cc2397b8f3606e7f1b04d7b5ae2ec44.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-40556ca05466d86c2e3ff79da26d7f55.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8cc2397b8f3606e7f1b04d7b5ae2ec44.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-31ed4a8310bc9f9df482963c8b6aedc8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-7cda5ed498ecfdb3b7381a7951f07614.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-31ed4a8310bc9f9df482963c8b6aedc8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../assets/logo.svg" alt="MECH 501/600 vortex logo" class="navbar-logo light-content">
+    <img src="../assets/logo.svg" alt="MECH 501/600 vortex logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">MECH 501/600 — Computational Turbulence</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../tutorials/tutorial-00.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/YOUR_USERNAME/MECH501_Tutorial"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../tutorials/tutorial-00.html">Tutorials</a></li><li class="breadcrumb-item"><a href="../tutorials/tutorial-00.html">Tutorial 0: Prerequisites</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../assets/logo-full.svg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../assets/logo-full.svg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">MECH 501/600 — Computational Turbulence</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Tutorials</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/tutorial-00.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Tutorial 0: Prerequisites</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#sec-tensors" id="toc-sec-tensors" class="nav-link active" data-scroll-target="#sec-tensors"><span class="header-section-number">1</span> Basic tensor algebra</a>
+  <ul class="collapse">
+  <li><a href="#what-is-a-tensor" id="toc-what-is-a-tensor" class="nav-link" data-scroll-target="#what-is-a-tensor"><span class="header-section-number">1.1</span> What is a tensor?</a></li>
+  <li><a href="#elementary-operations" id="toc-elementary-operations" class="nav-link" data-scroll-target="#elementary-operations"><span class="header-section-number">1.2</span> Elementary operations</a></li>
+  <li><a href="#two-special-tensors-delta_ij-and-varepsilon_ijk" id="toc-two-special-tensors-delta_ij-and-varepsilon_ijk" class="nav-link" data-scroll-target="#two-special-tensors-delta_ij-and-varepsilon_ijk"><span class="header-section-number">1.3</span> Two special tensors: <span class="math inline">\(\delta_{ij}\)</span> and <span class="math inline">\(\varepsilon_{ijk}\)</span></a></li>
+  <li><a href="#symmetric-antisymmetric-decomposition" id="toc-symmetric-antisymmetric-decomposition" class="nav-link" data-scroll-target="#symmetric-antisymmetric-decomposition"><span class="header-section-number">1.4</span> Symmetric / antisymmetric decomposition</a></li>
+  </ul></li>
+  <li><a href="#sec-ns" id="toc-sec-ns" class="nav-link" data-scroll-target="#sec-ns"><span class="header-section-number">2</span> Continuity and Navier–Stokes</a></li>
+  <li><a href="#sec-index" id="toc-sec-index" class="nav-link" data-scroll-target="#sec-index"><span class="header-section-number">3</span> Index notation</a>
+  <ul class="collapse">
+  <li><a href="#worked-example-1-divergence-of-a-vector" id="toc-worked-example-1-divergence-of-a-vector" class="nav-link" data-scroll-target="#worked-example-1-divergence-of-a-vector"><span class="header-section-number">3.1</span> Worked example 1: divergence of a vector</a></li>
+  <li><a href="#worked-example-2-tensorvector-product" id="toc-worked-example-2-tensorvector-product" class="nav-link" data-scroll-target="#worked-example-2-tensorvector-product"><span class="header-section-number">3.2</span> Worked example 2: tensor–vector product</a></li>
+  <li><a href="#navierstokes-in-index-notation" id="toc-navierstokes-in-index-notation" class="nav-link" data-scroll-target="#navierstokes-in-index-notation"><span class="header-section-number">3.3</span> Navier–Stokes in index notation</a></li>
+  </ul></li>
+  <li><a href="#sec-dim" id="toc-sec-dim" class="nav-link" data-scroll-target="#sec-dim"><span class="header-section-number">4</span> Dimensional analysis: the Reynolds number</a></li>
+  <li><a href="#where-to-review" id="toc-where-to-review" class="nav-link" data-scroll-target="#where-to-review"><span class="header-section-number">5</span> Where to review</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">6</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../tutorials/tutorial-00.html">Tutorials</a></li><li class="breadcrumb-item"><a href="../tutorials/tutorial-00.html">Tutorial 0: Prerequisites</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Tutorial 0: Prerequisites</h1>
+<p class="subtitle lead">What you should already know</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>MECH 501/600 — Computational Turbulence </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 2, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>About this page
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This tutorial is a <strong>checklist, not a lecture</strong>. Everything here should be familiar from your fluid mechanics and math courses — we will briefly repeat some of it inside later exercises, but not re-teach it. Work through the <em>self-checks</em> at the end of each section; if one feels hard, review that topic before Tutorial 1 (references at the bottom).</p>
+</div>
+</div>
+<section id="sec-tensors" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="sec-tensors"><span class="header-section-number">1</span> Basic tensor algebra</h2>
+<section id="what-is-a-tensor" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="what-is-a-tensor"><span class="header-section-number">1.1</span> What is a tensor?</h3>
+<p>A <strong>tensor</strong> is a physical quantity that exists independently of the coordinate system used to describe it — only its <em>components</em> change when the coordinate axes are rotated, and they do so in a well-defined way. Tensors are classified by their <strong>order</strong> (or rank), which is simply the number of indices needed to identify one component:</p>
+<ul>
+<li><strong>Order 0 — scalar</strong> (1 component): temperature <span class="math inline">\(T\)</span>, pressure <span class="math inline">\(p\)</span>, density <span class="math inline">\(\rho\)</span>.</li>
+<li><strong>Order 1 — vector</strong> (3 components): velocity <span class="math inline">\(u_i\)</span>, i.e.&nbsp;<span class="math inline">\((u_1, u_2, u_3)\)</span>.</li>
+<li><strong>Order 2</strong> (9 components): stress <span class="math inline">\(\sigma_{ij}\)</span>, velocity gradient <span class="math inline">\(\partial u_i / \partial x_j\)</span>.</li>
+</ul>
+<p>A second-order tensor is more than a matrix of numbers: it is a <em>linear map between vectors</em>. The classic example is the Cauchy stress tensor, which maps the unit normal <span class="math inline">\(n_j\)</span> of a surface to the traction (force per area) <span class="math inline">\(t_i\)</span> acting on it:</p>
+<p><span id="eq-cauchy"><span class="math display">\[
+t_i = \sigma_{ij}\, n_j
+\tag{1}\]</span></span></p>
+<p>We write tensors either in <strong>symbolic (bold) notation</strong> (<span class="math inline">\(\mathbf{u}\)</span>, <span class="math inline">\(\boldsymbol{\sigma}\)</span>) or in <strong>index notation</strong> (<span class="math inline">\(u_i\)</span>, <span class="math inline">\(\sigma_{ij}\)</span>); <a href="#sec-index" class="quarto-xref">Section&nbsp;3</a> explains the index rules in detail.</p>
+</section>
+<section id="elementary-operations" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="elementary-operations"><span class="header-section-number">1.2</span> Elementary operations</h3>
+<p>The operations you should recognize (in both notations):</p>
+<p><span id="eq-ops"><span class="math display">\[
+\mathbf{a} \cdot \mathbf{b} = a_i b_i, \qquad
+(\mathbf{A}\mathbf{b})_i = A_{ij} b_j, \qquad
+\mathbf{A} : \mathbf{B} = A_{ij} B_{ij}
+\tag{2}\]</span></span></p>
+<p>i.e.&nbsp;the dot product (two vectors → scalar), the tensor–vector product (→ vector, as in <a href="#eq-cauchy" class="quarto-xref">Eq.&nbsp;1</a>), and the double contraction (two tensors → scalar, used later for the dissipation rate).</p>
+</section>
+<section id="two-special-tensors-delta_ij-and-varepsilon_ijk" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="two-special-tensors-delta_ij-and-varepsilon_ijk"><span class="header-section-number">1.3</span> Two special tensors: <span class="math inline">\(\delta_{ij}\)</span> and <span class="math inline">\(\varepsilon_{ijk}\)</span></h3>
+<p>The <strong>Kronecker delta</strong> is the index form of the identity:</p>
+<p><span id="eq-kron"><span class="math display">\[
+\delta_{ij} =
+\begin{cases}
+1 &amp; i = j \\
+0 &amp; i \neq j
+\end{cases}
+\tag{3}\]</span></span></p>
+<p>Its key use is <em>index substitution</em>: multiplying by <span class="math inline">\(\delta_{ij}\)</span> and summing renames an index, <span class="math inline">\(\delta_{ij}\, a_j = a_i\)</span>.</p>
+<p>The <strong>Levi-Civita (permutation) symbol</strong> <span class="math inline">\(\varepsilon_{ijk}\)</span> is the third-order companion of <a href="#eq-kron" class="quarto-xref">Eq.&nbsp;3</a>:</p>
+<p><span id="eq-levi"><span class="math display">\[
+\varepsilon_{ijk} =
+\begin{cases}
++1 &amp; (i,j,k) \text{ an even permutation of } (1,2,3)\text{: } 123,\, 231,\, 312 \\
+-1 &amp; (i,j,k) \text{ an odd permutation: } 132,\, 213,\, 321 \\
+0 &amp; \text{any index repeated}
+\end{cases}
+\tag{4}\]</span></span></p>
+<p>It encodes cross products and hence rotation. The two expressions you will meet in this course are the cross product and the <strong>vorticity</strong>:</p>
+<p><span id="eq-cross"><span class="math display">\[
+(\mathbf{a} \times \mathbf{b})_i = \varepsilon_{ijk}\, a_j b_k,
+\qquad
+\omega_i = \varepsilon_{ijk} \frac{\partial u_k}{\partial x_j}
+\tag{5}\]</span></span></p>
+<p>Finally, the <span class="math inline">\(\varepsilon\)</span>–<span class="math inline">\(\delta\)</span> identity connects the two symbols and is the workhorse for simplifying double cross products:</p>
+<p><span id="eq-epsdelta"><span class="math display">\[
+\varepsilon_{ijk}\, \varepsilon_{ilm} = \delta_{jl}\, \delta_{km} - \delta_{jm}\, \delta_{kl}
+\tag{6}\]</span></span></p>
+</section>
+<section id="symmetric-antisymmetric-decomposition" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="symmetric-antisymmetric-decomposition"><span class="header-section-number">1.4</span> Symmetric / antisymmetric decomposition</h3>
+<p>Any second-order tensor splits uniquely into a symmetric and an antisymmetric part:</p>
+<p><span id="eq-decomp"><span class="math display">\[
+A_{ij} = \underbrace{\tfrac{1}{2}(A_{ij} + A_{ji})}_{\text{symmetric}}
+       + \underbrace{\tfrac{1}{2}(A_{ij} - A_{ji})}_{\text{antisymmetric}}
+\tag{7}\]</span></span></p>
+<p>Applied to the velocity gradient this defines the <strong>strain-rate tensor</strong> <span class="math inline">\(S_{ij}\)</span> (deformation) and the <strong>rotation-rate tensor</strong> <span class="math inline">\(\Omega_{ij}\)</span> (rigid-body rotation, related to <span class="math inline">\(\omega_i\)</span> from <a href="#eq-cross" class="quarto-xref">Eq.&nbsp;5</a>):</p>
+<p><span id="eq-sij"><span class="math display">\[
+\frac{\partial u_i}{\partial x_j} = S_{ij} + \Omega_{ij}, \qquad
+S_{ij} = \frac{1}{2}\!\left(\frac{\partial u_i}{\partial x_j} + \frac{\partial u_j}{\partial x_i}\right), \qquad
+\Omega_{ij} = \frac{1}{2}\!\left(\frac{\partial u_i}{\partial x_j} - \frac{\partial u_j}{\partial x_i}\right)
+\tag{8}\]</span></span></p>
+<p>This decomposition appears in essentially every turbulence model.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Self-check — tensor algebra
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>What is <span class="math inline">\(\delta_{ii}\)</span>? <em>(Careful: repeated index!)</em></li>
+<li>What are <span class="math inline">\(\varepsilon_{123}\)</span>, <span class="math inline">\(\varepsilon_{321}\)</span>, and <span class="math inline">\(\varepsilon_{112}\)</span>?</li>
+<li>Use <a href="#eq-cross" class="quarto-xref">Eq.&nbsp;5</a> to show <span class="math inline">\(\mathbf{a} \times \mathbf{a} = \mathbf{0}\)</span>.</li>
+</ol>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><span class="math inline">\(\delta_{ii} = \delta_{11}+\delta_{22}+\delta_{33} = 3\)</span>.</li>
+<li><span class="math inline">\(\varepsilon_{123} = +1\)</span>, <span class="math inline">\(\varepsilon_{321} = -1\)</span>, <span class="math inline">\(\varepsilon_{112} = 0\)</span>.</li>
+<li><span class="math inline">\(\varepsilon_{ijk} a_j a_k = 0\)</span> because <span class="math inline">\(a_j a_k\)</span> is symmetric in <span class="math inline">\((j,k)\)</span> while <span class="math inline">\(\varepsilon_{ijk}\)</span> is antisymmetric — swapping <span class="math inline">\(j \leftrightarrow k\)</span> flips the sign of the sum, so it must vanish.</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-ns" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="sec-ns"><span class="header-section-number">2</span> Continuity and Navier–Stokes</h2>
+<p>For an incompressible, Newtonian fluid with constant properties, the governing variables and their SI units are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 35%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Quantity</th>
+<th>SI units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(u_i\)</span></td>
+<td>velocity</td>
+<td><span class="math inline">\(\mathrm{m\,s^{-1}}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(p\)</span></td>
+<td>pressure</td>
+<td><span class="math inline">\(\mathrm{Pa} = \mathrm{kg\,m^{-1}\,s^{-2}}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\rho\)</span></td>
+<td>density</td>
+<td><span class="math inline">\(\mathrm{kg\,m^{-3}}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mu\)</span></td>
+<td>dynamic viscosity</td>
+<td><span class="math inline">\(\mathrm{Pa\,s} = \mathrm{kg\,m^{-1}\,s^{-1}}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\nu = \mu/\rho\)</span></td>
+<td>kinematic viscosity</td>
+<td><span class="math inline">\(\mathrm{m^2\,s^{-1}}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Continuity</strong> (conservation of mass) states that the velocity field is divergence-free; every term has units <span class="math inline">\(\mathrm{s^{-1}}\)</span>:</p>
+<p><span id="eq-cont-vec"><span class="math display">\[
+\nabla \cdot \mathbf{u} = 0
+\qquad \left[\mathrm{s^{-1}}\right]
+\tag{9}\]</span></span></p>
+<p><strong>Momentum</strong> (Navier–Stokes) is Newton’s second law per unit mass; every term has units of acceleration, <span class="math inline">\(\mathrm{m\,s^{-2}}\)</span>:</p>
+<p><span id="eq-ns-vec"><span class="math display">\[
+\underbrace{\frac{\partial \mathbf{u}}{\partial t}}_{\text{unsteady}}
++ \underbrace{(\mathbf{u} \cdot \nabla)\,\mathbf{u}}_{\text{convection}}
+= \underbrace{-\frac{1}{\rho} \nabla p}_{\text{pressure gradient}}
++ \underbrace{\nu \nabla^2 \mathbf{u}}_{\text{viscous diffusion}}
+\qquad \left[\mathrm{m\,s^{-2}}\right]
+\tag{10}\]</span></span></p>
+<p>Check the units term by term: <span class="math inline">\(\partial \mathbf{u}/\partial t \sim
+\mathrm{(m/s)/s}\)</span>; convection <span class="math inline">\(\sim \mathrm{(m/s) \cdot (m/s)/m}\)</span>; pressure gradient <span class="math inline">\(\sim \mathrm{(Pa/m)/(kg/m^3)} =
+\mathrm{kg\,m^{-2}\,s^{-2} \cdot m^3\,kg^{-1}}\)</span>; viscous term <span class="math inline">\(\sim
+\mathrm{(m^2/s) \cdot (m/s)/m^2}\)</span> — all <span class="math inline">\(\mathrm{m\,s^{-2}}\)</span>. ✓</p>
+<p>Two things to remember: the <strong>convective term is the only nonlinear term</strong> — it is the reason turbulence exists and the reason the averaged equations don’t close — and pressure in incompressible flow is not a thermodynamic variable but a Lagrange multiplier that enforces <a href="#eq-cont-vec" class="quarto-xref">Eq.&nbsp;9</a>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Self-check — governing equations
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(The index-notation tools for 1 and 2 are introduced in <a href="#sec-index" class="quarto-xref">Section&nbsp;3</a> — come back here if needed.)</em></p>
+<ol type="1">
+<li>Using continuity (<a href="#eq-cont-vec" class="quarto-xref">Eq.&nbsp;9</a>), show that the convective term can be written in <strong>conservative form</strong>: <span class="math inline">\(u_j\, \partial u_i / \partial x_j = \partial (u_i u_j) / \partial x_j\)</span>.</li>
+<li>Take the divergence of <a href="#eq-ns-vec" class="quarto-xref">Eq.&nbsp;10</a> and use continuity to show that pressure satisfies a <strong>Poisson equation</strong>, <span class="math inline">\(\frac{1}{\rho} \frac{\partial^2 p}{\partial x_i \partial x_i}
+= -\frac{\partial u_j}{\partial x_i} \frac{\partial u_i}{\partial x_j}\)</span>. What does this tell you about the role of pressure in incompressible flow?</li>
+<li>The viscous dissipation rate per unit mass is <span class="math inline">\(\varepsilon = 2 \nu S_{ij} S_{ij}\)</span> (with <span class="math inline">\(S_{ij}\)</span> from <a href="#eq-sij" class="quarto-xref">Eq.&nbsp;8</a>). Show that its units are <span class="math inline">\(\mathrm{m^2\,s^{-3}} = \mathrm{W\,kg^{-1}}\)</span>.</li>
+</ol>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Product rule: <span class="math inline">\(\partial (u_i u_j)/\partial x_j
+= u_j\, \partial u_i/\partial x_j + u_i\, \underbrace{\partial u_j / \partial x_j}_{=\,0}\)</span> — the last term vanishes by continuity. The conservative form is what finite-volume codes like OpenFOAM actually discretize.</li>
+<li>Applying <span class="math inline">\(\partial/\partial x_i\)</span> to each term: the unsteady term gives <span class="math inline">\(\partial(\partial u_i/\partial x_i)/\partial t = 0\)</span> and the viscous term gives <span class="math inline">\(\nu\, \partial^2 (\partial u_i / \partial x_i)/\partial x_j \partial x_j = 0\)</span> (both by continuity); the convective term leaves <span class="math inline">\(\partial u_j/\partial x_i\; \partial u_i/\partial x_j\)</span>. Hence the Poisson equation. Pressure has <strong>no evolution equation of its own</strong>: it is determined instantaneously by the velocity field (elliptic problem) and acts as a Lagrange multiplier that enforces <a href="#eq-cont-vec" class="quarto-xref">Eq.&nbsp;9</a> — this is why incompressible solvers need a pressure-correction step (e.g.&nbsp;PISO/SIMPLE in OpenFOAM).</li>
+<li><span class="math inline">\([\nu] = \mathrm{m^2\,s^{-1}}\)</span> and <span class="math inline">\([S_{ij}] = \mathrm{s^{-1}}\)</span>, so <span class="math inline">\([\varepsilon] = \mathrm{m^2\,s^{-1}} \cdot \mathrm{s^{-2}}
+= \mathrm{m^2\,s^{-3}}\)</span>. Since <span class="math inline">\(\mathrm{W\,kg^{-1}} = \mathrm{J\,s^{-1}\,kg^{-1}}
+= \mathrm{kg\,m^2\,s^{-2}} \cdot \mathrm{s^{-1}\,kg^{-1}}
+= \mathrm{m^2\,s^{-3}}\)</span>, dissipation is a power per unit mass — kinetic energy converted to heat.</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-index" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="sec-index"><span class="header-section-number">3</span> Index notation</h2>
+<p>We will write most turbulence equations in <strong>Cartesian index (Einstein) notation</strong>. The rules:</p>
+<ol type="1">
+<li>A <strong>repeated (dummy) index</strong> in a term implies summation over 1–3: <span class="math inline">\(a_i b_i = a_1 b_1 + a_2 b_2 + a_3 b_3\)</span>.</li>
+<li>A <strong>free index</strong> (appearing once) must match in every term of an equation and denotes three equations at once.</li>
+<li>No index may appear <strong>more than twice</strong> in a single term.</li>
+</ol>
+<section id="worked-example-1-divergence-of-a-vector" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="worked-example-1-divergence-of-a-vector"><span class="header-section-number">3.1</span> Worked example 1: divergence of a vector</h3>
+<p>With the shorthand <span class="math inline">\(\partial/\partial x_j\)</span>, the divergence <span class="math inline">\(\nabla \cdot \mathbf{u}\)</span> has one repeated index <span class="math inline">\(j\)</span> — so it is a scalar, written out as:</p>
+<p><span id="eq-ex-div"><span class="math display">\[
+\frac{\partial u_j}{\partial x_j}
+= \frac{\partial u_1}{\partial x_1}
++ \frac{\partial u_2}{\partial x_2}
++ \frac{\partial u_3}{\partial x_3}
+\tag{11}\]</span></span></p>
+</section>
+<section id="worked-example-2-tensorvector-product" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="worked-example-2-tensorvector-product"><span class="header-section-number">3.2</span> Worked example 2: tensor–vector product</h3>
+<p><span class="math inline">\(b_i = A_{ij}\, x_j\)</span> has free index <span class="math inline">\(i\)</span> and dummy index <span class="math inline">\(j\)</span>: it is three equations, each a sum of three terms. The first one (<span class="math inline">\(i = 1\)</span>) reads</p>
+<p><span id="eq-ex-matvec"><span class="math display">\[
+b_1 = A_{11} x_1 + A_{12} x_2 + A_{13} x_3,
+\tag{12}\]</span></span></p>
+<p>and analogously for <span class="math inline">\(b_2\)</span>, <span class="math inline">\(b_3\)</span> — exactly a matrix–vector product.</p>
+</section>
+<section id="navierstokes-in-index-notation" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="navierstokes-in-index-notation"><span class="header-section-number">3.3</span> Navier–Stokes in index notation</h3>
+<p>Applying the same rules to <a href="#eq-cont-vec" class="quarto-xref">Eq.&nbsp;9</a> and <a href="#eq-ns-vec" class="quarto-xref">Eq.&nbsp;10</a>:</p>
+<p><span id="eq-cont-idx"><span class="math display">\[
+\frac{\partial u_j}{\partial x_j} = 0
+\tag{13}\]</span></span></p>
+<p><span id="eq-ns-idx"><span class="math display">\[
+\frac{\partial u_i}{\partial t}
++ u_j \frac{\partial u_i}{\partial x_j}
+= -\frac{1}{\rho} \frac{\partial p}{\partial x_i}
++ \nu \frac{\partial^2 u_i}{\partial x_j \partial x_j}
+\tag{14}\]</span></span></p>
+<p>Compare with <a href="#eq-ex-div" class="quarto-xref">Eq.&nbsp;11</a> and <a href="#eq-ex-matvec" class="quarto-xref">Eq.&nbsp;12</a>: continuity is a divergence (one dummy index, scalar equation), while in <a href="#eq-ns-idx" class="quarto-xref">Eq.&nbsp;14</a> the free index <span class="math inline">\(i\)</span> says “one equation per velocity component” and the dummy index <span class="math inline">\(j\)</span> sums the convective and viscous contributions from all three directions. You should be able to translate between <a href="#eq-ns-vec" class="quarto-xref">Eq.&nbsp;10</a> and <a href="#eq-ns-idx" class="quarto-xref">Eq.&nbsp;14</a> fluently — Reynolds averaging in the lectures happens almost entirely in index notation.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Self-check — index notation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Write out the <span class="math inline">\(i = 2\)</span> component of the convective term <span class="math inline">\(u_j\, \partial u_i / \partial x_j\)</span>.</li>
+<li>Is that term linear in <span class="math inline">\(\mathbf{u}\)</span>?</li>
+<li>Is <span class="math inline">\(c_i = a_j b_j d_i\)</span> valid index notation? What about <span class="math inline">\(c_i = a_j b_j d_j\)</span>?</li>
+</ol>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><span class="math inline">\(u_1 \frac{\partial u_2}{\partial x_1} + u_2 \frac{\partial u_2}{\partial x_2} + u_3 \frac{\partial u_2}{\partial x_3}\)</span>.</li>
+<li>No — velocity multiplies its own gradient (quadratic). This term generates the Reynolds stresses under averaging.</li>
+<li>Valid (<span class="math inline">\(j\)</span> dummy, <span class="math inline">\(i\)</span> free); invalid — <span class="math inline">\(j\)</span> appears three times in one term.</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-dim" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="sec-dim"><span class="header-section-number">4</span> Dimensional analysis: the Reynolds number</h2>
+<p>Consider fully developed flow through a pipe (<a href="#fig-pipe" class="quarto-xref">Fig.&nbsp;1</a>): we ask how the pressure drop <span class="math inline">\(\Delta p\)</span> over a length <span class="math inline">\(L\)</span> depends on the flow and fluid parameters.</p>
+<div id="fig-pipe" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pipe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/pipe-sketch.svg" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pipe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Pipe flow: mean velocity <span class="math inline">\(U\)</span>, diameter <span class="math inline">\(D\)</span>, length <span class="math inline">\(L\)</span>, fluid properties <span class="math inline">\(\rho, \mu\)</span>, and measured pressure drop <span class="math inline">\(\Delta p\)</span>.
+</figcaption>
+</figure>
+</div>
+<p>The physical relationship is</p>
+<p><span id="eq-pipe-rel"><span class="math display">\[
+\Delta p = f(\rho,\ \mu,\ U,\ D,\ L),
+\tag{15}\]</span></span></p>
+<p>with dimensions (using <span class="math inline">\(\mathrm{M}\)</span> = mass, <span class="math inline">\(\mathrm{L}\)</span> = length, <span class="math inline">\(\mathrm{T}\)</span> = time):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 21%">
+<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th><span class="math inline">\(\Delta p\)</span></th>
+<th><span class="math inline">\(\rho\)</span></th>
+<th><span class="math inline">\(\mu\)</span></th>
+<th><span class="math inline">\(U\)</span></th>
+<th><span class="math inline">\(D\)</span></th>
+<th><span class="math inline">\(L\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Dimensions</td>
+<td><span class="math inline">\(\mathrm{M\,L^{-1}\,T^{-2}}\)</span></td>
+<td><span class="math inline">\(\mathrm{M\,L^{-3}}\)</span></td>
+<td><span class="math inline">\(\mathrm{M\,L^{-1}\,T^{-1}}\)</span></td>
+<td><span class="math inline">\(\mathrm{L\,T^{-1}}\)</span></td>
+<td><span class="math inline">\(\mathrm{L}\)</span></td>
+<td><span class="math inline">\(\mathrm{L}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Step 1 — count.</strong> <span class="math inline">\(n = 6\)</span> variables, <span class="math inline">\(k = 3\)</span> independent dimensions (<span class="math inline">\(\mathrm{M}, \mathrm{L}, \mathrm{T}\)</span>) ⟹ the Buckingham-<span class="math inline">\(\Pi\)</span> theorem guarantees <span class="math inline">\(n - k = 3\)</span> independent dimensionless groups.</p>
+<p><strong>Step 2 — choose repeating variables.</strong> Pick <span class="math inline">\(k = 3\)</span> variables that (i) together contain all three dimensions, (ii) are dimensionally independent of each other, and (iii) do <em>not</em> include the dependent variable <span class="math inline">\(\Delta p\)</span>. The standard choice is <span class="math inline">\(\rho\)</span> (mass), <span class="math inline">\(U\)</span> (time), <span class="math inline">\(D\)</span> (length).</p>
+<p><strong>Step 3 — form the groups.</strong> Each remaining variable, multiplied by powers of the repeating ones, must come out dimensionless. For <span class="math inline">\(\mu\)</span>:</p>
+<p><span id="eq-pi2-setup"><span class="math display">\[
+\Pi_2 = \mu\, \rho^{a} U^{b} D^{c}
+\;\;\Rightarrow\;\;
+\mathrm{M}^{1+a}\ \mathrm{L}^{-1-3a+b+c}\ \mathrm{T}^{-1-b} \overset{!}{=} \mathrm{M}^0 \mathrm{L}^0 \mathrm{T}^0
+\tag{16}\]</span></span></p>
+<p>Setting each exponent to zero: <span class="math inline">\(\mathrm{M}\!: a = -1\)</span>; <span class="math inline">\(\mathrm{T}\!: b = -1\)</span>; then <span class="math inline">\(\mathrm{L}\!: c = -1\)</span>. Hence</p>
+<p><span id="eq-re"><span class="math display">\[
+\Pi_2 = \frac{\mu}{\rho U D}
+\quad\Longleftrightarrow\quad
+\Pi_2^{-1} = \frac{\rho U D}{\mu} = \mathrm{Re}.
+\tag{17}\]</span></span></p>
+<p>The same procedure applied to <span class="math inline">\(\Delta p\)</span> and <span class="math inline">\(L\)</span> gives the other two groups (do it yourself — self-check below):</p>
+<p><span id="eq-pipe-result"><span class="math display">\[
+\Pi_1 = \frac{\Delta p}{\rho U^2}, \qquad
+\Pi_3 = \frac{L}{D},
+\qquad\text{so}\qquad
+\frac{\Delta p}{\rho U^2} = \phi\!\left(\mathrm{Re},\ \frac{L}{D}\right)
+\tag{18}\]</span></span></p>
+<p>— six dimensional variables collapse to a relation between three numbers. That is exactly why friction-factor charts (Moody diagram) work.</p>
+<p><strong>The physical meaning of <span class="math inline">\(\mathrm{Re}\)</span></strong> is the ratio of inertial to viscous effects:</p>
+<p><span id="eq-re-meaning"><span class="math display">\[
+\mathrm{Re} = \frac{\rho U D}{\mu} = \frac{U D}{\nu}
+\sim \frac{\text{inertial forces}}{\text{viscous forces}}
+\tag{19}\]</span></span></p>
+<p>The same conclusion follows from non-dimensionalizing <a href="#eq-ns-idx" class="quarto-xref">Eq.&nbsp;14</a> with <span class="math inline">\(x_i^* = x_i / D\)</span>, <span class="math inline">\(u_i^* = u_i / U\)</span>, <span class="math inline">\(t^* = tU/D\)</span>, <span class="math inline">\(p^* = p / (\rho U^2)\)</span>:</p>
+<p><span id="eq-ns-nd"><span class="math display">\[
+\frac{\partial u_i^*}{\partial t^*}
++ u_j^* \frac{\partial u_i^*}{\partial x_j^*}
+= -\frac{\partial p^*}{\partial x_i^*}
++ \frac{1}{\mathrm{Re}} \frac{\partial^2 u_i^*}{\partial x_j^* \partial x_j^*}
+\tag{20}\]</span></span></p>
+<p><span class="math inline">\(\mathrm{Re}\)</span> is the only parameter left — two incompressible flows with the same geometry and Reynolds number are dynamically similar, and the viscous term becomes small (in a subtle, near-wall-dominated way) as <span class="math inline">\(\mathrm{Re} \to \infty\)</span>. This is the starting point of the course.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Self-check — dimensional analysis
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Derive <span class="math inline">\(\Pi_1\)</span> in <a href="#eq-pipe-result" class="quarto-xref">Eq.&nbsp;18</a> by repeating Step 3 for <span class="math inline">\(\Delta p\)</span>.</li>
+<li>The pipe wall has a roughness height <span class="math inline">\(k_s\)</span> <span class="math inline">\([\mathrm{L}]\)</span>. Which dimensionless group does it add?</li>
+<li>Water flows at <span class="math inline">\(U = 1\,\mathrm{m\,s^{-1}}\)</span> through a <span class="math inline">\(D = 5\,\mathrm{cm}\)</span> pipe (<span class="math inline">\(\nu = 10^{-6}\,\mathrm{m^2\,s^{-1}}\)</span>). Compute <span class="math inline">\(\mathrm{Re}\)</span>. Laminar or turbulent?</li>
+</ol>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><span class="math inline">\(\Delta p\, \rho^a U^b D^c\)</span>: <span class="math inline">\(\mathrm{M}\!: a=-1\)</span>; <span class="math inline">\(\mathrm{T}\!: b=-2\)</span>; <span class="math inline">\(\mathrm{L}\!: -1+3-2+c=0 \Rightarrow c=0\)</span> — giving <span class="math inline">\(\Delta p / (\rho U^2)\)</span>.</li>
+<li>The relative roughness <span class="math inline">\(k_s / D\)</span> (the third parameter of the Moody diagram).</li>
+<li><span class="math inline">\(\mathrm{Re} = UD/\nu = 5 \times 10^4\)</span> — far above the transitional value <span class="math inline">\(\approx 2300\)</span>: turbulent.</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="where-to-review" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="where-to-review"><span class="header-section-number">5</span> Where to review</h2>
+<p>If any of the above is rusty: the fluid mechanics fundamentals (<a href="#sec-tensors" class="quarto-xref">Section&nbsp;1</a>–<a href="#sec-ns" class="quarto-xref">Section&nbsp;2</a>) are covered in <span class="citation" data-cites="kundu2015">[<a href="#ref-kundu2015" role="doc-biblioref">1</a>]</span> (Chs. 2–4), tensor and index notation in <span class="citation" data-cites="pope2000">[<a href="#ref-pope2000" role="doc-biblioref">2</a>]</span> (Appendix A), and <span class="citation" data-cites="tennekes1972">[<a href="#ref-tennekes1972" role="doc-biblioref">3</a>]</span> remains a classic compact introduction to turbulence itself.</p>
+</section>
+<section id="references" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="references"><span class="header-section-number">6</span> References</h2>
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-kundu2015" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">P. K. Kundu, I. M. Cohen, and D. R. Dowling, <em>Fluid mechanics</em>, 6 ed., Academic Press, 2015.</div>
+</div>
+<div id="ref-pope2000" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">S. B. Pope, <em>Turbulent flows</em>, Cambridge University Press, 2000.</div>
+</div>
+<div id="ref-tennekes1972" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">H. Tennekes and J. L. Lumley, <em>A first course in turbulence</em>, MIT Press, 1972.</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Hendrik Nicolai · MECH 501/600 · McGill University</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -1,0 +1,165 @@
+[
+  {
+    "objectID": "tutorials/tutorial-01.html",
+    "href": "tutorials/tutorial-01.html",
+    "title": "Tutorial 1: The law of the wall",
+    "section": "",
+    "text": "NoteDeliverables\n\n\n\nAnswer Tasks 1–3 below and upload a single PDF to Crowdmark by the posted deadline. Include all requested plots and short written answers."
+  },
+  {
+    "objectID": "tutorials/tutorial-01.html#background",
+    "href": "tutorials/tutorial-01.html#background",
+    "title": "Tutorial 1: The law of the wall",
+    "section": "1 Background",
+    "text": "1 Background\nIn wall-bounded turbulent flows, the mean streamwise velocity near the wall follows universal scaling laws when expressed in viscous (wall) units:\n\\[\nu^+ = \\frac{\\bar{u}}{u_\\tau}, \\qquad\ny^+ = \\frac{y \\, u_\\tau}{\\nu}, \\qquad\nu_\\tau = \\sqrt{\\frac{\\tau_w}{\\rho}}\n\\]\nTwo regions are of particular interest:\n\nViscous sublayer (\\(y^+ \\lesssim 5\\)): \\(\\; u^+ = y^+\\)\nLog-law region (\\(y^+ \\gtrsim 30\\)): \\(\\; u^+ = \\frac{1}{\\kappa} \\ln y^+ + B\\)\n\nwith \\(\\kappa \\approx 0.41\\) and \\(B \\approx 5.2\\)."
+  },
+  {
+    "objectID": "tutorials/tutorial-01.html#python-post-processing-example",
+    "href": "tutorials/tutorial-01.html#python-post-processing-example",
+    "title": "Tutorial 1: The law of the wall",
+    "section": "2 Python post-processing example",
+    "text": "2 Python post-processing example\nThe cell below builds a composite mean-velocity profile (Spalding’s law) and compares it to the two limiting behaviours. Run it yourself — you will adapt this code in the tasks.\n\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nkappa, B = 0.41, 5.2\n\n# Spalding's law gives y+ as a function of u+ (implicit profile)\nu_plus = np.linspace(0.01, 25, 400)\ny_plus = u_plus + np.exp(-kappa * B) * (\n    np.exp(kappa * u_plus) - 1 - kappa * u_plus\n    - (kappa * u_plus) ** 2 / 2 - (kappa * u_plus) ** 3 / 6\n)\n\nfig, ax = plt.subplots(figsize=(7, 4.5))\nax.semilogx(y_plus, u_plus, \"k-\", lw=2, label=\"Spalding (composite)\")\n\nyp = np.logspace(-1, 1.2, 50)\nax.semilogx(yp, yp, \"b--\", label=r\"$u^+ = y^+$ (viscous sublayer)\")\n\nyp = np.logspace(1, 3.5, 50)\nax.semilogx(yp, np.log(yp) / kappa + B, \"r--\",\n            label=r\"$u^+ = \\frac{1}{\\kappa}\\ln y^+ + B$ (log law)\")\n\nax.set_xlabel(r\"$y^+$\")\nax.set_ylabel(r\"$u^+$\")\nax.set_xlim(0.1, 3000)\nax.set_ylim(0, 27)\nax.legend()\nax.grid(alpha=0.3, which=\"both\")\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\nFigure 1: Law of the wall: Spalding’s composite profile vs. the viscous sublayer and log law.\n\n\n\n\n\n\n\n\n\n\n\nImportantTask 1 — Sublayer/log-law crossover\n\n\n\nUsing the code above as a starting point, find (numerically) the value of \\(y^+\\) where the viscous-sublayer law and the log law intersect. Plot both laws, mark the intersection point, and briefly comment (2–3 sentences) on why neither law is accurate in the buffer layer."
+  },
+  {
+    "objectID": "tutorials/tutorial-01.html#a-first-look-at-openfoam",
+    "href": "tutorials/tutorial-01.html#a-first-look-at-openfoam",
+    "title": "Tutorial 1: The law of the wall",
+    "section": "3 A first look at OpenFOAM",
+    "text": "3 A first look at OpenFOAM\nFrom Tutorial 2 you will run turbulent channel-flow simulations in OpenFOAM. As a preview, turbulence modelling is configured in constant/turbulenceProperties:\n\n\nconstant/turbulenceProperties\n\n/*--------------------------------*- C++ -*----------------------------------*\\\n| =========                 |                                                 |\n| \\\\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |\n\\*---------------------------------------------------------------------------*/\nFoamFile\n{\n    version     2.0;\n    format      ascii;\n    class       dictionary;\n    object      turbulenceProperties;\n}\n\nsimulationType  RAS;\n\nRAS\n{\n1    RASModel        kOmegaSST;\n    turbulence      on;\n2    printCoeffs     on;\n}\n\n\n1\n\nThe turbulence model — we will compare kOmegaSST and kEpsilon later in the course.\n\n2\n\nPrints the model coefficients to the log at startup, useful for reproducibility.\n\n\n\n\n\n\n\n\nImportantTask 2 — Wall treatment\n\n\n\nIn one short paragraph: what near-wall mesh resolution (in terms of the first-cell \\(y^+\\)) does a wall-resolved RANS computation require, and how does this differ when wall functions are used? Relate your answer to the regions identified in Task 1."
+  },
+  {
+    "objectID": "tutorials/tutorial-01.html#working-on-the-cluster",
+    "href": "tutorials/tutorial-01.html#working-on-the-cluster",
+    "title": "Tutorial 1: The law of the wall",
+    "section": "4 Working on the cluster",
+    "text": "4 Working on the cluster\nYou can run the Python examples locally or on the course cluster.\n\nLocal machineCluster (SLURM)\n\n\n# create an environment once\npython3 -m venv mech501\nsource mech501/bin/activate\npip install numpy matplotlib scipy\n\n# run a script\npython task1.py\n\n\n# log in (use your course account)\nssh username@cluster.example.ca      # TODO: actual hostname\n\n# load modules\nmodule load python/3.11 scipy-stack\n\n# submit a job\nsbatch job.sh\nsqueue -u $USER          # check status\nExample job.sh:\n#!/bin/bash\n#SBATCH --job-name=mech501-t1\n#SBATCH --time=00:10:00\n#SBATCH --cpus-per-task=1\n#SBATCH --mem=2G\n\nmodule load python/3.11 scipy-stack\npython task1.py\n\n\n\n\n\n\n\n\n\nImportantTask 3 — First contact with the cluster\n\n\n\nLog in to the cluster, run hostname and module list, and include a screenshot (or copied terminal output) in your Crowdmark submission.\n\n\n\n\n\n\n\n\nTipHint: SSH keys\n\n\n\n\n\nSet up an SSH key pair (ssh-keygen, then ssh-copy-id) so you don’t have to type your password every time."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "MECH 501/600 — Computational Turbulence",
+    "section": "",
+    "text": "Welcome to the tutorial pages for MECH 501/600 — Computational Turbulence.\nEach tutorial walks you through a hands-on exercise combining theory, OpenFOAM simulations, and Python post-processing. Tutorials contain numbered Tasks — complete them and upload your answers to Crowdmark by the posted deadline.",
+    "crumbs": [
+      "Home",
+      "MECH 501/600 — Computational Turbulence"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-work-through-a-tutorial",
+    "href": "index.html#how-to-work-through-a-tutorial",
+    "title": "MECH 501/600 — Computational Turbulence",
+    "section": "1 How to work through a tutorial",
+    "text": "1 How to work through a tutorial\n\nRead the background section and run the provided code yourself.\nAnswer all Task boxes (derivations, plots, short discussions).\nExport your answers as a single PDF and upload to Crowdmark.",
+    "crumbs": [
+      "Home",
+      "MECH 501/600 — Computational Turbulence"
+    ]
+  },
+  {
+    "objectID": "index.html#tutorials",
+    "href": "index.html#tutorials",
+    "title": "MECH 501/600 — Computational Turbulence",
+    "section": "2 Tutorials",
+    "text": "2 Tutorials\n\n\n\n#\nTopic\nCrowdmark due date\n\n\n\n\n0\nPrerequisites — what you should already know\n—",
+    "crumbs": [
+      "Home",
+      "MECH 501/600 — Computational Turbulence"
+    ]
+  },
+  {
+    "objectID": "index.html#software-you-will-need",
+    "href": "index.html#software-you-will-need",
+    "title": "MECH 501/600 — Computational Turbulence",
+    "section": "3 Software you will need",
+    "text": "3 Software you will need\n\nPython ≥ 3.10 with numpy, matplotlib (and later pyvista/fluidfoam)\nOpenFOAM (introduced from Tutorial 2 onward)\nAccess to the course cluster account (details in Tutorial 1)\n\n\n\n\n\n\n\nTipGetting help\n\n\n\nQuestions? Post on the course discussion board or come to office hours.",
+    "crumbs": [
+      "Home",
+      "MECH 501/600 — Computational Turbulence"
+    ]
+  },
+  {
+    "objectID": "tutorials/tutorial-00.html",
+    "href": "tutorials/tutorial-00.html",
+    "title": "Tutorial 0: Prerequisites",
+    "section": "",
+    "text": "NoteAbout this page\n\n\n\nThis tutorial is a checklist, not a lecture. Everything here should be familiar from your fluid mechanics and math courses — we will briefly repeat some of it inside later exercises, but not re-teach it. Work through the self-checks at the end of each section; if one feels hard, review that topic before Tutorial 1 (references at the bottom).",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Tutorial 0: Prerequisites"
+    ]
+  },
+  {
+    "objectID": "tutorials/tutorial-00.html#sec-tensors",
+    "href": "tutorials/tutorial-00.html#sec-tensors",
+    "title": "Tutorial 0: Prerequisites",
+    "section": "1 Basic tensor algebra",
+    "text": "1 Basic tensor algebra\n\n1.1 What is a tensor?\nA tensor is a physical quantity that exists independently of the coordinate system used to describe it — only its components change when the coordinate axes are rotated, and they do so in a well-defined way. Tensors are classified by their order (or rank), which is simply the number of indices needed to identify one component:\n\nOrder 0 — scalar (1 component): temperature \\(T\\), pressure \\(p\\), density \\(\\rho\\).\nOrder 1 — vector (3 components): velocity \\(u_i\\), i.e. \\((u_1, u_2, u_3)\\).\nOrder 2 (9 components): stress \\(\\sigma_{ij}\\), velocity gradient \\(\\partial u_i / \\partial x_j\\).\n\nA second-order tensor is more than a matrix of numbers: it is a linear map between vectors. The classic example is the Cauchy stress tensor, which maps the unit normal \\(n_j\\) of a surface to the traction (force per area) \\(t_i\\) acting on it:\n\\[\nt_i = \\sigma_{ij}\\, n_j\n\\tag{1}\\]\nWe write tensors either in symbolic (bold) notation (\\(\\mathbf{u}\\), \\(\\boldsymbol{\\sigma}\\)) or in index notation (\\(u_i\\), \\(\\sigma_{ij}\\)); Section 3 explains the index rules in detail.\n\n\n1.2 Elementary operations\nThe operations you should recognize (in both notations):\n\\[\n\\mathbf{a} \\cdot \\mathbf{b} = a_i b_i, \\qquad\n(\\mathbf{A}\\mathbf{b})_i = A_{ij} b_j, \\qquad\n\\mathbf{A} : \\mathbf{B} = A_{ij} B_{ij}\n\\tag{2}\\]\ni.e. the dot product (two vectors → scalar), the tensor–vector product (→ vector, as in Eq. 1), and the double contraction (two tensors → scalar, used later for the dissipation rate).\n\n\n1.3 Two special tensors: \\(\\delta_{ij}\\) and \\(\\varepsilon_{ijk}\\)\nThe Kronecker delta is the index form of the identity:\n\\[\n\\delta_{ij} =\n\\begin{cases}\n1 & i = j \\\\\n0 & i \\neq j\n\\end{cases}\n\\tag{3}\\]\nIts key use is index substitution: multiplying by \\(\\delta_{ij}\\) and summing renames an index, \\(\\delta_{ij}\\, a_j = a_i\\).\nThe Levi-Civita (permutation) symbol \\(\\varepsilon_{ijk}\\) is the third-order companion of Eq. 3:\n\\[\n\\varepsilon_{ijk} =\n\\begin{cases}\n+1 & (i,j,k) \\text{ an even permutation of } (1,2,3)\\text{: } 123,\\, 231,\\, 312 \\\\\n-1 & (i,j,k) \\text{ an odd permutation: } 132,\\, 213,\\, 321 \\\\\n0 & \\text{any index repeated}\n\\end{cases}\n\\tag{4}\\]\nIt encodes cross products and hence rotation. The two expressions you will meet in this course are the cross product and the vorticity:\n\\[\n(\\mathbf{a} \\times \\mathbf{b})_i = \\varepsilon_{ijk}\\, a_j b_k,\n\\qquad\n\\omega_i = \\varepsilon_{ijk} \\frac{\\partial u_k}{\\partial x_j}\n\\tag{5}\\]\nFinally, the \\(\\varepsilon\\)–\\(\\delta\\) identity connects the two symbols and is the workhorse for simplifying double cross products:\n\\[\n\\varepsilon_{ijk}\\, \\varepsilon_{ilm} = \\delta_{jl}\\, \\delta_{km} - \\delta_{jm}\\, \\delta_{kl}\n\\tag{6}\\]\n\n\n1.4 Symmetric / antisymmetric decomposition\nAny second-order tensor splits uniquely into a symmetric and an antisymmetric part:\n\\[\nA_{ij} = \\underbrace{\\tfrac{1}{2}(A_{ij} + A_{ji})}_{\\text{symmetric}}\n       + \\underbrace{\\tfrac{1}{2}(A_{ij} - A_{ji})}_{\\text{antisymmetric}}\n\\tag{7}\\]\nApplied to the velocity gradient this defines the strain-rate tensor \\(S_{ij}\\) (deformation) and the rotation-rate tensor \\(\\Omega_{ij}\\) (rigid-body rotation, related to \\(\\omega_i\\) from Eq. 5):\n\\[\n\\frac{\\partial u_i}{\\partial x_j} = S_{ij} + \\Omega_{ij}, \\qquad\nS_{ij} = \\frac{1}{2}\\!\\left(\\frac{\\partial u_i}{\\partial x_j} + \\frac{\\partial u_j}{\\partial x_i}\\right), \\qquad\n\\Omega_{ij} = \\frac{1}{2}\\!\\left(\\frac{\\partial u_i}{\\partial x_j} - \\frac{\\partial u_j}{\\partial x_i}\\right)\n\\tag{8}\\]\nThis decomposition appears in essentially every turbulence model.\n\n\n\n\n\n\nTipSelf-check — tensor algebra\n\n\n\n\nWhat is \\(\\delta_{ii}\\)? (Careful: repeated index!)\nWhat are \\(\\varepsilon_{123}\\), \\(\\varepsilon_{321}\\), and \\(\\varepsilon_{112}\\)?\nUse Eq. 5 to show \\(\\mathbf{a} \\times \\mathbf{a} = \\mathbf{0}\\).\n\n\n\n\n\n\n\nNoteAnswers\n\n\n\n\n\n\n\\(\\delta_{ii} = \\delta_{11}+\\delta_{22}+\\delta_{33} = 3\\).\n\\(\\varepsilon_{123} = +1\\), \\(\\varepsilon_{321} = -1\\), \\(\\varepsilon_{112} = 0\\).\n\\(\\varepsilon_{ijk} a_j a_k = 0\\) because \\(a_j a_k\\) is symmetric in \\((j,k)\\) while \\(\\varepsilon_{ijk}\\) is antisymmetric — swapping \\(j \\leftrightarrow k\\) flips the sign of the sum, so it must vanish.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Tutorial 0: Prerequisites"
+    ]
+  },
+  {
+    "objectID": "tutorials/tutorial-00.html#sec-ns",
+    "href": "tutorials/tutorial-00.html#sec-ns",
+    "title": "Tutorial 0: Prerequisites",
+    "section": "2 Continuity and Navier–Stokes",
+    "text": "2 Continuity and Navier–Stokes\nFor an incompressible, Newtonian fluid with constant properties, the governing variables and their SI units are:\n\n\n\n\n\n\n\n\nSymbol\nQuantity\nSI units\n\n\n\n\n\\(u_i\\)\nvelocity\n\\(\\mathrm{m\\,s^{-1}}\\)\n\n\n\\(p\\)\npressure\n\\(\\mathrm{Pa} = \\mathrm{kg\\,m^{-1}\\,s^{-2}}\\)\n\n\n\\(\\rho\\)\ndensity\n\\(\\mathrm{kg\\,m^{-3}}\\)\n\n\n\\(\\mu\\)\ndynamic viscosity\n\\(\\mathrm{Pa\\,s} = \\mathrm{kg\\,m^{-1}\\,s^{-1}}\\)\n\n\n\\(\\nu = \\mu/\\rho\\)\nkinematic viscosity\n\\(\\mathrm{m^2\\,s^{-1}}\\)\n\n\n\nContinuity (conservation of mass) states that the velocity field is divergence-free; every term has units \\(\\mathrm{s^{-1}}\\):\n\\[\n\\nabla \\cdot \\mathbf{u} = 0\n\\qquad \\left[\\mathrm{s^{-1}}\\right]\n\\tag{9}\\]\nMomentum (Navier–Stokes) is Newton’s second law per unit mass; every term has units of acceleration, \\(\\mathrm{m\\,s^{-2}}\\):\n\\[\n\\underbrace{\\frac{\\partial \\mathbf{u}}{\\partial t}}_{\\text{unsteady}}\n+ \\underbrace{(\\mathbf{u} \\cdot \\nabla)\\,\\mathbf{u}}_{\\text{convection}}\n= \\underbrace{-\\frac{1}{\\rho} \\nabla p}_{\\text{pressure gradient}}\n+ \\underbrace{\\nu \\nabla^2 \\mathbf{u}}_{\\text{viscous diffusion}}\n\\qquad \\left[\\mathrm{m\\,s^{-2}}\\right]\n\\tag{10}\\]\nCheck the units term by term: \\(\\partial \\mathbf{u}/\\partial t \\sim\n\\mathrm{(m/s)/s}\\); convection \\(\\sim \\mathrm{(m/s) \\cdot (m/s)/m}\\); pressure gradient \\(\\sim \\mathrm{(Pa/m)/(kg/m^3)} =\n\\mathrm{kg\\,m^{-2}\\,s^{-2} \\cdot m^3\\,kg^{-1}}\\); viscous term \\(\\sim\n\\mathrm{(m^2/s) \\cdot (m/s)/m^2}\\) — all \\(\\mathrm{m\\,s^{-2}}\\). ✓\nTwo things to remember: the convective term is the only nonlinear term — it is the reason turbulence exists and the reason the averaged equations don’t close — and pressure in incompressible flow is not a thermodynamic variable but a Lagrange multiplier that enforces Eq. 9.\n\n\n\n\n\n\nTipSelf-check — governing equations\n\n\n\n(The index-notation tools for 1 and 2 are introduced in Section 3 — come back here if needed.)\n\nUsing continuity (Eq. 9), show that the convective term can be written in conservative form: \\(u_j\\, \\partial u_i / \\partial x_j = \\partial (u_i u_j) / \\partial x_j\\).\nTake the divergence of Eq. 10 and use continuity to show that pressure satisfies a Poisson equation, \\(\\frac{1}{\\rho} \\frac{\\partial^2 p}{\\partial x_i \\partial x_i}\n= -\\frac{\\partial u_j}{\\partial x_i} \\frac{\\partial u_i}{\\partial x_j}\\). What does this tell you about the role of pressure in incompressible flow?\nThe viscous dissipation rate per unit mass is \\(\\varepsilon = 2 \\nu S_{ij} S_{ij}\\) (with \\(S_{ij}\\) from Eq. 8). Show that its units are \\(\\mathrm{m^2\\,s^{-3}} = \\mathrm{W\\,kg^{-1}}\\).\n\n\n\n\n\n\n\nNoteAnswers\n\n\n\n\n\n\nProduct rule: \\(\\partial (u_i u_j)/\\partial x_j\n= u_j\\, \\partial u_i/\\partial x_j + u_i\\, \\underbrace{\\partial u_j / \\partial x_j}_{=\\,0}\\) — the last term vanishes by continuity. The conservative form is what finite-volume codes like OpenFOAM actually discretize.\nApplying \\(\\partial/\\partial x_i\\) to each term: the unsteady term gives \\(\\partial(\\partial u_i/\\partial x_i)/\\partial t = 0\\) and the viscous term gives \\(\\nu\\, \\partial^2 (\\partial u_i / \\partial x_i)/\\partial x_j \\partial x_j = 0\\) (both by continuity); the convective term leaves \\(\\partial u_j/\\partial x_i\\; \\partial u_i/\\partial x_j\\). Hence the Poisson equation. Pressure has no evolution equation of its own: it is determined instantaneously by the velocity field (elliptic problem) and acts as a Lagrange multiplier that enforces Eq. 9 — this is why incompressible solvers need a pressure-correction step (e.g. PISO/SIMPLE in OpenFOAM).\n\\([\\nu] = \\mathrm{m^2\\,s^{-1}}\\) and \\([S_{ij}] = \\mathrm{s^{-1}}\\), so \\([\\varepsilon] = \\mathrm{m^2\\,s^{-1}} \\cdot \\mathrm{s^{-2}}\n= \\mathrm{m^2\\,s^{-3}}\\). Since \\(\\mathrm{W\\,kg^{-1}} = \\mathrm{J\\,s^{-1}\\,kg^{-1}}\n= \\mathrm{kg\\,m^2\\,s^{-2}} \\cdot \\mathrm{s^{-1}\\,kg^{-1}}\n= \\mathrm{m^2\\,s^{-3}}\\), dissipation is a power per unit mass — kinetic energy converted to heat.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Tutorial 0: Prerequisites"
+    ]
+  },
+  {
+    "objectID": "tutorials/tutorial-00.html#sec-index",
+    "href": "tutorials/tutorial-00.html#sec-index",
+    "title": "Tutorial 0: Prerequisites",
+    "section": "3 Index notation",
+    "text": "3 Index notation\nWe will write most turbulence equations in Cartesian index (Einstein) notation. The rules:\n\nA repeated (dummy) index in a term implies summation over 1–3: \\(a_i b_i = a_1 b_1 + a_2 b_2 + a_3 b_3\\).\nA free index (appearing once) must match in every term of an equation and denotes three equations at once.\nNo index may appear more than twice in a single term.\n\n\n3.1 Worked example 1: divergence of a vector\nWith the shorthand \\(\\partial/\\partial x_j\\), the divergence \\(\\nabla \\cdot \\mathbf{u}\\) has one repeated index \\(j\\) — so it is a scalar, written out as:\n\\[\n\\frac{\\partial u_j}{\\partial x_j}\n= \\frac{\\partial u_1}{\\partial x_1}\n+ \\frac{\\partial u_2}{\\partial x_2}\n+ \\frac{\\partial u_3}{\\partial x_3}\n\\tag{11}\\]\n\n\n3.2 Worked example 2: tensor–vector product\n\\(b_i = A_{ij}\\, x_j\\) has free index \\(i\\) and dummy index \\(j\\): it is three equations, each a sum of three terms. The first one (\\(i = 1\\)) reads\n\\[\nb_1 = A_{11} x_1 + A_{12} x_2 + A_{13} x_3,\n\\tag{12}\\]\nand analogously for \\(b_2\\), \\(b_3\\) — exactly a matrix–vector product.\n\n\n3.3 Navier–Stokes in index notation\nApplying the same rules to Eq. 9 and Eq. 10:\n\\[\n\\frac{\\partial u_j}{\\partial x_j} = 0\n\\tag{13}\\]\n\\[\n\\frac{\\partial u_i}{\\partial t}\n+ u_j \\frac{\\partial u_i}{\\partial x_j}\n= -\\frac{1}{\\rho} \\frac{\\partial p}{\\partial x_i}\n+ \\nu \\frac{\\partial^2 u_i}{\\partial x_j \\partial x_j}\n\\tag{14}\\]\nCompare with Eq. 11 and Eq. 12: continuity is a divergence (one dummy index, scalar equation), while in Eq. 14 the free index \\(i\\) says “one equation per velocity component” and the dummy index \\(j\\) sums the convective and viscous contributions from all three directions. You should be able to translate between Eq. 10 and Eq. 14 fluently — Reynolds averaging in the lectures happens almost entirely in index notation.\n\n\n\n\n\n\nTipSelf-check — index notation\n\n\n\n\nWrite out the \\(i = 2\\) component of the convective term \\(u_j\\, \\partial u_i / \\partial x_j\\).\nIs that term linear in \\(\\mathbf{u}\\)?\nIs \\(c_i = a_j b_j d_i\\) valid index notation? What about \\(c_i = a_j b_j d_j\\)?\n\n\n\n\n\n\n\nNoteAnswers\n\n\n\n\n\n\n\\(u_1 \\frac{\\partial u_2}{\\partial x_1} + u_2 \\frac{\\partial u_2}{\\partial x_2} + u_3 \\frac{\\partial u_2}{\\partial x_3}\\).\nNo — velocity multiplies its own gradient (quadratic). This term generates the Reynolds stresses under averaging.\nValid (\\(j\\) dummy, \\(i\\) free); invalid — \\(j\\) appears three times in one term.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Tutorial 0: Prerequisites"
+    ]
+  },
+  {
+    "objectID": "tutorials/tutorial-00.html#sec-dim",
+    "href": "tutorials/tutorial-00.html#sec-dim",
+    "title": "Tutorial 0: Prerequisites",
+    "section": "4 Dimensional analysis: the Reynolds number",
+    "text": "4 Dimensional analysis: the Reynolds number\nConsider fully developed flow through a pipe (Fig. 1): we ask how the pressure drop \\(\\Delta p\\) over a length \\(L\\) depends on the flow and fluid parameters.\n\n\n\n\n\n\nFigure 1: Pipe flow: mean velocity \\(U\\), diameter \\(D\\), length \\(L\\), fluid properties \\(\\rho, \\mu\\), and measured pressure drop \\(\\Delta p\\).\n\n\n\nThe physical relationship is\n\\[\n\\Delta p = f(\\rho,\\ \\mu,\\ U,\\ D,\\ L),\n\\tag{15}\\]\nwith dimensions (using \\(\\mathrm{M}\\) = mass, \\(\\mathrm{L}\\) = length, \\(\\mathrm{T}\\) = time):\n\n\n\n\n\n\n\n\n\n\n\n\nVariable\n\\(\\Delta p\\)\n\\(\\rho\\)\n\\(\\mu\\)\n\\(U\\)\n\\(D\\)\n\\(L\\)\n\n\n\n\nDimensions\n\\(\\mathrm{M\\,L^{-1}\\,T^{-2}}\\)\n\\(\\mathrm{M\\,L^{-3}}\\)\n\\(\\mathrm{M\\,L^{-1}\\,T^{-1}}\\)\n\\(\\mathrm{L\\,T^{-1}}\\)\n\\(\\mathrm{L}\\)\n\\(\\mathrm{L}\\)\n\n\n\nStep 1 — count. \\(n = 6\\) variables, \\(k = 3\\) independent dimensions (\\(\\mathrm{M}, \\mathrm{L}, \\mathrm{T}\\)) ⟹ the Buckingham-\\(\\Pi\\) theorem guarantees \\(n - k = 3\\) independent dimensionless groups.\nStep 2 — choose repeating variables. Pick \\(k = 3\\) variables that (i) together contain all three dimensions, (ii) are dimensionally independent of each other, and (iii) do not include the dependent variable \\(\\Delta p\\). The standard choice is \\(\\rho\\) (mass), \\(U\\) (time), \\(D\\) (length).\nStep 3 — form the groups. Each remaining variable, multiplied by powers of the repeating ones, must come out dimensionless. For \\(\\mu\\):\n\\[\n\\Pi_2 = \\mu\\, \\rho^{a} U^{b} D^{c}\n\\;\\;\\Rightarrow\\;\\;\n\\mathrm{M}^{1+a}\\ \\mathrm{L}^{-1-3a+b+c}\\ \\mathrm{T}^{-1-b} \\overset{!}{=} \\mathrm{M}^0 \\mathrm{L}^0 \\mathrm{T}^0\n\\tag{16}\\]\nSetting each exponent to zero: \\(\\mathrm{M}\\!: a = -1\\); \\(\\mathrm{T}\\!: b = -1\\); then \\(\\mathrm{L}\\!: c = -1\\). Hence\n\\[\n\\Pi_2 = \\frac{\\mu}{\\rho U D}\n\\quad\\Longleftrightarrow\\quad\n\\Pi_2^{-1} = \\frac{\\rho U D}{\\mu} = \\mathrm{Re}.\n\\tag{17}\\]\nThe same procedure applied to \\(\\Delta p\\) and \\(L\\) gives the other two groups (do it yourself — self-check below):\n\\[\n\\Pi_1 = \\frac{\\Delta p}{\\rho U^2}, \\qquad\n\\Pi_3 = \\frac{L}{D},\n\\qquad\\text{so}\\qquad\n\\frac{\\Delta p}{\\rho U^2} = \\phi\\!\\left(\\mathrm{Re},\\ \\frac{L}{D}\\right)\n\\tag{18}\\]\n— six dimensional variables collapse to a relation between three numbers. That is exactly why friction-factor charts (Moody diagram) work.\nThe physical meaning of \\(\\mathrm{Re}\\) is the ratio of inertial to viscous effects:\n\\[\n\\mathrm{Re} = \\frac{\\rho U D}{\\mu} = \\frac{U D}{\\nu}\n\\sim \\frac{\\text{inertial forces}}{\\text{viscous forces}}\n\\tag{19}\\]\nThe same conclusion follows from non-dimensionalizing Eq. 14 with \\(x_i^* = x_i / D\\), \\(u_i^* = u_i / U\\), \\(t^* = tU/D\\), \\(p^* = p / (\\rho U^2)\\):\n\\[\n\\frac{\\partial u_i^*}{\\partial t^*}\n+ u_j^* \\frac{\\partial u_i^*}{\\partial x_j^*}\n= -\\frac{\\partial p^*}{\\partial x_i^*}\n+ \\frac{1}{\\mathrm{Re}} \\frac{\\partial^2 u_i^*}{\\partial x_j^* \\partial x_j^*}\n\\tag{20}\\]\n\\(\\mathrm{Re}\\) is the only parameter left — two incompressible flows with the same geometry and Reynolds number are dynamically similar, and the viscous term becomes small (in a subtle, near-wall-dominated way) as \\(\\mathrm{Re} \\to \\infty\\). This is the starting point of the course.\n\n\n\n\n\n\nTipSelf-check — dimensional analysis\n\n\n\n\nDerive \\(\\Pi_1\\) in Eq. 18 by repeating Step 3 for \\(\\Delta p\\).\nThe pipe wall has a roughness height \\(k_s\\) \\([\\mathrm{L}]\\). Which dimensionless group does it add?\nWater flows at \\(U = 1\\,\\mathrm{m\\,s^{-1}}\\) through a \\(D = 5\\,\\mathrm{cm}\\) pipe (\\(\\nu = 10^{-6}\\,\\mathrm{m^2\\,s^{-1}}\\)). Compute \\(\\mathrm{Re}\\). Laminar or turbulent?\n\n\n\n\n\n\n\nNoteAnswers\n\n\n\n\n\n\n\\(\\Delta p\\, \\rho^a U^b D^c\\): \\(\\mathrm{M}\\!: a=-1\\); \\(\\mathrm{T}\\!: b=-2\\); \\(\\mathrm{L}\\!: -1+3-2+c=0 \\Rightarrow c=0\\) — giving \\(\\Delta p / (\\rho U^2)\\).\nThe relative roughness \\(k_s / D\\) (the third parameter of the Moody diagram).\n\\(\\mathrm{Re} = UD/\\nu = 5 \\times 10^4\\) — far above the transitional value \\(\\approx 2300\\): turbulent.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Tutorial 0: Prerequisites"
+    ]
+  },
+  {
+    "objectID": "tutorials/tutorial-00.html#where-to-review",
+    "href": "tutorials/tutorial-00.html#where-to-review",
+    "title": "Tutorial 0: Prerequisites",
+    "section": "5 Where to review",
+    "text": "5 Where to review\nIf any of the above is rusty: the fluid mechanics fundamentals (Section 1–Section 2) are covered in [1] (Chs. 2–4), tensor and index notation in [2] (Appendix A), and [3] remains a classic compact introduction to turbulence itself.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Tutorial 0: Prerequisites"
+    ]
+  },
+  {
+    "objectID": "tutorials/tutorial-00.html#references",
+    "href": "tutorials/tutorial-00.html#references",
+    "title": "Tutorial 0: Prerequisites",
+    "section": "6 References",
+    "text": "6 References\n\n\n[1] P. K. Kundu, I. M. Cohen, and D. R. Dowling, Fluid mechanics, 6 ed., Academic Press, 2015.\n\n\n[2] S. B. Pope, Turbulent flows, Cambridge University Press, 2000.\n\n\n[3] H. Tennekes and J. L. Lumley, A first course in turbulence, MIT Press, 1972.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Tutorial 0: Prerequisites"
+    ]
+  }
+]

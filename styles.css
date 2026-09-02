@@ -1,0 +1,107 @@
+/* MECH 501/600 — theme-neutral styles only.
+   Color/branding rules live in theme-light.scss / theme-dark.scss
+   so they adapt to the light/dark toggle. */
+
+/* --- Compact, modern typography (sizes shared by both themes) --- */
+
+h1, .title {
+  font-size: 1.9rem;
+  letter-spacing: -0.02em;
+}
+h2 {
+  font-size: 1.4rem;
+  letter-spacing: -0.015em;
+}
+h3 {
+  font-size: 1.12rem;
+}
+.subtitle {
+  font-size: 1.05rem;
+}
+
+.navbar {
+  font-size: 0.92rem;
+}
+.sidebar-navigation,
+.sidebar nav {
+  font-size: 0.88rem;
+}
+nav[role="doc-toc"] {
+  font-size: 0.84rem;
+}
+
+/* --- Math: size matched to body text (MathJax and KaTeX) --- */
+mjx-container[jax="CHTML"] {
+  font-size: 113% !important; /* TeX fonts have a smaller x-height; ~113% visually matches the text */
+}
+.katex {
+  font-size: 1.06em;
+}
+mjx-container[jax="CHTML"][display="true"] {
+  margin: 0.8rem 0;
+}
+
+/* Slightly smaller code font for long OpenFOAM dicts */
+pre code {
+  font-size: 0.85em;
+}
+
+/* Captions and subcaptions: slightly larger than Bootstrap default */
+.figure-caption,
+figcaption,
+caption,
+.table-caption,
+.quarto-subfloat-caption,
+.panel-caption {
+  font-size: 0.95em;
+}
+
+/* Clear visual separation between sections */
+main h2 {
+  margin-top: 3.2rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--bs-border-color);
+}
+main h2:first-of-type {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 2rem;
+}
+
+/* --- Footer: keep on one line --- */
+.nav-footer .nav-footer-left,
+.nav-footer .nav-footer-right {
+  white-space: nowrap;
+  font-size: 0.82rem;
+}
+
+/* --- Sidebar logo (full wordmark, top-left) --- */
+.sidebar-header img.sidebar-logo,
+img.sidebar-logo {
+  max-width: 200px;
+  padding: 0.6rem 0 0.4rem 0;
+}
+
+/* --- Navbar logo --- */
+.navbar-brand img.navbar-logo {
+  height: 26px;
+  width: 26px;
+  max-height: 26px;
+  border-radius: 6px;
+  margin-right: 0.35rem;
+}
+
+/* --- Dark/light toggle: pill geometry (colors set per theme) --- */
+.navbar .quarto-color-scheme-toggle {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.3rem 0.6rem;
+  margin-left: 0.45rem;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.navbar .quarto-color-scheme-toggle .bi::before {
+  width: 1.05em;
+  height: 1.05em;
+  background-size: contain;
+}

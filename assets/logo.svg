@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="MECH 501/600 vortex logo">
+  <!-- McGill red rounded tile -->
+  <rect width="64" height="64" rx="14" fill="#ed1b2f"/>
+  <!-- Vortex spiral: chained semicircles of decreasing radius -->
+  <path d="M8 32 A24 24 0 0 1 56 32 A18 18 0 0 1 20 32 A12 12 0 0 1 44 32 A7 7 0 0 1 30 32"
+        fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+</svg>
