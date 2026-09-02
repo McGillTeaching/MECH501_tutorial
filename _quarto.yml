@@ -1,0 +1,63 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "MECH 501/600 — Computational Turbulence"
+  description: "Tutorials for MECH 501/600, McGill University"
+  favicon: assets/logo.svg
+  navbar:
+    background: primary
+    logo: assets/logo.svg
+    logo-alt: "MECH 501/600 vortex logo"
+    left:
+      - href: index.qmd
+        text: Home
+      - text: Tutorials
+        href: tutorials/tutorial-00.qmd
+    right:
+      - icon: github
+        href: https://github.com/YOUR_USERNAME/MECH501_Tutorial   # TODO: update
+  sidebar:
+    style: docked
+    search: true
+    logo: assets/logo-full.svg
+    contents:
+      - index.qmd
+      - section: "Tutorials"
+        contents:
+          - tutorials/tutorial-00.qmd
+  page-footer:
+    left: "© 2026 Hendrik Nicolai · MECH 501/600 · McGill University"
+    right: "Built with [Quarto](https://quarto.org)"
+
+bibliography: references.bib
+csl: assets/numeric.csl
+
+crossref:
+  eq-prefix: "Eq."
+  fig-prefix: "Fig."
+  tbl-prefix: "Tab."
+
+format:
+  html:
+    theme:
+      light: [flatly, theme-light.scss]
+      dark: [darkly, theme-dark.scss]
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-copy: true
+    highlight-style:
+      light: github
+      dark: github
+    link-external-newwindow: true
+
+execute:
+  freeze: auto   # only re-run Python when the source file changes
+
+profile:
+  default: student
+  group:
+    - [student, solutions]

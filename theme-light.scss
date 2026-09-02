@@ -1,0 +1,86 @@
+/*-- scss:defaults --*/
+
+// McGill branding — official red (PMS 485)
+$mcgill-red:      #ed1b2f;
+$mcgill-red-dark: #b3122a;   // darker shade for text/links (better contrast on white)
+
+$primary:       $mcgill-red;
+$link-color:    $mcgill-red-dark;
+$code-color:    $mcgill-red-dark;
+
+// Modern typography
+$font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$font-family-monospace:  "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+$headings-font-weight:   650;
+$font-size-root:         15px;
+
+// Layout polish
+$border-radius:     0.5rem;
+$border-radius-sm:  0.4rem;
+$navbar-bg:         $mcgill-red;
+$navbar-fg:         #ffffff;
+$body-bg:           #ffffff;
+$body-color:        #212529;
+$code-block-bg:     #f6f8fa;
+$toc-active-border: $mcgill-red;
+$sidebar-fg:        #3d4248;
+
+/*-- scss:rules --*/
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+// Softer, modern code blocks
+div.sourceCode {
+  border: 1px solid #e4e7eb;
+  border-radius: $border-radius;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+// Modern callouts: rounded, subtle shadow
+div.callout {
+  border-radius: $border-radius;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+// Task boxes (callout-important) in McGill red
+div.callout-important {
+  border-left-color: $mcgill-red;
+  .callout-title { font-weight: 650; }
+  .callout-icon::before { filter: hue-rotate(-10deg); }
+}
+
+// Solution boxes (solutions profile only)
+div.solution-box {
+  border: 2px dashed #2c7a3f;
+  border-radius: $border-radius;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  background-color: #f2faf4;
+  &::before {
+    content: "Solution";
+    display: block;
+    font-weight: 700;
+    color: #2c7a3f;
+    margin-bottom: 0.5rem;
+  }
+}
+
+// Sidebar: highlight active page with red accent
+.sidebar nav[role="doc-toc"] ul > li > a.active,
+div.sidebar-item-container .active {
+  color: $mcgill-red-dark;
+  font-weight: 600;
+}
+
+// Navbar: keep title/links crisp white
+.navbar-brand, .navbar .nav-link { font-weight: 550; }
+
+// Dark-mode toggle: obvious pill button with a moon icon (click → dark)
+.navbar .quarto-color-scheme-toggle {
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.08);
+  &:hover { background-color: rgba(255, 255, 255, 0.22); }
+  .bi::before {
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="%23ffffff"%3E%3Cpath d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/%3E%3C/svg%3E') !important;
+  }
+}

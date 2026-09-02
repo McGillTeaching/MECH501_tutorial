@@ -1,0 +1,84 @@
+/*-- scss:defaults --*/
+
+// McGill branding, adapted for dark backgrounds
+$mcgill-red:       #ed1b2f;
+$mcgill-red-light: #ff6b76;   // lighter shade for links/text on dark bg
+
+$primary:    $mcgill-red;
+$link-color: $mcgill-red-light;
+$code-color: $mcgill-red-light;
+
+// Modern typography (same as light)
+$font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$font-family-monospace:  "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+$headings-font-weight:   650;
+$font-size-root:         15px;
+
+// Dark palette
+$body-bg:       #16181d;
+$body-color:    #d6d9de;
+$headings-color: #f0f2f5;
+$navbar-bg:     #1e2127;
+$navbar-fg:     #f0f2f5;
+$code-block-bg: #1e2127;
+$border-color:  #2c2f36;
+
+$border-radius:    0.5rem;
+$border-radius-sm: 0.4rem;
+$toc-active-border: $mcgill-red-light;
+
+/*-- scss:rules --*/
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+// Red accent strip under the dark navbar for McGill identity
+.navbar { border-bottom: 3px solid $mcgill-red; }
+.navbar-brand, .navbar .nav-link { font-weight: 550; }
+
+// Light-mode toggle: obvious pill button with a sun icon (click → light)
+.navbar .quarto-color-scheme-toggle {
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.06);
+  &:hover { background-color: rgba(255, 255, 255, 0.16); }
+  .bi::before {
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="%23ffd75e"%3E%3Cpath d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/%3E%3C/svg%3E') !important;
+  }
+}
+
+div.sourceCode {
+  border: 1px solid #2c2f36;
+  border-radius: $border-radius;
+}
+
+div.callout {
+  border-radius: $border-radius;
+  background-color: #1b1e24;
+}
+
+// Task boxes in McGill red
+div.callout-important {
+  border-left-color: $mcgill-red;
+  .callout-title { font-weight: 650; }
+}
+
+// Solution boxes (solutions profile only)
+div.solution-box {
+  border: 2px dashed #3fa35c;
+  border-radius: $border-radius;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  background-color: rgba(63, 163, 92, 0.08);
+  &::before {
+    content: "Solution";
+    display: block;
+    font-weight: 700;
+    color: #5fc47e;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.sidebar nav[role="doc-toc"] ul > li > a.active,
+div.sidebar-item-container .active {
+  color: $mcgill-red-light;
+  font-weight: 600;
+}

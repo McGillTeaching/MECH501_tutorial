@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only">
+  <info>
+    <title>MECH 501/600 numeric (bracketed, enumerated bibliography)</title>
+    <id>https://example.org/styles/mech501-numeric</id>
+    <updated>2026-07-12T00:00:00+00:00</updated>
+  </info>
+  <citation collapse="citation-number">
+    <sort>
+      <key variable="citation-number"/>
+    </sort>
+    <layout prefix="[" suffix="]" delimiter=", ">
+      <text variable="citation-number"/>
+    </layout>
+  </citation>
+  <bibliography entry-spacing="0" second-field-align="flush">
+    <layout>
+      <text variable="citation-number" prefix="[" suffix="]"/>
+      <group delimiter=", " prefix=" " suffix=".">
+        <names variable="author">
+          <name and="text" initialize-with=". " delimiter=", "/>
+        </names>
+        <text variable="title" font-style="italic"/>
+        <text variable="edition" suffix=" ed."/>
+        <text variable="publisher"/>
+        <date variable="issued">
+          <date-part name="year"/>
+        </date>
+      </group>
+    </layout>
+  </bibliography>
+</style>

@@ -1,0 +1,18 @@
+# Quarto output
+/_site/
+/_site-solutions/
+/.quarto/
+
+# NOTE: _freeze/ is intentionally NOT ignored — commit it so CI can render
+# without re-running Python.
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+mech501/
+
+# OS
+.DS_Store
+
+**/*.quarto_ipynb
