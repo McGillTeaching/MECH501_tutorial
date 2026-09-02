@@ -1,6 +1,6 @@
 ---
 title: "MECH 501/600 — Computational Turbulence"
-subtitle: "Tutorial series"
+subtitle: "Tutorial for Lecture"
 ---
 
 Welcome to the tutorial pages for **MECH 501/600 — Computational Turbulence**.
