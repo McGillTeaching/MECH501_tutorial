@@ -8,7 +8,7 @@ Welcome to the tutorial pages for **MECH 501/600 — Computational Turbulence**.
 Each tutorial walks you through a hands-on exercise combining theory,
 OpenFOAM simulations, and Python post-processing. Tutorials contain
 numbered **Tasks** — complete them and upload your answers to
-[Crowdmark](https://crowdmark.com) by the posted deadline.
+Crowdmark by the posted deadline.
 
 ## How to work through a tutorial
 
@@ -21,7 +21,6 @@ numbered **Tasks** — complete them and upload your answers to
 | # | Topic | Crowdmark due date |
 |---|-------|--------------------|
 | 0 | [Prerequisites — what you should already know](tutorials/tutorial-00.qmd) | — |
-| 1 | [The law of the wall & channel flow post-processing](tutorials/tutorial-01.qmd) | TBD |
 
 ## Software you will need
 
