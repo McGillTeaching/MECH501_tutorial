@@ -5,15 +5,15 @@
 /* --- Compact, modern typography (sizes shared by both themes) --- */
 
 h1, .title {
-  font-size: 1.9rem;
+  font-size: 2.1rem;
   letter-spacing: -0.02em;
 }
 h2 {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   letter-spacing: -0.015em;
 }
 h3 {
-  font-size: 1.12rem;
+  font-size: 1.22rem;
 }
 .subtitle {
   font-size: 1.05rem;
