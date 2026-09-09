@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="MECH 501 — Computational Turbulence">
-<meta name="dcterms.date" content="2026-09-02">
+<meta name="dcterms.date" content="2026-09-09">
 
 <title>Tutorial 1: The law of the wall – MECH 501/600 — Computational Turbulence</title>
 <style>
@@ -85,9 +85,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-d5e46415c29d9d8c13eb6bbdb046d278.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a90b5204759118658571c6c04747b983.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-7f6abe1186bee6ecbc94f54310e86f57.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-a90b5204759118658571c6c04747b983.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-789ffd21cf41be4c2c01b4b03a5fd8df.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-489a8b5e2aa4355ee7db231f82495c65.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-789ffd21cf41be4c2c01b4b03a5fd8df.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -337,6 +337,14 @@ window.Quarto = {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../cluster/index.qmd"> 
+<span class="menu-text">Cluster</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../python/index.qmd"> 
+<span class="menu-text">Python</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../tutorials/tutorial-00.html"> 
 <span class="menu-text">Tutorials</span></a>
   </li>  
@@ -393,19 +401,92 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Tutorials</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Cluster</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">cluster/index.qmd</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">cluster/registration.qmd</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">cluster/intro.qmd</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">cluster/jupyterlab.qmd</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">cluster/vscode.qmd</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">cluster/terminal.qmd</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Python</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">python/index.qmd</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">python/01-plotting.ipynb</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">python/02-foundations.ipynb</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">python/03-oop.ipynb</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">python/04-functional.ipynb</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">python/05-internals.ipynb</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">python/06-engineering.ipynb</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">python/07-packaging.ipynb</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Tutorials</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../tutorials/tutorial-00.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tutorial 0: Prerequisites</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+ <span class="menu-text">tutorials/assignment-01-dns.qmd</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">tutorials/assignment-01-processing.ipynb</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">tutorials/assignment-01-kequation.qmd</span>
+  </li>
       </ul>
   </li>
     </ul>
@@ -449,7 +530,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 2, 2026</p>
+      <p class="date">September 9, 2026</p>
     </div>
   </div>
   

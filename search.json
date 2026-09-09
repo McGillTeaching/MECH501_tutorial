@@ -39,40 +39,62 @@
     "href": "index.html",
     "title": "MECH 501/600 — Computational Turbulence",
     "section": "",
-    "text": "Welcome to the tutorial pages for MECH 501/600 — Computational Turbulence.\nEach tutorial walks you through a hands-on exercise combining theory, OpenFOAM simulations, and Python post-processing. Tutorials contain numbered Tasks — complete them and upload your answers to Crowdmark by the posted deadline.",
+    "text": "Welcome! These pages are the practical, hands-on side of MECH 501/600 — Computational Turbulence. Where the lectures build the theory, here you will use it: refresh your scientific Python, get onto the course computing cluster, and work through tutorials that combine turbulence theory, OpenFOAM simulations, and Python post-processing.",
     "crumbs": [
       "Home",
       "MECH 501/600 — Computational Turbulence"
     ]
   },
   {
-    "objectID": "index.html#how-to-work-through-a-tutorial",
-    "href": "index.html#how-to-work-through-a-tutorial",
+    "objectID": "index.html#start-here",
+    "href": "index.html#start-here",
     "title": "MECH 501/600 — Computational Turbulence",
-    "section": "1 How to work through a tutorial",
-    "text": "1 How to work through a tutorial\n\nRead the background section and run the provided code yourself.\nAnswer all Task boxes (derivations, plots, short discussions).\nExport your answers as a single PDF and upload to Crowdmark.",
+    "section": "1 Start here",
+    "text": "1 Start here\n\n\n\n\n\n\n\n\nNoteCluster\n\n\n\nCreate your account on the course computing cluster and run notebooks or VS Code right in your browser — no local install required. Do this first, since account approval takes a day or two.\n\n\n\n\n\n\n\n\n\n\nNotePython\n\n\n\nLevel up from “a 300-line script and a prayer” to clean, reusable scientific code — efficient plotting, good structure, and building your own package.\n\n\n\n\n\n\n\n\n\n\nNoteTutorials\n\n\n\nGuided exercises that tie theory to practice, with numbered Tasks you complete and hand in. Start with the prerequisites check.",
     "crumbs": [
       "Home",
       "MECH 501/600 — Computational Turbulence"
     ]
   },
   {
-    "objectID": "index.html#tutorials",
-    "href": "index.html#tutorials",
+    "objectID": "index.html#how-it-all-fits-together",
+    "href": "index.html#how-it-all-fits-together",
     "title": "MECH 501/600 — Computational Turbulence",
-    "section": "2 Tutorials",
-    "text": "2 Tutorials\n\n\n\n#\nTopic\nCrowdmark due date\n\n\n\n\n0\nPrerequisites — what you should already know\n—",
+    "section": "2 How it all fits together",
+    "text": "2 How it all fits together\nThe lectures develop the equations and models. These tutorials put them to work: you will run simulations, post-process the results in Python, and often do so on the cluster. Each tutorial contains numbered Tasks — derivations, plots, and short discussions — which you collect into a single PDF and upload to Crowdmark by the posted deadline.\nIf your Python or command-line skills feel rusty, work through the Python section and get comfortable with the Cluster before the first tutorial that needs them — it will make everything afterwards much smoother.",
     "crumbs": [
       "Home",
       "MECH 501/600 — Computational Turbulence"
     ]
   },
   {
-    "objectID": "index.html#software-you-will-need",
-    "href": "index.html#software-you-will-need",
+    "objectID": "index.html#working-through-a-tutorial",
+    "href": "index.html#working-through-a-tutorial",
     "title": "MECH 501/600 — Computational Turbulence",
-    "section": "3 Software you will need",
-    "text": "3 Software you will need\n\nPython ≥ 3.10 with numpy, matplotlib (and later pyvista/fluidfoam)\nOpenFOAM (introduced from Tutorial 2 onward)\nAccess to the course cluster account (details in Tutorial 1)\n\n\n\n\n\n\n\nTipGetting help\n\n\n\nQuestions? Post on the course discussion board or come to office hours.",
+    "section": "3 Working through a tutorial",
+    "text": "3 Working through a tutorial\n\nRead the background and run the provided code yourself — don’t just read it.\nAnswer every Task box (derivations, plots, short written answers).\nExport your answers as a single PDF and upload it to Crowdmark before the deadline.",
+    "crumbs": [
+      "Home",
+      "MECH 501/600 — Computational Turbulence"
+    ]
+  },
+  {
+    "objectID": "index.html#tutorials-1",
+    "href": "index.html#tutorials-1",
+    "title": "MECH 501/600 — Computational Turbulence",
+    "section": "4 Tutorials",
+    "text": "4 Tutorials\n\nMore tutorials will appear here as the term progresses.\n\n\n\n\n\n\n\n#\nTopic\nCrowdmark due\n\n\n\n\n0\nPrerequisites — what you should already know\n—",
+    "crumbs": [
+      "Home",
+      "MECH 501/600 — Computational Turbulence"
+    ]
+  },
+  {
+    "objectID": "index.html#what-youll-need",
+    "href": "index.html#what-youll-need",
+    "title": "MECH 501/600 — Computational Turbulence",
+    "section": "5 What you’ll need",
+    "text": "5 What you’ll need\n\nPython ≥ 3.10 with numpy, matplotlib, scipy (and later pyvista / fluidfoam).\nOpenFOAM, introduced from Tutorial 2 onward.\nAn account on the course cluster — see the Cluster page.\n\nEverything above is already installed in the cluster’s JupyterLab environment, so if you work there you can skip local setup entirely.\n\n\n\n\n\n\nTipGetting help\n\n\n\nStuck? Post on the course discussion board or drop by office hours — and if something on these pages is wrong or unclear, let us know so we can fix it.",
     "crumbs": [
       "Home",
       "MECH 501/600 — Computational Turbulence"
