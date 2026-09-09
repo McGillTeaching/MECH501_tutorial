@@ -13,6 +13,10 @@ website:
     left:
       - href: index.qmd
         text: Home
+      - text: Cluster
+        href: cluster/index.qmd
+      - text: Python
+        href: python/index.qmd
       - text: Tutorials
         href: tutorials/tutorial-00.qmd
     right:
@@ -21,12 +25,34 @@ website:
   sidebar:
     style: docked
     search: true
+    collapse-level: 1
     logo: assets/logo-full.svg
     contents:
       - index.qmd
+      - section: "Cluster"
+        contents:
+          - cluster/index.qmd
+          - cluster/registration.qmd
+          - cluster/intro.qmd
+          - cluster/jupyterlab.qmd
+          - cluster/vscode.qmd
+          - cluster/terminal.qmd
+      - section: "Python"
+        contents:
+          - python/index.qmd
+          - python/01-plotting.ipynb
+          - python/02-foundations.ipynb
+          - python/03-oop.ipynb
+          - python/04-functional.ipynb
+          - python/05-internals.ipynb
+          - python/06-engineering.ipynb
+          - python/07-packaging.ipynb
       - section: "Tutorials"
         contents:
           - tutorials/tutorial-00.qmd
+          - tutorials/assignment-01-dns.qmd
+          - tutorials/assignment-01-processing.ipynb
+          - tutorials/assignment-01-kequation.qmd
   page-footer:
     left: "© 2026 Hendrik Nicolai · MECH 501/600 · McGill University"
     right: "Built with [Quarto](https://quarto.org)"
@@ -45,6 +71,7 @@ format:
       light: [flatly, theme-light.scss]
       dark: [darkly, theme-dark.scss]
     css: styles.css
+    include-after-body: expand-tutorials.html
     toc: true
     toc-depth: 3
     number-sections: true

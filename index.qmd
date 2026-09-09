@@ -1,35 +1,87 @@
 ---
 title: "MECH 501/600 — Computational Turbulence"
-subtitle: "Tutorial for Lecture"
+subtitle: "Hands-on companion to the course: Python, simulation, and HPC"
 ---
 
-Welcome to the tutorial pages for **MECH 501/600 — Computational Turbulence**.
+Welcome! These pages are the practical, hands-on side of **MECH 501/600 —
+Computational Turbulence**. Where the lectures build the theory, here you will
+*use* it: refresh your scientific Python, get onto the course computing cluster,
+and work through tutorials that combine turbulence theory, OpenFOAM simulations,
+and Python post-processing.
 
-Each tutorial walks you through a hands-on exercise combining theory,
-OpenFOAM simulations, and Python post-processing. Tutorials contain
-numbered **Tasks** — complete them and upload your answers to
-Crowdmark by the posted deadline.
+## Start here
 
-## How to work through a tutorial
+::::: {.grid}
 
-1. Read the background section and run the provided code yourself.
-2. Answer all Task boxes (derivations, plots, short discussions).
-3. Export your answers as a single PDF and upload to Crowdmark.
+:::: {.g-col-12 .g-col-md-4}
+::: {.callout-note appearance="simple"}
+### [Cluster](cluster/index.qmd)
+
+Create your account on the course computing cluster and run notebooks or VS Code
+right in your browser — no local install required. **Do this first**, since
+account approval takes a day or two.
+:::
+::::
+
+:::: {.g-col-12 .g-col-md-4}
+::: {.callout-note appearance="simple"}
+### [Python](python/index.qmd)
+
+Level up from "a 300-line script and a prayer" to clean, reusable scientific
+code — efficient plotting, good structure, and building your own package.
+:::
+::::
+
+:::: {.g-col-12 .g-col-md-4}
+::: {.callout-note appearance="simple"}
+### [Tutorials](tutorials/tutorial-00.qmd)
+
+Guided exercises that tie theory to practice, with numbered **Tasks** you
+complete and hand in. Start with the prerequisites check.
+:::
+::::
+
+:::::
+
+## How it all fits together
+
+The **lectures** develop the equations and models. These **tutorials** put them
+to work: you will run simulations, post-process the results in **Python**, and
+often do so on the **cluster**. Each tutorial contains numbered **Tasks** —
+derivations, plots, and short discussions — which you collect into a single PDF
+and upload to **Crowdmark** by the posted deadline.
+
+If your Python or command-line skills feel rusty, work through the
+[Python](python/index.qmd) section and get comfortable with the
+[Cluster](cluster/index.qmd) before the first tutorial that needs them — it will
+make everything afterwards much smoother.
+
+## Working through a tutorial
+
+1. Read the background and **run the provided code yourself** — don't just read it.
+2. Answer every **Task** box (derivations, plots, short written answers).
+3. Export your answers as a **single PDF** and upload it to Crowdmark before the deadline.
 
 ## Tutorials
 
-| # | Topic | Crowdmark due date |
-|---|-------|--------------------|
+| # | Topic | Crowdmark due |
+|---|-------|:-------------:|
 | 0 | [Prerequisites — what you should already know](tutorials/tutorial-00.qmd) | — |
 
-## Software you will need
+: More tutorials will appear here as the term progresses. {.striped tbl-colwidths="[8,72,20]"}
 
-- **Python** ≥ 3.10 with `numpy`, `matplotlib` (and later `pyvista`/`fluidfoam`)
-- **OpenFOAM** (introduced from Tutorial 2 onward)
-- Access to the course cluster account (details in Tutorial 1)
+## What you'll need
+
+- **Python** ≥ 3.10 with `numpy`, `matplotlib`, `scipy` (and later `pyvista` / `fluidfoam`).
+- **OpenFOAM**, introduced from Tutorial 2 onward.
+- An account on the **course cluster** — see the [Cluster](cluster/index.qmd) page.
+
+Everything above is already installed in the cluster's JupyterLab environment, so
+if you work there you can skip local setup entirely.
 
 ::: {.callout-tip}
 ## Getting help
 
-Questions? Post on the course discussion board or come to office hours.
+Stuck? Post on the course discussion board or drop by office hours — and if
+something on these pages is wrong or unclear, let us know so we can fix it.
 :::
