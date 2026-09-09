@@ -9,7 +9,7 @@
 <meta name="author" content="MECH 501/600 — Computational Turbulence">
 <meta name="dcterms.date" content="2026-09-09">
 
-<title>Tutorial 0: Prerequisites – MECH 501/600 — Computational Turbulence</title>
+<title>Intermediate &amp; advanced Python – MECH 501/600 — Computational Turbulence</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -28,27 +28,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -101,35 +81,6 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -352,7 +303,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../tutorials/tutorial-00.html">Tutorials</a></li><li class="breadcrumb-item"><a href="../tutorials/tutorial-00.html">Tutorial 0: Prerequisites</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../python/index.html">Python</a></li><li class="breadcrumb-item"><a href="../python/index.html">Intermediate &amp; advanced Python</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -433,16 +384,16 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">Python</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../python/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../python/index.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Intermediate &amp; advanced Python</span></a>
   </div>
 </li>
@@ -492,16 +443,16 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
  <span class="menu-text">Tutorials</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tutorials/tutorial-00.html" class="sidebar-item-text sidebar-link active">
+  <a href="../tutorials/tutorial-00.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tutorial 0: Prerequisites</span></a>
   </div>
 </li>
@@ -535,23 +486,20 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#sec-tensors" id="toc-sec-tensors" class="nav-link active" data-scroll-target="#sec-tensors"><span class="header-section-number">1</span> Basic tensor algebra</a>
+  <li><a href="#sections" id="toc-sections" class="nav-link active" data-scroll-target="#sections"><span class="header-section-number">1</span> Sections</a></li>
+  <li><a href="#package-environment" id="toc-package-environment" class="nav-link" data-scroll-target="#package-environment"><span class="header-section-number">2</span> Package environment</a>
   <ul class="collapse">
-  <li><a href="#what-is-a-tensor" id="toc-what-is-a-tensor" class="nav-link" data-scroll-target="#what-is-a-tensor"><span class="header-section-number">1.1</span> What is a tensor?</a></li>
-  <li><a href="#elementary-operations" id="toc-elementary-operations" class="nav-link" data-scroll-target="#elementary-operations"><span class="header-section-number">1.2</span> Elementary operations</a></li>
-  <li><a href="#two-special-tensors-delta_ij-and-varepsilon_ijk" id="toc-two-special-tensors-delta_ij-and-varepsilon_ijk" class="nav-link" data-scroll-target="#two-special-tensors-delta_ij-and-varepsilon_ijk"><span class="header-section-number">1.3</span> Two special tensors: <span class="math inline">\(\delta_{ij}\)</span> and <span class="math inline">\(\varepsilon_{ijk}\)</span></a></li>
-  <li><a href="#symmetric-antisymmetric-decomposition" id="toc-symmetric-antisymmetric-decomposition" class="nav-link" data-scroll-target="#symmetric-antisymmetric-decomposition"><span class="header-section-number">1.4</span> Symmetric / antisymmetric decomposition</a></li>
+  <li><a href="#required-python-packages" id="toc-required-python-packages" class="nav-link" data-scroll-target="#required-python-packages"><span class="header-section-number">2.1</span> Required Python packages</a></li>
   </ul></li>
-  <li><a href="#sec-ns" id="toc-sec-ns" class="nav-link" data-scroll-target="#sec-ns"><span class="header-section-number">2</span> Continuity and Navier–Stokes</a></li>
-  <li><a href="#sec-index" id="toc-sec-index" class="nav-link" data-scroll-target="#sec-index"><span class="header-section-number">3</span> Index notation</a>
+  <li><a href="#py-vs-.ipynb" id="toc-py-vs-.ipynb" class="nav-link" data-scroll-target="#py-vs-.ipynb"><span class="header-section-number">3</span> <code>.py</code> vs <code>.ipynb</code></a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">4</span> References</a>
   <ul class="collapse">
-  <li><a href="#worked-example-1-divergence-of-a-vector" id="toc-worked-example-1-divergence-of-a-vector" class="nav-link" data-scroll-target="#worked-example-1-divergence-of-a-vector"><span class="header-section-number">3.1</span> Worked example 1: divergence of a vector</a></li>
-  <li><a href="#worked-example-2-tensorvector-product" id="toc-worked-example-2-tensorvector-product" class="nav-link" data-scroll-target="#worked-example-2-tensorvector-product"><span class="header-section-number">3.2</span> Worked example 2: tensor–vector product</a></li>
-  <li><a href="#navierstokes-in-index-notation" id="toc-navierstokes-in-index-notation" class="nav-link" data-scroll-target="#navierstokes-in-index-notation"><span class="header-section-number">3.3</span> Navier–Stokes in index notation</a></li>
+  <li><a href="#core-python" id="toc-core-python" class="nav-link" data-scroll-target="#core-python"><span class="header-section-number">4.1</span> Core Python</a></li>
+  <li><a href="#numpy" id="toc-numpy" class="nav-link" data-scroll-target="#numpy"><span class="header-section-number">4.2</span> NumPy</a></li>
+  <li><a href="#matplotlib" id="toc-matplotlib" class="nav-link" data-scroll-target="#matplotlib"><span class="header-section-number">4.3</span> Matplotlib</a></li>
+  <li><a href="#scipy" id="toc-scipy" class="nav-link" data-scroll-target="#scipy"><span class="header-section-number">4.4</span> SciPy</a></li>
+  <li><a href="#not-covered-here-but-very-helpful" id="toc-not-covered-here-but-very-helpful" class="nav-link" data-scroll-target="#not-covered-here-but-very-helpful"><span class="header-section-number">4.5</span> Not covered here, but very helpful</a></li>
   </ul></li>
-  <li><a href="#sec-dim" id="toc-sec-dim" class="nav-link" data-scroll-target="#sec-dim"><span class="header-section-number">4</span> Dimensional analysis: the Reynolds number</a></li>
-  <li><a href="#where-to-review" id="toc-where-to-review" class="nav-link" data-scroll-target="#where-to-review"><span class="header-section-number">5</span> Where to review</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">6</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -559,10 +507,10 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../tutorials/tutorial-00.html">Tutorials</a></li><li class="breadcrumb-item"><a href="../tutorials/tutorial-00.html">Tutorial 0: Prerequisites</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../python/index.html">Python</a></li><li class="breadcrumb-item"><a href="../python/index.html">Intermediate &amp; advanced Python</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Tutorial 0: Prerequisites</h1>
-<p class="subtitle lead">What you should already know</p>
+<h1 class="title">Intermediate &amp; advanced Python</h1>
+<p class="subtitle lead">A hands-on tutorial for scientific computing</p>
 </div>
 
 
@@ -591,456 +539,138 @@ window.Quarto = {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
+<p>At this point, you should have a solid foundation in Python and programming in general. We won’t be covering the basics here — there are approximately 4.7 million tutorials on loops, conditionals, and functions online, and you should know this stuff anyway.</p>
+<p>What we <em>will</em> do is help you graduate from the “I write 300 lines of spaghetti code in a single script and pray it works” phase to becoming a proper programmer who knows how to abstract, modularize, and eventually build their own Python package.</p>
+<p>Each section is a <strong>Jupyter notebook</strong> — the code and its output are rendered on the page, the code blocks are copyable and foldable, and every section ends with short <strong>self-tests</strong> whose solutions you can reveal.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>About this page
+<span class="screen-reader-only">Tip</span>Run the notebooks yourself
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This tutorial is a <strong>checklist, not a lecture</strong>. Everything here should be familiar from your fluid mechanics and math courses — we will briefly repeat some of it inside later exercises, but not re-teach it. Work through the <em>self-checks</em> at the end of each section; if one feels hard, review that topic before Tutorial 1 (references at the bottom).</p>
+<p>To <em>run and edit</em> a section interactively, download its notebook with the <strong><code>&lt;/&gt;</code> Source Code</strong> menu (top-right of each page) and open it in JupyterLab or VS Code — for example on the <a href="../cluster/index.html">course cluster</a>, where the Python environment is already set up.</p>
 </div>
 </div>
-<section id="sec-tensors" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="sec-tensors"><span class="header-section-number">1</span> Basic tensor algebra</h2>
-<section id="what-is-a-tensor" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="what-is-a-tensor"><span class="header-section-number">1.1</span> What is a tensor?</h3>
-<p>A <strong>tensor</strong> is a physical quantity that exists independently of the coordinate system used to describe it — only its <em>components</em> change when the coordinate axes are rotated, and they do so in a well-defined way. Tensors are classified by their <strong>order</strong> (or rank), which is simply the number of indices needed to identify one component:</p>
+<section id="sections" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="sections"><span class="header-section-number">1</span> Sections</h2>
+<ol type="1">
+<li><a href="../python/01-plotting.html">Efficient scientific plotting</a> — golden rules for publication-quality figures, and the Matplotlib code to produce them.</li>
+<li><a href="../python/02-foundations.html">Python foundations</a> — program entry points, data structures (comprehensions, <code>collections</code>), and file I/O with <code>pathlib</code>.</li>
+<li><a href="../python/03-oop.html">Object-oriented programming</a> — classes, properties, inheritance, dunder methods, and dataclasses.</li>
+<li><a href="../python/04-functional.html">Functional programming</a> — functions as first-class objects, lambdas &amp; <code>map</code>, and type hints.</li>
+<li><a href="../python/05-internals.html">Advanced Python internals</a> — decorators, iterators &amp; iterables, and generators.</li>
+<li><a href="../python/06-engineering.html">Software engineering practices</a> — validation &amp; exceptions, testing, logging, and documentation.</li>
+<li><a href="../python/07-packaging.html">Packaging &amp; distribution</a> — turn your code into an installable Python package.</li>
+</ol>
+</section>
+<section id="package-environment" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="package-environment"><span class="header-section-number">2</span> Package environment</h2>
+<p>One of the biggest advantages of Python is its rich and well-maintained ecosystem of packages and libraries. The main downside is that managing these packages can sometimes become cumbersome, especially when different projects require different versions.</p>
+<p>Python comes with its own package manager, <code>pip</code>, which works well — particularly when used together with <strong>virtual environments</strong>. Another option, which I personally recommend, is <a href="https://github.com/conda-forge/miniforge">Miniforge3</a>. It provides a lightweight Conda-based environment similar to Anaconda, but without unnecessary extras, and it uses the <code>conda-forge</code> channel by default. This often results in more reliable and consistent package installations, especially for scientific computing.</p>
+<section id="required-python-packages" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="required-python-packages"><span class="header-section-number">2.1</span> Required Python packages</h3>
+<p>For this course, we will mainly rely on the following core scientific Python packages:</p>
 <ul>
-<li><strong>Order 0 — scalar</strong> (1 component): temperature <span class="math inline">\(T\)</span>, pressure <span class="math inline">\(p\)</span>, density <span class="math inline">\(\rho\)</span>.</li>
-<li><strong>Order 1 — vector</strong> (3 components): velocity <span class="math inline">\(u_i\)</span>, i.e.&nbsp;<span class="math inline">\((u_1, u_2, u_3)\)</span>.</li>
-<li><strong>Order 2</strong> (9 components): stress <span class="math inline">\(\sigma_{ij}\)</span>, velocity gradient <span class="math inline">\(\partial u_i / \partial x_j\)</span>.</li>
+<li><strong>NumPy</strong> — efficient array operations, linear algebra, and numerical computations.</li>
+<li><strong>SciPy</strong> — numerical algorithms such as solvers, optimization, integration, and interpolation.</li>
+<li><strong>Matplotlib</strong> — plotting and visualization of results.</li>
 </ul>
-<p>A second-order tensor is more than a matrix of numbers: it is a <em>linear map between vectors</em>. The classic example is the Cauchy stress tensor, which maps the unit normal <span class="math inline">\(n_j\)</span> of a surface to the traction (force per area) <span class="math inline">\(t_i\)</span> acting on it:</p>
-<p><span id="eq-cauchy"><span class="math display">\[
-t_i = \sigma_{ij}\, n_j
-\tag{1}\]</span></span></p>
-<p>We write tensors either in <strong>symbolic (bold) notation</strong> (<span class="math inline">\(\mathbf{u}\)</span>, <span class="math inline">\(\boldsymbol{\sigma}\)</span>) or in <strong>index notation</strong> (<span class="math inline">\(u_i\)</span>, <span class="math inline">\(\sigma_{ij}\)</span>); <a href="#sec-index" class="quarto-xref">Section&nbsp;3</a> explains the index rules in detail.</p>
+<p>Together, these packages form the foundation of the scientific Python ecosystem and are sufficient for all assignments and projects in this course.</p>
 </section>
-<section id="elementary-operations" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="elementary-operations"><span class="header-section-number">1.2</span> Elementary operations</h3>
-<p>The operations you should recognize (in both notations):</p>
-<p><span id="eq-ops"><span class="math display">\[
-\mathbf{a} \cdot \mathbf{b} = a_i b_i, \qquad
-(\mathbf{A}\mathbf{b})_i = A_{ij} b_j, \qquad
-\mathbf{A} : \mathbf{B} = A_{ij} B_{ij}
-\tag{2}\]</span></span></p>
-<p>i.e.&nbsp;the dot product (two vectors → scalar), the tensor–vector product (→ vector, as in <a href="#eq-cauchy" class="quarto-xref">Eq.&nbsp;1</a>), and the double contraction (two tensors → scalar, used later for the dissipation rate).</p>
 </section>
-<section id="two-special-tensors-delta_ij-and-varepsilon_ijk" class="level3" data-number="1.3">
-<h3 data-number="1.3" class="anchored" data-anchor-id="two-special-tensors-delta_ij-and-varepsilon_ijk"><span class="header-section-number">1.3</span> Two special tensors: <span class="math inline">\(\delta_{ij}\)</span> and <span class="math inline">\(\varepsilon_{ijk}\)</span></h3>
-<p>The <strong>Kronecker delta</strong> is the index form of the identity:</p>
-<p><span id="eq-kron"><span class="math display">\[
-\delta_{ij} =
-\begin{cases}
-1 &amp; i = j \\
-0 &amp; i \neq j
-\end{cases}
-\tag{3}\]</span></span></p>
-<p>Its key use is <em>index substitution</em>: multiplying by <span class="math inline">\(\delta_{ij}\)</span> and summing renames an index, <span class="math inline">\(\delta_{ij}\, a_j = a_i\)</span>.</p>
-<p>The <strong>Levi-Civita (permutation) symbol</strong> <span class="math inline">\(\varepsilon_{ijk}\)</span> is the third-order companion of <a href="#eq-kron" class="quarto-xref">Eq.&nbsp;3</a>:</p>
-<p><span id="eq-levi"><span class="math display">\[
-\varepsilon_{ijk} =
-\begin{cases}
-+1 &amp; (i,j,k) \text{ an even permutation of } (1,2,3)\text{: } 123,\, 231,\, 312 \\
--1 &amp; (i,j,k) \text{ an odd permutation: } 132,\, 213,\, 321 \\
-0 &amp; \text{any index repeated}
-\end{cases}
-\tag{4}\]</span></span></p>
-<p>It encodes cross products and hence rotation. The two expressions you will meet in this course are the cross product and the <strong>vorticity</strong>:</p>
-<p><span id="eq-cross"><span class="math display">\[
-(\mathbf{a} \times \mathbf{b})_i = \varepsilon_{ijk}\, a_j b_k,
-\qquad
-\omega_i = \varepsilon_{ijk} \frac{\partial u_k}{\partial x_j}
-\tag{5}\]</span></span></p>
-<p>Finally, the <span class="math inline">\(\varepsilon\)</span>–<span class="math inline">\(\delta\)</span> identity connects the two symbols and is the workhorse for simplifying double cross products:</p>
-<p><span id="eq-epsdelta"><span class="math display">\[
-\varepsilon_{ijk}\, \varepsilon_{ilm} = \delta_{jl}\, \delta_{km} - \delta_{jm}\, \delta_{kl}
-\tag{6}\]</span></span></p>
-</section>
-<section id="symmetric-antisymmetric-decomposition" class="level3" data-number="1.4">
-<h3 data-number="1.4" class="anchored" data-anchor-id="symmetric-antisymmetric-decomposition"><span class="header-section-number">1.4</span> Symmetric / antisymmetric decomposition</h3>
-<p>Any second-order tensor splits uniquely into a symmetric and an antisymmetric part:</p>
-<p><span id="eq-decomp"><span class="math display">\[
-A_{ij} = \underbrace{\tfrac{1}{2}(A_{ij} + A_{ji})}_{\text{symmetric}}
-       + \underbrace{\tfrac{1}{2}(A_{ij} - A_{ji})}_{\text{antisymmetric}}
-\tag{7}\]</span></span></p>
-<p>Applied to the velocity gradient this defines the <strong>strain-rate tensor</strong> <span class="math inline">\(S_{ij}\)</span> (deformation) and the <strong>rotation-rate tensor</strong> <span class="math inline">\(\Omega_{ij}\)</span> (rigid-body rotation, related to <span class="math inline">\(\omega_i\)</span> from <a href="#eq-cross" class="quarto-xref">Eq.&nbsp;5</a>):</p>
-<p><span id="eq-sij"><span class="math display">\[
-\frac{\partial u_i}{\partial x_j} = S_{ij} + \Omega_{ij}, \qquad
-S_{ij} = \frac{1}{2}\!\left(\frac{\partial u_i}{\partial x_j} + \frac{\partial u_j}{\partial x_i}\right), \qquad
-\Omega_{ij} = \frac{1}{2}\!\left(\frac{\partial u_i}{\partial x_j} - \frac{\partial u_j}{\partial x_i}\right)
-\tag{8}\]</span></span></p>
-<p>This decomposition appears in essentially every turbulence model.</p>
+<section id="py-vs-.ipynb" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="py-vs-.ipynb"><span class="header-section-number">3</span> <code>.py</code> vs <code>.ipynb</code></h2>
+<p>Python code can be written either as plain script files (<code>.py</code>) or as Jupyter notebooks (<code>.ipynb</code>). Both formats are useful, but they serve different purposes.</p>
+<p><strong><code>.py</code> files</strong></p>
+<ul>
+<li>Best for clean, reproducible code.</li>
+<li>Easy to version control (Git).</li>
+<li>Suitable for larger projects and scripts.</li>
+<li>Less interactive for exploration.</li>
+</ul>
+<p><strong><code>.ipynb</code> files (Jupyter notebooks)</strong></p>
+<ul>
+<li>Excellent for exploration, learning, and visualization.</li>
+<li>Combine code, text, equations, and plots in one place.</li>
+<li>Very convenient for tutorials and reports.</li>
+<li>Harder to version control cleanly.</li>
+<li>Execution order can be confusing if cells are run out of order.</li>
+<li>Need the extra packages <code>jupyter</code> and <code>ipykernel</code>.</li>
+</ul>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Self-check — tensor algebra
+<span class="screen-reader-only">Tip</span>Recommendation
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<ol type="1">
-<li>What is <span class="math inline">\(\delta_{ii}\)</span>? <em>(Careful: repeated index!)</em></li>
-<li>What are <span class="math inline">\(\varepsilon_{123}\)</span>, <span class="math inline">\(\varepsilon_{321}\)</span>, and <span class="math inline">\(\varepsilon_{112}\)</span>?</li>
-<li>Use <a href="#eq-cross" class="quarto-xref">Eq.&nbsp;5</a> to show <span class="math inline">\(\mathbf{a} \times \mathbf{a} = \mathbf{0}\)</span>.</li>
-</ol>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Answers
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li><span class="math inline">\(\delta_{ii} = \delta_{11}+\delta_{22}+\delta_{33} = 3\)</span>.</li>
-<li><span class="math inline">\(\varepsilon_{123} = +1\)</span>, <span class="math inline">\(\varepsilon_{321} = -1\)</span>, <span class="math inline">\(\varepsilon_{112} = 0\)</span>.</li>
-<li><span class="math inline">\(\varepsilon_{ijk} a_j a_k = 0\)</span> because <span class="math inline">\(a_j a_k\)</span> is symmetric in <span class="math inline">\((j,k)\)</span> while <span class="math inline">\(\varepsilon_{ijk}\)</span> is antisymmetric — swapping <span class="math inline">\(j \leftrightarrow k\)</span> flips the sign of the sum, so it must vanish.</li>
-</ol>
-</div>
-</div>
-</div>
+<p>Use Jupyter notebooks for learning, experimentation, and visualization, and switch to <code>.py</code> files once the code becomes larger or more structured.</p>
 </div>
 </div>
 </section>
+<section id="references" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="references"><span class="header-section-number">4</span> References</h2>
+<section id="core-python" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="core-python"><span class="header-section-number">4.1</span> Core Python</h3>
+<ul>
+<li>Official website: <a href="https://www.python.org" class="uri">https://www.python.org</a></li>
+<li>Official documentation: <a href="https://docs.python.org/3/" class="uri">https://docs.python.org/3/</a></li>
+<li>Python tutorial (official): <a href="https://docs.python.org/3/tutorial/" class="uri">https://docs.python.org/3/tutorial/</a></li>
+<li>Standard library reference: <a href="https://docs.python.org/3/library/" class="uri">https://docs.python.org/3/library/</a></li>
+</ul>
 </section>
-<section id="sec-ns" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="sec-ns"><span class="header-section-number">2</span> Continuity and Navier–Stokes</h2>
-<p>For an incompressible, Newtonian fluid with constant properties, the governing variables and their SI units are:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 28%">
-<col style="width: 35%">
-<col style="width: 35%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Symbol</th>
-<th>Quantity</th>
-<th>SI units</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(u_i\)</span></td>
-<td>velocity</td>
-<td><span class="math inline">\(\mathrm{m\,s^{-1}}\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(p\)</span></td>
-<td>pressure</td>
-<td><span class="math inline">\(\mathrm{Pa} = \mathrm{kg\,m^{-1}\,s^{-2}}\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\rho\)</span></td>
-<td>density</td>
-<td><span class="math inline">\(\mathrm{kg\,m^{-3}}\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\mu\)</span></td>
-<td>dynamic viscosity</td>
-<td><span class="math inline">\(\mathrm{Pa\,s} = \mathrm{kg\,m^{-1}\,s^{-1}}\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\nu = \mu/\rho\)</span></td>
-<td>kinematic viscosity</td>
-<td><span class="math inline">\(\mathrm{m^2\,s^{-1}}\)</span></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Continuity</strong> (conservation of mass) states that the velocity field is divergence-free; every term has units <span class="math inline">\(\mathrm{s^{-1}}\)</span>:</p>
-<p><span id="eq-cont-vec"><span class="math display">\[
-\nabla \cdot \mathbf{u} = 0
-\qquad \left[\mathrm{s^{-1}}\right]
-\tag{9}\]</span></span></p>
-<p><strong>Momentum</strong> (Navier–Stokes) is Newton’s second law per unit mass; every term has units of acceleration, <span class="math inline">\(\mathrm{m\,s^{-2}}\)</span>:</p>
-<p><span id="eq-ns-vec"><span class="math display">\[
-\underbrace{\frac{\partial \mathbf{u}}{\partial t}}_{\text{unsteady}}
-+ \underbrace{(\mathbf{u} \cdot \nabla)\,\mathbf{u}}_{\text{convection}}
-= \underbrace{-\frac{1}{\rho} \nabla p}_{\text{pressure gradient}}
-+ \underbrace{\nu \nabla^2 \mathbf{u}}_{\text{viscous diffusion}}
-\qquad \left[\mathrm{m\,s^{-2}}\right]
-\tag{10}\]</span></span></p>
-<p>Check the units term by term: <span class="math inline">\(\partial \mathbf{u}/\partial t \sim
-\mathrm{(m/s)/s}\)</span>; convection <span class="math inline">\(\sim \mathrm{(m/s) \cdot (m/s)/m}\)</span>; pressure gradient <span class="math inline">\(\sim \mathrm{(Pa/m)/(kg/m^3)} =
-\mathrm{kg\,m^{-2}\,s^{-2} \cdot m^3\,kg^{-1}}\)</span>; viscous term <span class="math inline">\(\sim
-\mathrm{(m^2/s) \cdot (m/s)/m^2}\)</span> — all <span class="math inline">\(\mathrm{m\,s^{-2}}\)</span>. ✓</p>
-<p>Two things to remember: the <strong>convective term is the only nonlinear term</strong> — it is the reason turbulence exists and the reason the averaged equations don’t close — and pressure in incompressible flow is not a thermodynamic variable but a Lagrange multiplier that enforces <a href="#eq-cont-vec" class="quarto-xref">Eq.&nbsp;9</a>.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Self-check — governing equations
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><em>(The index-notation tools for 1 and 2 are introduced in <a href="#sec-index" class="quarto-xref">Section&nbsp;3</a> — come back here if needed.)</em></p>
-<ol type="1">
-<li>Using continuity (<a href="#eq-cont-vec" class="quarto-xref">Eq.&nbsp;9</a>), show that the convective term can be written in <strong>conservative form</strong>: <span class="math inline">\(u_j\, \partial u_i / \partial x_j = \partial (u_i u_j) / \partial x_j\)</span>.</li>
-<li>Take the divergence of <a href="#eq-ns-vec" class="quarto-xref">Eq.&nbsp;10</a> and use continuity to show that pressure satisfies a <strong>Poisson equation</strong>, <span class="math inline">\(\frac{1}{\rho} \frac{\partial^2 p}{\partial x_i \partial x_i}
-= -\frac{\partial u_j}{\partial x_i} \frac{\partial u_i}{\partial x_j}\)</span>. What does this tell you about the role of pressure in incompressible flow?</li>
-<li>The viscous dissipation rate per unit mass is <span class="math inline">\(\varepsilon = 2 \nu S_{ij} S_{ij}\)</span> (with <span class="math inline">\(S_{ij}\)</span> from <a href="#eq-sij" class="quarto-xref">Eq.&nbsp;8</a>). Show that its units are <span class="math inline">\(\mathrm{m^2\,s^{-3}} = \mathrm{W\,kg^{-1}}\)</span>.</li>
-</ol>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Answers
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li>Product rule: <span class="math inline">\(\partial (u_i u_j)/\partial x_j
-= u_j\, \partial u_i/\partial x_j + u_i\, \underbrace{\partial u_j / \partial x_j}_{=\,0}\)</span> — the last term vanishes by continuity. The conservative form is what finite-volume codes like OpenFOAM actually discretize.</li>
-<li>Applying <span class="math inline">\(\partial/\partial x_i\)</span> to each term: the unsteady term gives <span class="math inline">\(\partial(\partial u_i/\partial x_i)/\partial t = 0\)</span> and the viscous term gives <span class="math inline">\(\nu\, \partial^2 (\partial u_i / \partial x_i)/\partial x_j \partial x_j = 0\)</span> (both by continuity); the convective term leaves <span class="math inline">\(\partial u_j/\partial x_i\; \partial u_i/\partial x_j\)</span>. Hence the Poisson equation. Pressure has <strong>no evolution equation of its own</strong>: it is determined instantaneously by the velocity field (elliptic problem) and acts as a Lagrange multiplier that enforces <a href="#eq-cont-vec" class="quarto-xref">Eq.&nbsp;9</a> — this is why incompressible solvers need a pressure-correction step (e.g.&nbsp;PISO/SIMPLE in OpenFOAM).</li>
-<li><span class="math inline">\([\nu] = \mathrm{m^2\,s^{-1}}\)</span> and <span class="math inline">\([S_{ij}] = \mathrm{s^{-1}}\)</span>, so <span class="math inline">\([\varepsilon] = \mathrm{m^2\,s^{-1}} \cdot \mathrm{s^{-2}}
-= \mathrm{m^2\,s^{-3}}\)</span>. Since <span class="math inline">\(\mathrm{W\,kg^{-1}} = \mathrm{J\,s^{-1}\,kg^{-1}}
-= \mathrm{kg\,m^2\,s^{-2}} \cdot \mathrm{s^{-1}\,kg^{-1}}
-= \mathrm{m^2\,s^{-3}}\)</span>, dissipation is a power per unit mass — kinetic energy converted to heat.</li>
-</ol>
-</div>
-</div>
-</div>
-</div>
-</div>
+<section id="numpy" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="numpy"><span class="header-section-number">4.2</span> NumPy</h3>
+<ul>
+<li>Official website: <a href="https://numpy.org" class="uri">https://numpy.org</a></li>
+<li>Documentation: <a href="https://numpy.org/doc/" class="uri">https://numpy.org/doc/</a></li>
+<li>User guide: <a href="https://numpy.org/doc/stable/user/index.html" class="uri">https://numpy.org/doc/stable/user/index.html</a></li>
+<li>API reference: <a href="https://numpy.org/doc/stable/reference/" class="uri">https://numpy.org/doc/stable/reference/</a></li>
+</ul>
 </section>
-<section id="sec-index" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="sec-index"><span class="header-section-number">3</span> Index notation</h2>
-<p>We will write most turbulence equations in <strong>Cartesian index (Einstein) notation</strong>. The rules:</p>
-<ol type="1">
-<li>A <strong>repeated (dummy) index</strong> in a term implies summation over 1–3: <span class="math inline">\(a_i b_i = a_1 b_1 + a_2 b_2 + a_3 b_3\)</span>.</li>
-<li>A <strong>free index</strong> (appearing once) must match in every term of an equation and denotes three equations at once.</li>
-<li>No index may appear <strong>more than twice</strong> in a single term.</li>
-</ol>
-<section id="worked-example-1-divergence-of-a-vector" class="level3" data-number="3.1">
-<h3 data-number="3.1" class="anchored" data-anchor-id="worked-example-1-divergence-of-a-vector"><span class="header-section-number">3.1</span> Worked example 1: divergence of a vector</h3>
-<p>With the shorthand <span class="math inline">\(\partial/\partial x_j\)</span>, the divergence <span class="math inline">\(\nabla \cdot \mathbf{u}\)</span> has one repeated index <span class="math inline">\(j\)</span> — so it is a scalar, written out as:</p>
-<p><span id="eq-ex-div"><span class="math display">\[
-\frac{\partial u_j}{\partial x_j}
-= \frac{\partial u_1}{\partial x_1}
-+ \frac{\partial u_2}{\partial x_2}
-+ \frac{\partial u_3}{\partial x_3}
-\tag{11}\]</span></span></p>
+<section id="matplotlib" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="matplotlib"><span class="header-section-number">4.3</span> Matplotlib</h3>
+<ul>
+<li>Official website: <a href="https://matplotlib.org" class="uri">https://matplotlib.org</a></li>
+<li>Documentation: <a href="https://matplotlib.org/stable/" class="uri">https://matplotlib.org/stable/</a></li>
+<li>Tutorials &amp; examples: <a href="https://matplotlib.org/stable/tutorials/index.html" class="uri">https://matplotlib.org/stable/tutorials/index.html</a></li>
+<li>Gallery: <a href="https://matplotlib.org/stable/gallery/index.html" class="uri">https://matplotlib.org/stable/gallery/index.html</a></li>
+<li>Style-sheets reference: <a href="https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html" class="uri">https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html</a></li>
+</ul>
 </section>
-<section id="worked-example-2-tensorvector-product" class="level3" data-number="3.2">
-<h3 data-number="3.2" class="anchored" data-anchor-id="worked-example-2-tensorvector-product"><span class="header-section-number">3.2</span> Worked example 2: tensor–vector product</h3>
-<p><span class="math inline">\(b_i = A_{ij}\, x_j\)</span> has free index <span class="math inline">\(i\)</span> and dummy index <span class="math inline">\(j\)</span>: it is three equations, each a sum of three terms. The first one (<span class="math inline">\(i = 1\)</span>) reads</p>
-<p><span id="eq-ex-matvec"><span class="math display">\[
-b_1 = A_{11} x_1 + A_{12} x_2 + A_{13} x_3,
-\tag{12}\]</span></span></p>
-<p>and analogously for <span class="math inline">\(b_2\)</span>, <span class="math inline">\(b_3\)</span> — exactly a matrix–vector product.</p>
+<section id="scipy" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="scipy"><span class="header-section-number">4.4</span> SciPy</h3>
+<ul>
+<li>Official website: <a href="https://scipy.org" class="uri">https://scipy.org</a></li>
+<li>Documentation: <a href="https://docs.scipy.org/doc/scipy/" class="uri">https://docs.scipy.org/doc/scipy/</a></li>
+<li>Tutorial: <a href="https://docs.scipy.org/doc/scipy/tutorial/index.html" class="uri">https://docs.scipy.org/doc/scipy/tutorial/index.html</a></li>
+<li>API reference: <a href="https://docs.scipy.org/doc/scipy/reference/" class="uri">https://docs.scipy.org/doc/scipy/reference/</a></li>
+</ul>
 </section>
-<section id="navierstokes-in-index-notation" class="level3" data-number="3.3">
-<h3 data-number="3.3" class="anchored" data-anchor-id="navierstokes-in-index-notation"><span class="header-section-number">3.3</span> Navier–Stokes in index notation</h3>
-<p>Applying the same rules to <a href="#eq-cont-vec" class="quarto-xref">Eq.&nbsp;9</a> and <a href="#eq-ns-vec" class="quarto-xref">Eq.&nbsp;10</a>:</p>
-<p><span id="eq-cont-idx"><span class="math display">\[
-\frac{\partial u_j}{\partial x_j} = 0
-\tag{13}\]</span></span></p>
-<p><span id="eq-ns-idx"><span class="math display">\[
-\frac{\partial u_i}{\partial t}
-+ u_j \frac{\partial u_i}{\partial x_j}
-= -\frac{1}{\rho} \frac{\partial p}{\partial x_i}
-+ \nu \frac{\partial^2 u_i}{\partial x_j \partial x_j}
-\tag{14}\]</span></span></p>
-<p>Compare with <a href="#eq-ex-div" class="quarto-xref">Eq.&nbsp;11</a> and <a href="#eq-ex-matvec" class="quarto-xref">Eq.&nbsp;12</a>: continuity is a divergence (one dummy index, scalar equation), while in <a href="#eq-ns-idx" class="quarto-xref">Eq.&nbsp;14</a> the free index <span class="math inline">\(i\)</span> says “one equation per velocity component” and the dummy index <span class="math inline">\(j\)</span> sums the convective and viscous contributions from all three directions. You should be able to translate between <a href="#eq-ns-vec" class="quarto-xref">Eq.&nbsp;10</a> and <a href="#eq-ns-idx" class="quarto-xref">Eq.&nbsp;14</a> fluently — Reynolds averaging in the lectures happens almost entirely in index notation.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Self-check — index notation
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li>Write out the <span class="math inline">\(i = 2\)</span> component of the convective term <span class="math inline">\(u_j\, \partial u_i / \partial x_j\)</span>.</li>
-<li>Is that term linear in <span class="math inline">\(\mathbf{u}\)</span>?</li>
-<li>Is <span class="math inline">\(c_i = a_j b_j d_i\)</span> valid index notation? What about <span class="math inline">\(c_i = a_j b_j d_j\)</span>?</li>
-</ol>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Answers
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li><span class="math inline">\(u_1 \frac{\partial u_2}{\partial x_1} + u_2 \frac{\partial u_2}{\partial x_2} + u_3 \frac{\partial u_2}{\partial x_3}\)</span>.</li>
-<li>No — velocity multiplies its own gradient (quadratic). This term generates the Reynolds stresses under averaging.</li>
-<li>Valid (<span class="math inline">\(j\)</span> dummy, <span class="math inline">\(i\)</span> free); invalid — <span class="math inline">\(j\)</span> appears three times in one term.</li>
-</ol>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="sec-dim" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="sec-dim"><span class="header-section-number">4</span> Dimensional analysis: the Reynolds number</h2>
-<p>Consider fully developed flow through a pipe (<a href="#fig-pipe" class="quarto-xref">Fig.&nbsp;1</a>): we ask how the pressure drop <span class="math inline">\(\Delta p\)</span> over a length <span class="math inline">\(L\)</span> depends on the flow and fluid parameters.</p>
-<div id="fig-pipe" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-pipe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../assets/pipe-sketch.svg" class="img-fluid figure-img" style="width:75.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pipe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Pipe flow: mean velocity <span class="math inline">\(U\)</span>, diameter <span class="math inline">\(D\)</span>, length <span class="math inline">\(L\)</span>, fluid properties <span class="math inline">\(\rho, \mu\)</span>, and measured pressure drop <span class="math inline">\(\Delta p\)</span>.
-</figcaption>
-</figure>
-</div>
-<p>The physical relationship is</p>
-<p><span id="eq-pipe-rel"><span class="math display">\[
-\Delta p = f(\rho,\ \mu,\ U,\ D,\ L),
-\tag{15}\]</span></span></p>
-<p>with dimensions (using <span class="math inline">\(\mathrm{M}\)</span> = mass, <span class="math inline">\(\mathrm{L}\)</span> = length, <span class="math inline">\(\mathrm{T}\)</span> = time):</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 19%">
-<col style="width: 21%">
-<col style="width: 15%">
-<col style="width: 13%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Variable</th>
-<th><span class="math inline">\(\Delta p\)</span></th>
-<th><span class="math inline">\(\rho\)</span></th>
-<th><span class="math inline">\(\mu\)</span></th>
-<th><span class="math inline">\(U\)</span></th>
-<th><span class="math inline">\(D\)</span></th>
-<th><span class="math inline">\(L\)</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Dimensions</td>
-<td><span class="math inline">\(\mathrm{M\,L^{-1}\,T^{-2}}\)</span></td>
-<td><span class="math inline">\(\mathrm{M\,L^{-3}}\)</span></td>
-<td><span class="math inline">\(\mathrm{M\,L^{-1}\,T^{-1}}\)</span></td>
-<td><span class="math inline">\(\mathrm{L\,T^{-1}}\)</span></td>
-<td><span class="math inline">\(\mathrm{L}\)</span></td>
-<td><span class="math inline">\(\mathrm{L}\)</span></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Step 1 — count.</strong> <span class="math inline">\(n = 6\)</span> variables, <span class="math inline">\(k = 3\)</span> independent dimensions (<span class="math inline">\(\mathrm{M}, \mathrm{L}, \mathrm{T}\)</span>) ⟹ the Buckingham-<span class="math inline">\(\Pi\)</span> theorem guarantees <span class="math inline">\(n - k = 3\)</span> independent dimensionless groups.</p>
-<p><strong>Step 2 — choose repeating variables.</strong> Pick <span class="math inline">\(k = 3\)</span> variables that (i) together contain all three dimensions, (ii) are dimensionally independent of each other, and (iii) do <em>not</em> include the dependent variable <span class="math inline">\(\Delta p\)</span>. The standard choice is <span class="math inline">\(\rho\)</span> (mass), <span class="math inline">\(U\)</span> (time), <span class="math inline">\(D\)</span> (length).</p>
-<p><strong>Step 3 — form the groups.</strong> Each remaining variable, multiplied by powers of the repeating ones, must come out dimensionless. For <span class="math inline">\(\mu\)</span>:</p>
-<p><span id="eq-pi2-setup"><span class="math display">\[
-\Pi_2 = \mu\, \rho^{a} U^{b} D^{c}
-\;\;\Rightarrow\;\;
-\mathrm{M}^{1+a}\ \mathrm{L}^{-1-3a+b+c}\ \mathrm{T}^{-1-b} \overset{!}{=} \mathrm{M}^0 \mathrm{L}^0 \mathrm{T}^0
-\tag{16}\]</span></span></p>
-<p>Setting each exponent to zero: <span class="math inline">\(\mathrm{M}\!: a = -1\)</span>; <span class="math inline">\(\mathrm{T}\!: b = -1\)</span>; then <span class="math inline">\(\mathrm{L}\!: c = -1\)</span>. Hence</p>
-<p><span id="eq-re"><span class="math display">\[
-\Pi_2 = \frac{\mu}{\rho U D}
-\quad\Longleftrightarrow\quad
-\Pi_2^{-1} = \frac{\rho U D}{\mu} = \mathrm{Re}.
-\tag{17}\]</span></span></p>
-<p>The same procedure applied to <span class="math inline">\(\Delta p\)</span> and <span class="math inline">\(L\)</span> gives the other two groups (do it yourself — self-check below):</p>
-<p><span id="eq-pipe-result"><span class="math display">\[
-\Pi_1 = \frac{\Delta p}{\rho U^2}, \qquad
-\Pi_3 = \frac{L}{D},
-\qquad\text{so}\qquad
-\frac{\Delta p}{\rho U^2} = \phi\!\left(\mathrm{Re},\ \frac{L}{D}\right)
-\tag{18}\]</span></span></p>
-<p>— six dimensional variables collapse to a relation between three numbers. That is exactly why friction-factor charts (Moody diagram) work.</p>
-<p><strong>The physical meaning of <span class="math inline">\(\mathrm{Re}\)</span></strong> is the ratio of inertial to viscous effects:</p>
-<p><span id="eq-re-meaning"><span class="math display">\[
-\mathrm{Re} = \frac{\rho U D}{\mu} = \frac{U D}{\nu}
-\sim \frac{\text{inertial forces}}{\text{viscous forces}}
-\tag{19}\]</span></span></p>
-<p>The same conclusion follows from non-dimensionalizing <a href="#eq-ns-idx" class="quarto-xref">Eq.&nbsp;14</a> with <span class="math inline">\(x_i^* = x_i / D\)</span>, <span class="math inline">\(u_i^* = u_i / U\)</span>, <span class="math inline">\(t^* = tU/D\)</span>, <span class="math inline">\(p^* = p / (\rho U^2)\)</span>:</p>
-<p><span id="eq-ns-nd"><span class="math display">\[
-\frac{\partial u_i^*}{\partial t^*}
-+ u_j^* \frac{\partial u_i^*}{\partial x_j^*}
-= -\frac{\partial p^*}{\partial x_i^*}
-+ \frac{1}{\mathrm{Re}} \frac{\partial^2 u_i^*}{\partial x_j^* \partial x_j^*}
-\tag{20}\]</span></span></p>
-<p><span class="math inline">\(\mathrm{Re}\)</span> is the only parameter left — two incompressible flows with the same geometry and Reynolds number are dynamically similar, and the viscous term becomes small (in a subtle, near-wall-dominated way) as <span class="math inline">\(\mathrm{Re} \to \infty\)</span>. This is the starting point of the course.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Self-check — dimensional analysis
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li>Derive <span class="math inline">\(\Pi_1\)</span> in <a href="#eq-pipe-result" class="quarto-xref">Eq.&nbsp;18</a> by repeating Step 3 for <span class="math inline">\(\Delta p\)</span>.</li>
-<li>The pipe wall has a roughness height <span class="math inline">\(k_s\)</span> <span class="math inline">\([\mathrm{L}]\)</span>. Which dimensionless group does it add?</li>
-<li>Water flows at <span class="math inline">\(U = 1\,\mathrm{m\,s^{-1}}\)</span> through a <span class="math inline">\(D = 5\,\mathrm{cm}\)</span> pipe (<span class="math inline">\(\nu = 10^{-6}\,\mathrm{m^2\,s^{-1}}\)</span>). Compute <span class="math inline">\(\mathrm{Re}\)</span>. Laminar or turbulent?</li>
-</ol>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Answers
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li><span class="math inline">\(\Delta p\, \rho^a U^b D^c\)</span>: <span class="math inline">\(\mathrm{M}\!: a=-1\)</span>; <span class="math inline">\(\mathrm{T}\!: b=-2\)</span>; <span class="math inline">\(\mathrm{L}\!: -1+3-2+c=0 \Rightarrow c=0\)</span> — giving <span class="math inline">\(\Delta p / (\rho U^2)\)</span>.</li>
-<li>The relative roughness <span class="math inline">\(k_s / D\)</span> (the third parameter of the Moody diagram).</li>
-<li><span class="math inline">\(\mathrm{Re} = UD/\nu = 5 \times 10^4\)</span> — far above the transitional value <span class="math inline">\(\approx 2300\)</span>: turbulent.</li>
-</ol>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="where-to-review" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="where-to-review"><span class="header-section-number">5</span> Where to review</h2>
-<p>If any of the above is rusty: the fluid mechanics fundamentals (<a href="#sec-tensors" class="quarto-xref">Section&nbsp;1</a>–<a href="#sec-ns" class="quarto-xref">Section&nbsp;2</a>) are covered in <span class="citation" data-cites="kundu2015">[<a href="#ref-kundu2015" role="doc-biblioref">1</a>]</span> (Chs. 2–4), tensor and index notation in <span class="citation" data-cites="pope2000">[<a href="#ref-pope2000" role="doc-biblioref">2</a>]</span> (Appendix A), and <span class="citation" data-cites="tennekes1972">[<a href="#ref-tennekes1972" role="doc-biblioref">3</a>]</span> remains a classic compact introduction to turbulence itself.</p>
-</section>
-<section id="references" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="references"><span class="header-section-number">6</span> References</h2>
-<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
-<div id="ref-kundu2015" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">P. K. Kundu, I. M. Cohen, and D. R. Dowling, <em>Fluid mechanics</em>, 6 ed., Academic Press, 2015.</div>
-</div>
-<div id="ref-pope2000" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">S. B. Pope, <em>Turbulent flows</em>, Cambridge University Press, 2000.</div>
-</div>
-<div id="ref-tennekes1972" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[3] </div><div class="csl-right-inline">H. Tennekes and J. L. Lumley, <em>A first course in turbulence</em>, MIT Press, 1972.</div>
-</div>
-</div>
+<section id="not-covered-here-but-very-helpful" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="not-covered-here-but-very-helpful"><span class="header-section-number">4.5</span> Not covered here, but very helpful</h3>
+<p><em>Formatting &amp; linting</em></p>
+<ul>
+<li>Black formatter: <a href="https://pypi.org/project/black/" class="uri">https://pypi.org/project/black/</a></li>
+<li>Flake8: <a href="https://flake8.pycqa.org/" class="uri">https://flake8.pycqa.org/</a></li>
+<li>pylint: <a href="https://pylint.org/" class="uri">https://pylint.org/</a></li>
+<li>Formatting in VS Code: <a href="https://code.visualstudio.com/docs/python/editing#_formatting" class="uri">https://code.visualstudio.com/docs/python/editing#_formatting</a></li>
+</ul>
+<p><em>Testing</em></p>
+<ul>
+<li>pytest: <a href="https://docs.pytest.org/" class="uri">https://docs.pytest.org/</a></li>
+<li>Testing in VS Code (pytest/unittest): <a href="https://code.visualstudio.com/docs/python/testing" class="uri">https://code.visualstudio.com/docs/python/testing</a></li>
+</ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

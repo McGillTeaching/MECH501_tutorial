@@ -1,5 +1,569 @@
 [
   {
+    "objectID": "python/03-oop.html",
+    "href": "python/03-oop.html",
+    "title": "Object-oriented programming",
+    "section": "",
+    "text": "Classes bundle data (attributes) with the behaviour that acts on it (methods). In scientific code they are ideal for things like a simulation case, a mesh, or a material model — a coherent object you pass around and extend.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Object-oriented programming"
+    ]
+  },
+  {
+    "objectID": "python/03-oop.html#a-first-class",
+    "href": "python/03-oop.html#a-first-class",
+    "title": "Object-oriented programming",
+    "section": "1 A first class",
+    "text": "1 A first class\n__init__ sets up each instance; self is the instance the method is called on. __repr__ gives a useful printed form.\n\nclass Fluid:\n    \"\"\"A simple incompressible fluid.\"\"\"\n\n    def __init__(self, name, rho, mu):\n        self.name = name\n        self.rho = rho          # density  [kg/m^3]\n        self.mu = mu            # dyn. viscosity [Pa s]\n\n    def reynolds(self, u, length):\n        \"\"\"Reynolds number for velocity u and length scale.\"\"\"\n        return self.rho * u * length / self.mu\n\n    def __repr__(self):\n        return f\"Fluid(name={self.name!r}, rho={self.rho}, mu={self.mu})\"\n\nwater = Fluid('water', 1000.0, 1.0e-3)\nprint(water)\nprint('Re =', water.reynolds(u=1.0, length=0.05))\n\nFluid(name='water', rho=1000.0, mu=0.001)\nRe = 50000.0",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Object-oriented programming"
+    ]
+  },
+  {
+    "objectID": "python/03-oop.html#properties-and-encapsulation",
+    "href": "python/03-oop.html#properties-and-encapsulation",
+    "title": "Object-oriented programming",
+    "section": "2 Properties and encapsulation",
+    "text": "2 Properties and encapsulation\nA @property exposes a computed value as if it were an attribute, and lets you validate on assignment — without changing how callers use the object.\n\nclass Pipe:\n    def __init__(self, diameter):\n        self.diameter = diameter        # goes through the setter below\n\n    @property\n    def diameter(self):\n        return self._d\n\n    @diameter.setter\n    def diameter(self, value):\n        if value &lt;= 0:\n            raise ValueError(\"diameter must be positive\")\n        self._d = value\n\n    @property\n    def area(self):\n        \"\"\"Cross-sectional area — computed, read-only.\"\"\"\n        import math\n        return math.pi * (self._d / 2) ** 2\n\npipe = Pipe(0.05)\nprint('area =', pipe.area)\ntry:\n    pipe.diameter = -1\nexcept ValueError as e:\n    print('rejected:', e)\n\narea = 0.001963495408493621\nrejected: diameter must be positive\n\n\nImagine you need a ChannelCase, a PipeCase and a JetCase that differ only in their geometry but share all the post-processing. This is super easy in Python using inheritance from a common base class.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Object-oriented programming"
+    ]
+  },
+  {
+    "objectID": "python/03-oop.html#inheritance",
+    "href": "python/03-oop.html#inheritance",
+    "title": "Object-oriented programming",
+    "section": "3 Inheritance",
+    "text": "3 Inheritance\nA subclass reuses and extends a base class; super() calls the parent’s implementation.\n\nclass NonNewtonianFluid(Fluid):\n    \"\"\"Adds a power-law index n on top of a Fluid.\"\"\"\n\n    def __init__(self, name, rho, mu, n):\n        super().__init__(name, rho, mu)   # reuse Fluid.__init__\n        self.n = n\n\n    def __repr__(self):\n        base = super().__repr__()[:-1]     # drop trailing ')'\n        return f'{base}, n={self.n})'\n\nblood = NonNewtonianFluid('blood', 1060.0, 3.5e-3, 0.7)\nprint(blood)\nprint('inherited method Re =', round(blood.reynolds(0.2, 0.004), 2))\nprint('is a Fluid?', isinstance(blood, Fluid))\n\nFluid(name='blood', rho=1060.0, mu=0.0035, n=0.7)\ninherited method Re = 242.29\nis a Fluid? True",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Object-oriented programming"
+    ]
+  },
+  {
+    "objectID": "python/03-oop.html#dunder-methods-make-objects-feel-native",
+    "href": "python/03-oop.html#dunder-methods-make-objects-feel-native",
+    "title": "Object-oriented programming",
+    "section": "4 Dunder methods make objects feel native",
+    "text": "4 Dunder methods make objects feel native\nImplementing special (__dunder__) methods lets your objects work with len(), ==, [], arithmetic, and so on.\n\nclass Vector:\n    def __init__(self, *components):\n        self.c = tuple(components)\n    def __len__(self):\n        return len(self.c)\n    def __getitem__(self, i):\n        return self.c[i]\n    def __add__(self, other):\n        return Vector(*(a + b for a, b in zip(self.c, other.c)))\n    def __eq__(self, other):\n        return self.c == other.c\n    def __repr__(self):\n        return f'Vector{self.c}'\n\nv = Vector(1, 2, 3)\nw = Vector(4, 5, 6)\nprint(v + w, '| len =', len(v), '| v[0] =', v[0], '| v==v:', v == Vector(1, 2, 3))\n\nVector(5, 7, 9) | len = 3 | v[0] = 1 | v==v: True\n\n\nImagine you need a config object with a dozen fields and a readable printout. This is super easy in Python using @dataclass, which writes the boilerplate for you.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Object-oriented programming"
+    ]
+  },
+  {
+    "objectID": "python/03-oop.html#dataclass-classes-without-boilerplate",
+    "href": "python/03-oop.html#dataclass-classes-without-boilerplate",
+    "title": "Object-oriented programming",
+    "section": "5 dataclass — classes without boilerplate",
+    "text": "5 dataclass — classes without boilerplate\nFor plain data containers, @dataclass writes __init__, __repr__, and __eq__ for you.\n\nfrom dataclasses import dataclass, field\n\n@dataclass\nclass SimCase:\n    name: str\n    reynolds: float\n    mesh_cells: int = 10_000\n    tags: list = field(default_factory=list)\n\ncase = SimCase('channel', 5000, tags=['LES'])\nprint(case)\nprint('equal?', case == SimCase('channel', 5000, tags=['LES']))\n\nSimCase(name='channel', reynolds=5000, mesh_cells=10000, tags=['LES'])\nequal? True",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Object-oriented programming"
+    ]
+  },
+  {
+    "objectID": "python/03-oop.html#self-tests",
+    "href": "python/03-oop.html#self-tests",
+    "title": "Object-oriented programming",
+    "section": "6 Self-tests",
+    "text": "6 Self-tests\n1. Give Fluid a kinematic_viscosity property returning \\(\\nu=\\mu/\\rho\\).\n\n\nShow solution\nclass Fluid2(Fluid):\n    @property\n    def kinematic_viscosity(self):\n        return self.mu / self.rho\n\nprint(Fluid2('water', 1000.0, 1.0e-3).kinematic_viscosity)\n\n\n2. Make a @dataclass Airfoil with fields name: str, chord: float, alpha: float = 0.0.\n\n\nShow solution\nfrom dataclasses import dataclass\n@dataclass\nclass Airfoil:\n    name: str\n    chord: float\n    alpha: float = 0.0\nprint(Airfoil('NACA0012', 0.1))",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Object-oriented programming"
+    ]
+  },
+  {
+    "objectID": "python/03-oop.html#turbulence-in-practice-a-signal-class",
+    "href": "python/03-oop.html#turbulence-in-practice-a-signal-class",
+    "title": "Object-oriented programming",
+    "section": "7 Turbulence in practice: a Signal class",
+    "text": "7 Turbulence in practice: a Signal class\nWrap a velocity record in a class whose methods are the standard Reynolds operations — mean, fluctuation, and rms.\n\nimport numpy as np\n\nclass Signal:\n    \"\"\"A time series of one velocity component.\"\"\"\n    def __init__(self, t, u):\n        self.t = np.asarray(t)\n        self.u = np.asarray(u)\n    @property\n    def mean(self):\n        return self.u.mean()\n    def fluctuations(self):\n        return self.u - self.mean\n    def rms(self):\n        return float(np.sqrt((self.fluctuations() ** 2).mean()))\n    def __len__(self):\n        return self.u.size\n\nt = np.linspace(0, 1, 500)\ns = Signal(t, 10 + np.sin(2 * np.pi * 5 * t))\nprint(f'len={len(s)}, &lt;u&gt;={s.mean:.3f}, u_rms={s.rms():.4f}')\n\nlen=500, &lt;u&gt;=10.000, u_rms=0.7064\n\n\nSelf-test. Subclass Signal and add an intensity property returning the turbulence intensity \\(I = u_{\\mathrm{rms}}/\\langle u\\rangle\\).\n\n\nShow solution\nclass Signal2(Signal):\n    @property\n    def intensity(self):\n        return self.rms() / self.mean\n\nprint(Signal2(t, 10 + np.sin(2 * np.pi * 5 * t)).intensity)",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Object-oriented programming"
+    ]
+  },
+  {
+    "objectID": "python/02-foundations.html",
+    "href": "python/02-foundations.html",
+    "title": "Python foundations",
+    "section": "",
+    "text": "This section refreshes the building blocks you will lean on constantly: how a script starts, the core data structures (used idiomatically), and reading and writing files with pathlib.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Python foundations"
+    ]
+  },
+  {
+    "objectID": "python/02-foundations.html#program-entry-points",
+    "href": "python/02-foundations.html#program-entry-points",
+    "title": "Python foundations",
+    "section": "1 Program entry points",
+    "text": "1 Program entry points\nA Python file can be imported as a module or run as a script. The __name__ guard lets the same file do both: code under it runs only when the file is executed directly, not when it is imported.\n\ndef main():\n    print(\"running as a script\")\n\n# When run as `python myfile.py`, __name__ == '__main__'.\n# When imported, __name__ == 'myfile' and main() does not fire.\nif __name__ == \"__main__\":\n    main()\n\nrunning as a script\n\n\nFor real scripts, parse arguments with the standard-library argparse instead of reading sys.argv by hand — you get --help, types, and validation for free.\n\nimport argparse\n\ndef build_parser():\n    p = argparse.ArgumentParser(description=\"Scale a value.\")\n    p.add_argument(\"x\", type=float, help=\"input value\")\n    p.add_argument(\"--factor\", type=float, default=2.0)\n    return p\n\n# Parse an explicit list here (a notebook has no command line):\nargs = build_parser().parse_args([\"21\", \"--factor\", \"2\"])\nprint(args.x * args.factor)\n\n42.0\n\n\nRun a module (not a file path) with python -m package.module — the same mechanism behind python -m pip and python -m pytest.\nImagine you need to group ten thousand particles by which grid cell they fall in, or tally how many snapshots hit each flow regime. This is super easy in Python using collections (defaultdict, Counter).",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Python foundations"
+    ]
+  },
+  {
+    "objectID": "python/02-foundations.html#data-structures",
+    "href": "python/02-foundations.html#data-structures",
+    "title": "Python foundations",
+    "section": "2 Data structures",
+    "text": "2 Data structures\n\n2.1 Comprehensions\nComprehensions build lists, dicts, and sets in one readable expression — prefer them to manual append loops.\n\nsquares = [n ** 2 for n in range(6)]\nevens = [n for n in range(10) if n % 2 == 0]\nlookup = {ch: i for i, ch in enumerate('abc')}\nunique = {n % 3 for n in range(10)}\nprint(squares)\nprint(evens)\nprint(lookup)\nprint(unique)\n\n[0, 1, 4, 9, 16, 25]\n[0, 2, 4, 6, 8]\n{'a': 0, 'b': 1, 'c': 2}\n{0, 1, 2}\n\n\n\n\n2.2 The collections module\nSpecialised containers that make intent clear and code shorter.\n\nfrom collections import namedtuple, defaultdict, Counter, deque\n\n# namedtuple: a lightweight, immutable record with named fields\nPoint = namedtuple(\"Point\", [\"x\", \"y\"])\np = Point(1.0, 2.0)\nprint(\"namedtuple:\", p, p.x, p.y)\n\n# defaultdict: missing keys get a default automatically\ngroups = defaultdict(list)\nfor word in [\"fig\", \"flow\", \"turb\", \"flux\"]:\n    groups[word[0]].append(word)\nprint(\"defaultdict:\", dict(groups))\n\n# Counter: tally hashable items\nprint(\"Counter:\", Counter(\"mississippi\"))\n\n# deque: fast appends/pops at BOTH ends (a ring buffer, a queue, ...)\nd = deque([2, 3], maxlen=3)\nd.appendleft(1); d.append(4)\nprint(\"deque (maxlen=3):\", d)\n\nnamedtuple: Point(x=1.0, y=2.0) 1.0 2.0\ndefaultdict: {'f': ['fig', 'flow', 'flux'], 't': ['turb']}\nCounter: Counter({'i': 4, 's': 4, 'p': 2, 'm': 1})\ndeque (maxlen=3): deque([2, 3, 4], maxlen=3)\n\n\nImagine you need to load every stats_*.csv your solver scattered across a deep results tree. This is super easy in Python using pathlib.Path and rglob.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Python foundations"
+    ]
+  },
+  {
+    "objectID": "python/02-foundations.html#file-io-and-pathlib",
+    "href": "python/02-foundations.html#file-io-and-pathlib",
+    "title": "Python foundations",
+    "section": "3 File I/O and pathlib",
+    "text": "3 File I/O and pathlib\nUse pathlib.Path for filesystem paths — it is OS-independent and far cleaner than string concatenation or os.path. Always open files in a with block so they are closed even if an error occurs.\n\nfrom pathlib import Path\nimport tempfile\n\nworkdir = Path(tempfile.mkdtemp())   # a scratch directory for this demo\n\n# Build paths with the / operator, not string joins:\ndata_file = workdir / \"results\" / \"run01.txt\"\ndata_file.parent.mkdir(parents=True, exist_ok=True)\n\n# Simple whole-file write/read:\ndata_file.write_text(\"Re = 5000\\nCd = 0.42\\n\")\nprint(data_file.read_text())\n\n# Line-by-line with a context manager (best for large files):\nwith open(data_file, \"r\") as fh:\n    for line in fh:\n        key, _, value = line.partition(\"=\")\n        if value:\n            print(f\"{key.strip()} -&gt; {float(value)}\")\n\nRe = 5000\nCd = 0.42\n\nRe -&gt; 5000.0\nCd -&gt; 0.42\n\n\n\n# Useful Path attributes and globbing\nprint(\"name:\", data_file.name)\nprint(\"suffix:\", data_file.suffix)\nprint(\"parent:\", data_file.parent)\nprint(\"exists:\", data_file.exists())\ntxt_files = list(workdir.rglob(\"*.txt\"))\nprint(\"found:\", [f.name for f in txt_files])\n\nname: run01.txt\nsuffix: .txt\nparent: /tmp/tmpwsff0s28/results\nexists: True\nfound: ['run01.txt']",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Python foundations"
+    ]
+  },
+  {
+    "objectID": "python/02-foundations.html#self-tests",
+    "href": "python/02-foundations.html#self-tests",
+    "title": "Python foundations",
+    "section": "4 Self-tests",
+    "text": "4 Self-tests\n1. Using a dict comprehension, build {n: n**3 for n in 1..5} (cubes).\n\n\nShow solution\ncubes = {n: n ** 3 for n in range(1, 6)}\nprint(cubes)\n\n\n2. Given words = ['fig','flow','turb','flux','film'], use Counter to find how many start with each letter.\n\n\nShow solution\nfrom collections import Counter\nwords = ['fig', 'flow', 'turb', 'flux', 'film']\nprint(Counter(w[0] for w in words))\n\n\n3. Write the numbers 0–4 to a file nums.txt (one per line) with pathlib, then read them back into a list of ints.\n\n\nShow solution\nfrom pathlib import Path\nimport tempfile\nf = Path(tempfile.mkdtemp()) / \"nums.txt\"\nf.write_text(\"\\n\".join(str(n) for n in range(5)))\nnums = [int(line) for line in f.read_text().splitlines()]\nprint(nums)",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Python foundations"
+    ]
+  },
+  {
+    "objectID": "python/02-foundations.html#turbulence-in-practice-reading-a-velocity-signal",
+    "href": "python/02-foundations.html#turbulence-in-practice-reading-a-velocity-signal",
+    "title": "Python foundations",
+    "section": "5 Turbulence in practice: reading a velocity signal",
+    "text": "5 Turbulence in practice: reading a velocity signal\nPut the pieces together — write a short synthetic velocity signal \\(u(t)\\) to a file, read it back with pathlib, and compute its mean and rms fluctuation with comprehensions.\n\nimport numpy as np\nfrom pathlib import Path\nimport tempfile\n\nrng = np.random.default_rng(0)\nt = np.linspace(0, 1, 200)\nu = 10 + 0.5 * np.sin(2 * np.pi * 8 * t) + 0.2 * rng.standard_normal(t.size)\n\nf = Path(tempfile.mkdtemp()) / 'signal.csv'\nf.write_text('\\n'.join(f'{ti:.4f},{ui:.4f}' for ti, ui in zip(t, u)))\n\nrows = [line.split(',') for line in f.read_text().splitlines()]\nu_read = [float(r[1]) for r in rows]\nmean = sum(u_read) / len(u_read)\nrms = (sum((ui - mean) ** 2 for ui in u_read) / len(u_read)) ** 0.5\nprint(f'&lt;u&gt; = {mean:.3f} m/s,  u_rms = {rms:.3f} m/s')\n\n&lt;u&gt; = 10.003 m/s,  u_rms = 0.362 m/s\n\n\nSelf-test. Build a list of the fluctuations \\(u' = u - \\langle u\\rangle\\) with a comprehension and check their mean is \\(\\approx 0\\).\n\n\nShow solution\nfluct = [ui - mean for ui in u_read]\nprint('mean of u\\' =', sum(fluct) / len(fluct))",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Python foundations"
+    ]
+  },
+  {
+    "objectID": "python/01-plotting.html",
+    "href": "python/01-plotting.html",
+    "title": "Efficient scientific plotting",
+    "section": "",
+    "text": "This tutorial covers best practices and example code for creating high-quality figures directly in Python. The guidelines are based on personal experience — think of them as a set of golden rules that have proven their worth over time. Following them from the start will save you a lot of reformatting work later.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Efficient scientific plotting"
+    ]
+  },
+  {
+    "objectID": "python/01-plotting.html#guidelines-for-scientific-figures",
+    "href": "python/01-plotting.html#guidelines-for-scientific-figures",
+    "title": "Efficient scientific plotting",
+    "section": "1 Guidelines for scientific figures",
+    "text": "1 Guidelines for scientific figures\nBefore diving into code, it is worth establishing a few ground rules for what makes a good scientific figure. Getting these right from the start saves significant rework later.\n\nGeneral plotting style\n\nConsistent style — colour scheme, axis labels, line widths, …\nTypeface and font size\n\nLaTeX rendering (optional, for a perfect match).\nMatch the document by matching font size, figure size, and (optionally) typeface. The recommended figure and font sizes are usually in the journal’s author guidelines.\nIf created this way, include the figure without scaling in LaTeX — use scale=1 instead of the common width=\\textwidth.\n\nFigure quality and resolution\n\n.pdf — line plots and small plots (scalable vector graphics).\n.png / .jpeg — colour maps / contour plots (when PDF is impractical, and to avoid silent rescaling).\nSufficient resolution (~1000 dpi, or at least the journal guideline).\n\nLabels and units\n\nConsistent use; units set non-italic (upright).\nTypical formatting of a quantity \\(T\\) in kelvin:\n\n\\(T\\) / K — recommended by the SI guidelines\n\\(T\\) in K\n\\(T\\) (K)\n\\(T\\) [K]\n\n\nData visualization\n\nUnambiguous data representation (e.g. scatter vs. hexbin — see below).\nA high level of self-explanation — readers often skim a paper looking only at the figures.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Efficient scientific plotting"
+    ]
+  },
+  {
+    "objectID": "python/01-plotting.html#defining-a-consistent-plotting-style",
+    "href": "python/01-plotting.html#defining-a-consistent-plotting-style",
+    "title": "Efficient scientific plotting",
+    "section": "2 Defining a consistent plotting style",
+    "text": "2 Defining a consistent plotting style\nA key aspect of high-quality figures is a consistent design across all of them: font size, typeface, text rendering, colour scheme, axis design, and so on. Below we build up from the approach most beginners reach for to the one worth adopting — Matplotlib stylesheets.\nOur target style: a colour-blind-friendly colour cycle (the tableau 10-blind palette) paired with a set of line styles (why colour-blind-friendly?).\n\nimport matplotlib as mpl\nimport matplotlib.pyplot as plt\nimport numpy as np\n\ntableau10blind = [\n    \"#006BA4\", \"#FF800E\", \"#ABABAB\", \"#595959\", \"#5F9ED1\",\n    \"#C85200\", \"#898989\", \"#A2C8EC\", \"#FFBC79\", \"#CFCFCF\",\n]\nlinestyles = [\"-\", \"--\", \"-.\", \":\", \"-\", \"--\", \"-.\", \":\", \"-\", \"--\"]\n\n\n2.1 Approach 1 — style inside each command (beginner)\nThe most intuitive approach: set every option directly in the plotting calls.\n\n\n\nPros\nCons\n\n\n\n\nIntuitive\nTedious — repeat it for every axis and figure\n\n\nSimple to understand\nInefficient; clutters the code\n\n\n\n\nfig, ax = plt.subplots()\nfor i in range(4):\n    ax.plot([0, 1], [0, i + 1], color=tableau10blind[i],\n            linestyle=linestyles[i])\nax.set_xlabel(\"$x$ (m)\", fontsize=16)\nax.set_ylabel(\"$y$ (m)\", fontsize=16)\nax.tick_params(labelsize=16)\nax.legend([f\"$\\\\Phi={i}$\" for i in range(4)], fontsize=16)\nplt.show()\n\n\n\n\n\n\n\n\n\n\n2.2 Approach 2 — Matplotlib rcParams (intermediate)\nrcParams let you set styles once; they then apply to every plot below the definition.\n\n\n\nPros\nCons\n\n\n\n\nCentral definition, more efficient\nStill lives in each script\n\n\nNo per-command repetition\nLeads to code duplication across files\n\n\n\n\nplt.rcParams.update({\n    \"font.size\": 16,\n    \"font.family\": \"serif\",\n    \"mathtext.fontset\": \"cm\",   # Computer-Modern math without a LaTeX install\n    \"axes.prop_cycle\": mpl.cycler(color=tableau10blind, linestyle=linestyles),\n})\n\nfig, ax = plt.subplots()\nfor i in range(4):\n    ax.plot([0, 1], [0, i + 1])\nax.set_xlabel(\"$x$ (m)\")\nax.set_ylabel(\"$y$ (m)\")\nax.legend([f\"$\\\\Phi={i}$\" for i in range(4)])\nplt.show()\nplt.rcdefaults()   # reset for the next section\n\n\n\n\n\n\n\n\n\n\n2.3 Approach 3 — Matplotlib stylesheets (recommended)\nThe gold standard is a stylesheet — a small .mplstyle file holding your defaults.\nPros: central definition, easy reuse across projects, highly flexible, and very clean code — with essentially no downside.\nA stylesheet is a plain-text list of key : value settings. A good starting style (save it as mystyle.mplstyle):\nfigure.figsize   : 6.0, 4.0     # inches\nfigure.dpi       : 120          # on-screen scaling\nsavefig.dpi      : 500          # dpi when saving raster output\nxtick.direction  : in\nytick.direction  : in\nlegend.frameon   : False\nfont.family      : serif\nmathtext.fontset : cm\nfont.size        : 14\nimage.cmap       : turbo\n# colour-blind-friendly colour + line-style cycle\naxes.prop_cycle  : (cycler('color', ['006BA4','FF800E','ABABAB','595959','5F9ED1','C85200','898989','A2C8EC','FFBC79','CFCFCF']) + cycler('linestyle', ['-','--','-.',':','-','--','-.',':','-','--']))\nApply it with plt.style.use('mystyle.mplstyle'). The three files used in this course — mystyle (base), mcgill-colors, and PROCI (journal, LaTeX) — are provided in the plotting-styles/ folder next to this notebook. Below we load the base style from a temporary file so the example is self-contained.\n\nimport tempfile, pathlib\n\nMYSTYLE = '''\nfigure.figsize   : 6.0, 4.0\nfigure.dpi       : 120\nsavefig.dpi      : 500\nxtick.direction  : in\nytick.direction  : in\nlegend.frameon   : False\nfont.family      : serif\nmathtext.fontset : cm\nfont.size        : 14\nimage.cmap       : turbo\naxes.prop_cycle  : (cycler('color', ['006BA4','FF800E','ABABAB','595959','5F9ED1','C85200','898989','A2C8EC','FFBC79','CFCFCF']) + cycler('linestyle', ['-','--','-.',':','-','--','-.',':','-','--']))\n'''\n\nstyle_dir = pathlib.Path(tempfile.mkdtemp())\n(style_dir / \"mystyle.mplstyle\").write_text(MYSTYLE)\n\nplt.rcdefaults()\nplt.style.use(str(style_dir / \"mystyle.mplstyle\"))\n\nfig, ax = plt.subplots()\nfor i in range(4):\n    ax.plot([0, 1], [0, i + 1])\nax.set_xlabel(\"$x$ (m)\")\nax.set_ylabel(\"$y$ (m)\")\nax.legend([f\"$\\\\Phi={i}$\" for i in range(4)])\nplt.show()\n\n\n\n\n\n\n\n\n\n2.3.1 Make styles globally available\nPlace your .mplstyle files in Matplotlib’s config directory and they become available in every script — no path needed, just plt.style.use('mystyle').\n\nprint(\"put your styles here:\", mpl.get_configdir() + \"/stylelib\")\nprint(\"some built-in styles:\", plt.style.available[:8])\n\nput your styles here: /root/.config/matplotlib/stylelib\nsome built-in styles: ['Solarize_Light2', '_classic_test_patch', '_mpl-gallery', '_mpl-gallery-nogrid', 'bmh', 'classic', 'dark_background', 'fast']\n\n\n\n\n2.3.2 Combine styles, and apply one locally\nStyles compose: a base style plus a journal/medium-specific one (font and figure size for a paper vs. a poster). You can also apply a style to a single figure with a with context, leaving everything else untouched.\n\nPOSTER = 'font.size: 20\\nlines.linewidth: 3\\n'\nMCGILL = (\"axes.prop_cycle: cycler('color', \"\n          \"['ED1B2F','F7941D','27B0BE','305534','024F6D','B2D235'])\\n\")\n(style_dir / \"poster.mplstyle\").write_text(POSTER)\n(style_dir / \"mcgill.mplstyle\").write_text(MCGILL)\n\ndef demo(ax):\n    for i in range(3):\n        ax.plot([0, 1], [0, i + 1])\n    ax.set_xlabel(\"$x$\"); ax.set_ylabel(\"$y$\")\n\n# base + poster overrides, combined in a list (later wins)\nplt.rcdefaults()\nplt.style.use([str(style_dir / \"mystyle.mplstyle\"),\n               str(style_dir / \"poster.mplstyle\")])\nfig, ax = plt.subplots(figsize=(4, 2.6)); demo(ax)\nax.set_title(\"base + poster\"); plt.show()\n\n# McGill colours for THIS figure only\nwith plt.style.context([str(style_dir / \"mystyle.mplstyle\"),\n                        str(style_dir / \"mcgill.mplstyle\")]):\n    fig, ax = plt.subplots(figsize=(4, 2.6)); demo(ax)\n    ax.set_title(\"McGill colours (local)\"); plt.show()\nplt.rcdefaults()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n2.3.3 Make it fail-safe\nIf a style might not be installed on every machine, guard it so your script still runs:\ntry:\n    plt.style.use(['mystyle', 'PROCI'])\nexcept OSError:\n    print(\"Matplotlib styles not found — using defaults\")\n\n\n2.3.4 For a journal: true LaTeX rendering\nFor a perfect typeface match, a journal style enables LaTeX typesetting. This needs a working LaTeX toolchain (and the right fonts/packages), so the PROCI.mplstyle below is shown for reference and not executed here:\nfont.family         : serif\nfont.serif          : Times New Roman\ntext.usetex         : true\nfont.size           : 7\ntext.latex.preamble : \\usepackage{amsmath}\\usepackage{times}\nlines.linewidth     : 1.0\nsavefig.bbox        : tight\nImagine you need to relabel the temperature axis across 15 figures from T (K) to T / K. Hand-typing LaTeX 15 times invites typos — a label dictionary keeps one source of truth. This is super easy in Python using a dict with .get() fallbacks.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Efficient scientific plotting"
+    ]
+  },
+  {
+    "objectID": "python/01-plotting.html#labels-and-limits",
+    "href": "python/01-plotting.html#labels-and-limits",
+    "title": "Efficient scientific plotting",
+    "section": "3 Labels and limits",
+    "text": "3 Labels and limits\nConsistent axis labels and limits are a hallmark of high-quality figures. A clean, dictionary-based approach makes defining and reusing them across figures reliable.\n\n3.1 Always work with an explicit axis\nCreate the figure and axis explicitly and pass the axis into your plotting helpers, rather than relying on Matplotlib’s implicit current axis. Instead of plt.plot(...), use fig, ax = plt.subplots() then ax.plot(...). This makes helper functions reusable and trivially extensible to multi-panel figures.\n\ndef lineplot(ax, i):\n    ax.plot([0, 1], [0, i])\n    ax.set_xlabel(\"$x$\")\n    ax.set_ylabel(f\"Species {i}\")\n    return ax\n\nfig, axs = plt.subplots(ncols=3, figsize=(6, 2))\nfor i, ax in enumerate(axs):\n    lineplot(ax, i + 1)\n    lineplot(ax, i + 2)\nfig.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n3.2 Dictionaries for labels and limits\nMap each variable name (as used to access your data, e.g. a column of a DataFrame) to its label string and axis limits. The dictionary .get method gives a fail-safe default when a key is missing.\n\nvar_label = {\n    \"T\":  \"$T$ (K)\",\n    \"CO\": \"$Y_{\\\\mathrm{CO}}$ (-)\",\n    \"OH\": \"$Y_{\\\\mathrm{OH}}$ (-)\",\n}\nlims = {\n    \"T\":  (300, 2500),\n    \"CO\": (0, 0.05),\n    \"OH\": (0, 0.007),\n}\n\nprint(\"found    :\", var_label.get(\"T\", \"T\"))\nprint(\"fallback :\", var_label.get(\"CO2\", \"CO2\"))   # key missing -&gt; name\n\nfound    : $T$ (K)\nfallback : CO2\n\n\n\n\n3.3 Generate labels in a chosen unit style\nStore each quantity as its LaTeX symbol and unit, then assemble the label in whichever convention you want — matching the four styles from the guidelines above (T / K, T in K, T (K), T [K]).\n\nlatex_label_unit = {\n    \"t\": {\"latex_string\": \"$t$\", \"unit\": \"s\"},\n    \"z\": {\"latex_string\": \"$z$\", \"unit\": \"m\"},\n    \"T\": {\"latex_string\": \"$T$\", \"unit\": \"K\"},\n}\n\ndef define_label_dict(d, style=0):\n    \"\"\"style: 0 -&gt; 'q / u', 1 -&gt; 'q in u', 2 -&gt; 'q (u)', 3 -&gt; 'q [u]'.\"\"\"\n    sep = {0: \" / {}\", 1: \" in {}\", 2: \" ({})\", 3: \" [{}]\"}[style]\n    return {k: v[\"latex_string\"] + sep.format(v[\"unit\"])\n            for k, v in d.items()}\n\nfor s in range(4):\n    print(s, define_label_dict(latex_label_unit, style=s))\n\n0 {'t': '$t$ / s', 'z': '$z$ / m', 'T': '$T$ / K'}\n1 {'t': '$t$ in s', 'z': '$z$ in m', 'T': '$T$ in K'}\n2 {'t': '$t$ (s)', 'z': '$z$ (m)', 'T': '$T$ (K)'}\n3 {'t': '$t$ [s]', 'z': '$z$ [m]', 'T': '$T$ [K]'}\n\n\n\n\n3.4 Helpers to set labels and limits on any axis\nSmall, reusable functions that look everything up from the dictionaries — with graceful fallbacks.\n\ndef set_labels(ax, xv, yv, label_dict):\n    ax.set_xlabel(label_dict.get(xv, xv))\n    ax.set_ylabel(label_dict.get(yv, yv))\n\ndef set_limits(ax, xv, yv, lims):\n    if lims.get(xv):\n        ax.set_xlim(lims[xv])\n    if lims.get(yv):\n        ax.set_ylim(lims[yv])\n\ndef set_label_and_limits(ax, xv, yv, label_dict={}, lims={}):\n    set_labels(ax, xv, yv, label_dict)\n    set_limits(ax, xv, yv, lims)\n\nfig, axs = plt.subplots(ncols=2, figsize=(6, 2.4))\nfor yv, ax in zip([\"CO\", \"rho\"], axs):          # 'rho' is missing on purpose\n    set_label_and_limits(ax, \"T\", yv, label_dict=var_label, lims=lims)\nfig.tight_layout()\nplt.show()\nprint(\"note: 'rho' had no dictionary entry, so its axis label is just the name\")\n\n\n\n\n\n\n\n\nnote: 'rho' had no dictionary entry, so its axis label is just the name",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Efficient scientific plotting"
+    ]
+  },
+  {
+    "objectID": "python/01-plotting.html#figure-size-and-file-format",
+    "href": "python/01-plotting.html#figure-size-and-file-format",
+    "title": "Efficient scientific plotting",
+    "section": "4 Figure size and file format",
+    "text": "4 Figure size and file format\nDraw the figure at the width it will occupy (one column ≈ 3.5 in) and place it in LaTeX with scale=1. Save line plots as .pdf (vector, sharp at any zoom) and colour maps / contour plots as .png at high dpi (a vector version would be huge).\n\nGOLDEN = (1 + 5 ** 0.5) / 2\nx = np.linspace(0, 2 * np.pi, 400)\n\nplt.rcdefaults()\nplt.rcParams.update({\"font.family\": \"serif\", \"mathtext.fontset\": \"cm\",\n                     \"font.size\": 9})\nfig, ax = plt.subplots(figsize=(3.5, 3.5 / GOLDEN))\nax.plot(x, np.sin(x), label=r\"$\\sin(x)$\")\nax.set_xlabel(r\"$t \\; / \\; \\mathrm{s}$\")\nax.set_ylabel(r\"$u \\; / \\; \\mathrm{m\\,s^{-1}}$\")\nax.legend(frameon=False)\nfig.tight_layout(pad=0.3)\nfig.savefig(\"lineplot.pdf\")            # vector, for a line plot\nplt.show()\n\n\n\n\n\n\n\n\nImagine you need to plot a \\(u'\\)–\\(v'\\) cloud of two million points. A scatter plot turns into a solid black blob; you need to show density. This is super easy in Python using hexbin.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Efficient scientific plotting"
+    ]
+  },
+  {
+    "objectID": "python/01-plotting.html#unambiguous-data-scatter-vs.-hexbin",
+    "href": "python/01-plotting.html#unambiguous-data-scatter-vs.-hexbin",
+    "title": "Efficient scientific plotting",
+    "section": "5 Unambiguous data: scatter vs. hexbin",
+    "text": "5 Unambiguous data: scatter vs. hexbin\nA scatter plot of many points overplots — dense regions saturate and hide the true distribution. For large samples a 2-D density (hexbin) is honest and readable.\n\nrng = np.random.default_rng(0)\nn = 20_000\nxd = rng.normal(0, 1, n)\nyd = xd * 0.6 + rng.normal(0, 0.6, n)\n\nfig, (a1, a2) = plt.subplots(1, 2, figsize=(7, 2.6))\na1.scatter(xd, yd, s=4, alpha=0.3, edgecolors=\"none\")\na1.set_title(\"scatter (overplotted)\")\nhb = a2.hexbin(xd, yd, gridsize=40, cmap=\"viridis\", mincnt=1)\na2.set_title(\"hexbin (density)\")\nfig.colorbar(hb, ax=a2, label=\"count\")\nfor a in (a1, a2):\n    a.set_xlabel(r\"$x$\"); a.set_ylabel(r\"$y$\")\nfig.tight_layout(pad=0.4)\nplt.show()",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Efficient scientific plotting"
+    ]
+  },
+  {
+    "objectID": "python/01-plotting.html#self-tests",
+    "href": "python/01-plotting.html#self-tests",
+    "title": "Efficient scientific plotting",
+    "section": "6 Self-tests",
+    "text": "6 Self-tests\n1. Stylesheet. Write a two-line style string that sets font.size to 12 and puts the ticks inside the axes, save it to a temp file, apply it, and make any quick plot.\n\n\nShow solution\nimport tempfile, pathlib\ns = 'font.size: 12\\nxtick.direction: in\\nytick.direction: in\\n'\np = pathlib.Path(tempfile.mkdtemp()) / \"t.mplstyle\"\np.write_text(s)\nplt.rcdefaults(); plt.style.use(str(p))\nfig, ax = plt.subplots(figsize=(3, 2)); ax.plot([0, 1], [0, 1]); plt.show()\nplt.rcdefaults()\n\n\n2. Label dictionary. Using var_label above, write a helper ylabel(ax, key) that sets the y-label from the dictionary, falling back to the key if it is missing. Test it with \"OH\" and \"foo\".\n\n\nShow solution\ndef ylabel(ax, key):\n    ax.set_ylabel(var_label.get(key, key))\n\nfig, ax = plt.subplots(figsize=(3, 2))\nylabel(ax, \"OH\"); print(\"OH  -&gt;\", ax.get_ylabel())\nylabel(ax, \"foo\"); print(\"foo -&gt;\", ax.get_ylabel())\nplt.close(fig)\n\n\n3. Format choice. You made (a) a convergence-history line plot and (b) a filled temperature contour. Which file format for each?\n\n\n\n\n\n\nTipSolution\n\n\n\n\n\n\n.pdf — a few vector paths, sharp at any zoom, tiny file. (b) .png at ~1000 dpi — a filled contour is effectively an image; a vector version would contain a huge number of polygons, so a high-dpi raster is smaller and reliable.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Efficient scientific plotting"
+    ]
+  },
+  {
+    "objectID": "python/01-plotting.html#turbulence-in-practice-the-energy-spectrum",
+    "href": "python/01-plotting.html#turbulence-in-practice-the-energy-spectrum",
+    "title": "Efficient scientific plotting",
+    "section": "7 Turbulence in practice: the energy spectrum",
+    "text": "7 Turbulence in practice: the energy spectrum\nThe canonical turbulence figure is the Kolmogorov inertial-range spectrum \\(E(k)=C\\,\\varepsilon^{2/3}k^{-5/3}\\) on log–log axes, where a power law becomes a straight line — exactly the kind of plot the style above is built for.\n\ndef energy_spectrum(k, C=1.5, eps=1.0):\n    return C * eps ** (2 / 3) * k ** (-5 / 3)\n\nk = np.logspace(0, 3, 200)\nplt.rcdefaults()\nplt.rcParams.update({'font.family': 'serif', 'mathtext.fontset': 'cm',\n                     'font.size': 11})\nfig, ax = plt.subplots(figsize=(4.2, 3.0))\nax.loglog(k, energy_spectrum(k), label=r'$E(k)=C\\,\\varepsilon^{2/3}k^{-5/3}$')\nax.loglog([3, 300], 5 * energy_spectrum(np.array([3.0, 300.0])), '--',\n          color='0.4', label=r'slope $-5/3$')\nax.set_xlabel(r'$k$'); ax.set_ylabel(r'$E(k)$')\nax.grid(True, which='both', ls='--', alpha=0.4); ax.legend()\nfig.tight_layout(); plt.show()\n\n\n\n\n\n\n\n\nSelf-test. Overlay a second spectrum with ten times the dissipation (\\(\\varepsilon = 10\\)) and label both. Which lies higher, and why?\n\n\nShow solution\nfig, ax = plt.subplots(figsize=(4.2, 3.0))\nfor eps in (1.0, 10.0):\n    ax.loglog(k, energy_spectrum(k, eps=eps), label=fr'$\\varepsilon={eps:g}$')\nax.set_xlabel(r'$k$'); ax.set_ylabel(r'$E(k)$')\nax.grid(True, which='both', ls='--', alpha=0.4); ax.legend()\nfig.tight_layout(); plt.show()\n# E ~ eps^(2/3): more dissipation lifts the whole curve, so eps=10 sits above.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Efficient scientific plotting"
+    ]
+  },
+  {
+    "objectID": "python/index.html",
+    "href": "python/index.html",
+    "title": "Intermediate & advanced Python",
+    "section": "",
+    "text": "At this point, you should have a solid foundation in Python and programming in general. We won’t be covering the basics here — there are approximately 4.7 million tutorials on loops, conditionals, and functions online, and you should know this stuff anyway.\nWhat we will do is help you graduate from the “I write 300 lines of spaghetti code in a single script and pray it works” phase to becoming a proper programmer who knows how to abstract, modularize, and eventually build their own Python package.\nEach section is a Jupyter notebook — the code and its output are rendered on the page, the code blocks are copyable and foldable, and every section ends with short self-tests whose solutions you can reveal.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Intermediate & advanced Python"
+    ]
+  },
+  {
+    "objectID": "python/index.html#sections",
+    "href": "python/index.html#sections",
+    "title": "Intermediate & advanced Python",
+    "section": "1 Sections",
+    "text": "1 Sections\n\nEfficient scientific plotting — golden rules for publication-quality figures, and the Matplotlib code to produce them.\nPython foundations — program entry points, data structures (comprehensions, collections), and file I/O with pathlib.\nObject-oriented programming — classes, properties, inheritance, dunder methods, and dataclasses.\nFunctional programming — functions as first-class objects, lambdas & map, and type hints.\nAdvanced Python internals — decorators, iterators & iterables, and generators.\nSoftware engineering practices — validation & exceptions, testing, logging, and documentation.\nPackaging & distribution — turn your code into an installable Python package.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Intermediate & advanced Python"
+    ]
+  },
+  {
+    "objectID": "python/index.html#package-environment",
+    "href": "python/index.html#package-environment",
+    "title": "Intermediate & advanced Python",
+    "section": "2 Package environment",
+    "text": "2 Package environment\nOne of the biggest advantages of Python is its rich and well-maintained ecosystem of packages and libraries. The main downside is that managing these packages can sometimes become cumbersome, especially when different projects require different versions.\nPython comes with its own package manager, pip, which works well — particularly when used together with virtual environments. Another option, which I personally recommend, is Miniforge3. It provides a lightweight Conda-based environment similar to Anaconda, but without unnecessary extras, and it uses the conda-forge channel by default. This often results in more reliable and consistent package installations, especially for scientific computing.\n\n2.1 Required Python packages\nFor this course, we will mainly rely on the following core scientific Python packages:\n\nNumPy — efficient array operations, linear algebra, and numerical computations.\nSciPy — numerical algorithms such as solvers, optimization, integration, and interpolation.\nMatplotlib — plotting and visualization of results.\n\nTogether, these packages form the foundation of the scientific Python ecosystem and are sufficient for all assignments and projects in this course.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Intermediate & advanced Python"
+    ]
+  },
+  {
+    "objectID": "python/index.html#py-vs-.ipynb",
+    "href": "python/index.html#py-vs-.ipynb",
+    "title": "Intermediate & advanced Python",
+    "section": "3 .py vs .ipynb",
+    "text": "3 .py vs .ipynb\nPython code can be written either as plain script files (.py) or as Jupyter notebooks (.ipynb). Both formats are useful, but they serve different purposes.\n.py files\n\nBest for clean, reproducible code.\nEasy to version control (Git).\nSuitable for larger projects and scripts.\nLess interactive for exploration.\n\n.ipynb files (Jupyter notebooks)\n\nExcellent for exploration, learning, and visualization.\nCombine code, text, equations, and plots in one place.\nVery convenient for tutorials and reports.\nHarder to version control cleanly.\nExecution order can be confusing if cells are run out of order.\nNeed the extra packages jupyter and ipykernel.\n\n\n\n\n\n\n\nTipRecommendation\n\n\n\nUse Jupyter notebooks for learning, experimentation, and visualization, and switch to .py files once the code becomes larger or more structured.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Intermediate & advanced Python"
+    ]
+  },
+  {
+    "objectID": "python/index.html#references",
+    "href": "python/index.html#references",
+    "title": "Intermediate & advanced Python",
+    "section": "4 References",
+    "text": "4 References\n\n4.1 Core Python\n\nOfficial website: https://www.python.org\nOfficial documentation: https://docs.python.org/3/\nPython tutorial (official): https://docs.python.org/3/tutorial/\nStandard library reference: https://docs.python.org/3/library/\n\n\n\n4.2 NumPy\n\nOfficial website: https://numpy.org\nDocumentation: https://numpy.org/doc/\nUser guide: https://numpy.org/doc/stable/user/index.html\nAPI reference: https://numpy.org/doc/stable/reference/\n\n\n\n4.3 Matplotlib\n\nOfficial website: https://matplotlib.org\nDocumentation: https://matplotlib.org/stable/\nTutorials & examples: https://matplotlib.org/stable/tutorials/index.html\nGallery: https://matplotlib.org/stable/gallery/index.html\nStyle-sheets reference: https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html\n\n\n\n4.4 SciPy\n\nOfficial website: https://scipy.org\nDocumentation: https://docs.scipy.org/doc/scipy/\nTutorial: https://docs.scipy.org/doc/scipy/tutorial/index.html\nAPI reference: https://docs.scipy.org/doc/scipy/reference/\n\n\n\n4.5 Not covered here, but very helpful\nFormatting & linting\n\nBlack formatter: https://pypi.org/project/black/\nFlake8: https://flake8.pycqa.org/\npylint: https://pylint.org/\nFormatting in VS Code: https://code.visualstudio.com/docs/python/editing#_formatting\n\nTesting\n\npytest: https://docs.pytest.org/\nTesting in VS Code (pytest/unittest): https://code.visualstudio.com/docs/python/testing",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Intermediate & advanced Python"
+    ]
+  },
+  {
+    "objectID": "cluster/vscode.html",
+    "href": "cluster/vscode.html",
+    "title": "VS Code",
+    "section": "",
+    "text": "If you prefer VS Code to the JupyterLab interface, the cluster provides it in the browser (code-server) — nothing to install locally. It runs on the same compute node as your session and can edit and run Jupyter notebooks, Python scripts, and LaTeX.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "VS Code"
+    ]
+  },
+  {
+    "objectID": "cluster/vscode.html#open-vs-code",
+    "href": "cluster/vscode.html#open-vs-code",
+    "title": "VS Code",
+    "section": "1 Open VS Code",
+    "text": "1 Open VS Code\n\nStart a session and open the Launcher (see JupyterLab).\nUnder Notebook, click the VS Code tile. VS Code opens in a new browser tab, running on the cluster.\nIn VS Code, open your working folder with File ▸ Open Folder… and select scratch, so the Explorer is rooted there. Keep all your work in scratch (see Intro).",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "VS Code"
+    ]
+  },
+  {
+    "objectID": "cluster/vscode.html#notebooks-and-python",
+    "href": "cluster/vscode.html#notebooks-and-python",
+    "title": "VS Code",
+    "section": "2 Notebooks and Python",
+    "text": "2 Notebooks and Python\nOpen a .ipynb notebook (or a .py file) from the Explorer. The first time you run a cell, click Select Kernel (top-right) and choose Python 3.11. Then run cells as usual — output and plots appear inline, just as in JupyterLab.\n\n\n\n\n\n\nFigure 1: A Jupyter notebook open in VS Code on the cluster: the Explorer is rooted at scratch, and the plot renders inline.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "VS Code"
+    ]
+  },
+  {
+    "objectID": "cluster/vscode.html#latex",
+    "href": "cluster/vscode.html#latex",
+    "title": "VS Code",
+    "section": "3 LaTeX",
+    "text": "3 LaTeX\nYou can also edit LaTeX in the same VS Code window — handy for writing up your Crowdmark submission next to your code.\n\n\n\n\n\n\nFigure 2: Editing a LaTeX file in VS Code on the cluster.\n\n\n\n\n\n\n\n\n\nNoteHarmless warnings\n\n\n\nYou may see pop-ups such as a read-only settings.json message, or a prompt to install a language extension (e.g. Julia). These are expected on the shared image — dismiss them; they don’t affect your Python or LaTeX work.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "VS Code"
+    ]
+  },
+  {
+    "objectID": "cluster/jupyterlab.html",
+    "href": "cluster/jupyterlab.html",
+    "title": "JupyterLab",
+    "section": "",
+    "text": "For this course the main way to work on the cluster is JupyterLab, served through the cluster’s JupyterHub portal. It gives you notebooks, a file browser, and a terminal running on a compute node — no SSH required.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "JupyterLab"
+    ]
+  },
+  {
+    "objectID": "cluster/jupyterlab.html#launch-a-session",
+    "href": "cluster/jupyterlab.html#launch-a-session",
+    "title": "JupyterLab",
+    "section": "1 Launch a session",
+    "text": "1 Launch a session\n\nGo to https://mech501.calculquebec.cloud/ and log in with your cluster account (see Registration for the first-time walkthrough).\nOn the Server Options page, choose the resources for your session — the defaults are fine for this course:\n\nAccount — the allocation to charge; leave the pre-filled value (e.g. def-sponsor00) unless told otherwise.\nTime (hours) — how long the session lives; a few hours is plenty.\nNumber of cores and Memory (MB) — 1 core and ~8192 MB (8 GB) are enough for the Python post-processing tasks.\nGPU configuration — leave at None unless a task says otherwise.\nUser interface — keep JupyterLab.\n\nClick Start. Your session is queued and then opens on a compute node.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "JupyterLab"
+    ]
+  },
+  {
+    "objectID": "cluster/jupyterlab.html#working-in-python",
+    "href": "cluster/jupyterlab.html#working-in-python",
+    "title": "JupyterLab",
+    "section": "2 Working in Python",
+    "text": "2 Working in Python\nWhen JupyterLab opens, the file browser on the left shows two folders, projects and scratch.\n\n\n\n\n\n\nImportantKeep your work in scratch\n\n\n\nDo all your course work inside the scratch directory — create your notebooks and scripts there, and read and write your data there. Double-click scratch in the file browser to enter it before you start. (scratch is the large working space; your home and projects folders are not meant for active run data. Remember it is temporary — download anything you want to keep, see Intro.)\n\n\n\n\n\n\n\n\nFigure 1: The JupyterLab file browser after login. Double-click scratch and work inside it.\n\n\n\n\n2.1 Start a Python notebook\nOpen the Launcher (the blue + button at the top-left of the file browser, if it isn’t already open). Under Notebook, click the Python 3.11 tile — the blue-and-yellow Python symbol. This starts a Python instance (a kernel) and opens a new notebook.\n\n\n\n\n\n\nFigure 2: In the Launcher, click the Python 3.11 tile (the Python symbol) under Notebook to start a Python instance.\n\n\n\n\n\n2.2 Write and run your code\nType Python into a cell and press Shift + Enter to run it. The notebook keeps your code, its output, and any plots together in one document — ideal for the post-processing tasks. Keep the notebook saved inside scratch (check the path in the breadcrumb above the file browser).\n\n\n\n\n\n\nFigure 3: A notebook saved under /scratch/: import NumPy and Matplotlib, run a cell, and the plot appears inline. Note the scratch breadcrumb at the top of the file browser.\n\n\n\n\n\n\n\n\n\nWarningSave your work\n\n\n\nThe session ends when its time limit is reached. Save notebooks often and download any results you want to keep (right-click ▸ Download) — remember the whole cluster is temporary.\n\n\n\n\n\n\n\n\nTipUsing your own Python packages\n\n\n\n\n\nOpen a terminal in JupyterLab and build a virtual environment, then register it as a Jupyter kernel so it appears in the launcher:\nmodule load python/3.11\nvirtualenv --no-download ~/mech501\nsource ~/mech501/bin/activate\npip install --no-index numpy matplotlib scipy ipykernel\npython -m ipykernel install --user --name mech501 --display-name \"MECH 501\"",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "JupyterLab"
+    ]
+  },
+  {
+    "objectID": "cluster/intro.html",
+    "href": "cluster/intro.html",
+    "title": "Intro",
+    "section": "",
+    "text": "The course cluster looks and behaves like a real Alliance cluster. A few concepts before you run anything.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "Intro"
+    ]
+  },
+  {
+    "objectID": "cluster/intro.html#login-vs.-compute-nodes",
+    "href": "cluster/intro.html#login-vs.-compute-nodes",
+    "title": "Intro",
+    "section": "1 Login vs. compute nodes",
+    "text": "1 Login vs. compute nodes\n\nLogin node — where you land when you connect. Use it only for light work: editing files, moving data, launching jobs. Never run heavy computations on the login node.\nCompute nodes — where real work runs. You don’t use them directly; you request them through the Slurm scheduler, which queues your request and runs it when resources are free. The JupyterLab portal does this for you automatically.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "Intro"
+    ]
+  },
+  {
+    "objectID": "cluster/intro.html#storage",
+    "href": "cluster/intro.html#storage",
+    "title": "Intro",
+    "section": "2 Storage",
+    "text": "2 Storage\n\n\n\n\n\n\n\n\n\nSpace\nPath\nUse it for\nNotes\n\n\n\n\nHome\n/home/$USER\ncode, scripts, small files\nyour personal space\n\n\nScratch\n/scratch/$USER\nlarge temporary run data\nfor big / short-lived files\n\n\nProject\n/project\nshared course data\nread the tutorial data from here\n\n\n\n\n\n\n\n\n\nWarningNothing here is permanent\n\n\n\nThis is a disposable training cluster — all storage is wiped when the instance is torn down at the end of the course. Download anything you want to keep.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "Intro"
+    ]
+  },
+  {
+    "objectID": "cluster/intro.html#software",
+    "href": "cluster/intro.html#software",
+    "title": "Intro",
+    "section": "3 Software",
+    "text": "3 Software\nSoftware is provided through environment modules, exactly as on the national clusters:\nmodule avail             # list available software\nmodule load python/3.11  # load a specific version\nInside JupyterLab the Python environment is already set up for you.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "Intro"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-kequation.html",
+    "href": "tutorials/assignment-01-kequation.html",
+    "title": "Assignment 1 · Part B: The turbulent kinetic energy budget",
+    "section": "",
+    "text": "NoteDeliverables\n\n\n\nComplete Tasks 1–5 and upload a single PDF (code, figures and short written answers) to Crowdmark by the posted deadline. This part is graded. You work from the isotropic DNS field introduced in the Assignment 1 overview; make sure you have read it first.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part B: The turbulent kinetic energy budget"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-kequation.html#what-you-will-do",
+    "href": "tutorials/assignment-01-kequation.html#what-you-will-do",
+    "title": "Assignment 1 · Part B: The turbulent kinetic energy budget",
+    "section": "1 What you will do",
+    "text": "1 What you will do\nIn the data-processing tutorial you learned to read the field and manipulate it. Here you use it to evaluate the two central quantities of any turbulence calculation — the turbulent kinetic energy \\(k\\) and its dissipation rate \\(\\varepsilon\\) — directly from the DNS, and then build the characteristic scales of the flow from them. This mirrors the \\(k\\)-equation analysis from lecture: instead of modelling these terms, you measure them.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part B: The turbulent kinetic energy budget"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-kequation.html#the-turbulent-kinetic-energy-equation",
+    "href": "tutorials/assignment-01-kequation.html#the-turbulent-kinetic-energy-equation",
+    "title": "Assignment 1 · Part B: The turbulent kinetic energy budget",
+    "section": "2 The turbulent kinetic energy equation",
+    "text": "2 The turbulent kinetic energy equation\nApplying the Reynolds decomposition \\(u_i = \\langle u_i\\rangle + u_i'\\) to the Navier–Stokes equations and taking the mean gives the transport equation for the turbulent kinetic energy \\(k = \\tfrac12\\langle u_i' u_i'\\rangle\\):\n\\[\n\\underbrace{\\frac{\\partial k}{\\partial t}}_{\\text{unsteady}}\n+ \\underbrace{\\langle u_j\\rangle \\frac{\\partial k}{\\partial x_j}}_{\\text{advection}}\n= \\underbrace{-\\langle u_i' u_j'\\rangle \\frac{\\partial \\langle u_i\\rangle}{\\partial x_j}}_{\\text{production } \\mathcal{P}}\n- \\underbrace{\\varepsilon}_{\\text{dissipation}}\n+ \\underbrace{\\frac{\\partial}{\\partial x_j}\\!\\left(\\cdots\\right)}_{\\text{transport } \\mathcal{T}}\n\\tag{1}\\]\nwith the dissipation rate\n\\[\n\\varepsilon = 2\\nu \\langle s_{ij}' s_{ij}'\\rangle,\n\\qquad\ns_{ij}' = \\tfrac12\\!\\left(\\frac{\\partial u_i'}{\\partial x_j} + \\frac{\\partial u_j'}{\\partial x_i}\\right).\n\\tag{2}\\]\n\n\n\n\n\n\nTipWhy the budget collapses for our flow\n\n\n\nForced homogeneous isotropic turbulence is the cleanest possible case for Eq. 1, because almost every term drops out:\n\nNo mean shear. \\(\\langle u_i\\rangle \\approx 0\\) everywhere, so the mean advection term and the production term \\(\\mathcal{P} = -\\langle u_i' u_j'\\rangle\\,\\partial_j\\langle u_i\\rangle\\) both vanish — there is no mean gradient to extract energy from.\nHomogeneity. Statistics do not depend on position, so every spatial divergence — the transport term \\(\\mathcal{T}\\) — averages to zero.\nStationarity. The forcing injects energy at the large scales at a mean rate \\(\\mathcal{F}\\) that, on average, holds \\(\\partial k/\\partial t = 0\\).\n\nWhat remains is a single statement: injection balances dissipation, \\(\\mathcal{F} = \\varepsilon\\). You cannot measure the artificial forcing \\(\\mathcal{F}\\) from a snapshot, but you can measure \\(k\\) and \\(\\varepsilon\\) directly — and from them every characteristic scale of the flow. That is the task.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part B: The turbulent kinetic energy budget"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-kequation.html#reading-the-field-as-a-structured-cube",
+    "href": "tutorials/assignment-01-kequation.html#reading-the-field-as-a-structured-cube",
+    "title": "Assignment 1 · Part B: The turbulent kinetic energy budget",
+    "section": "3 Reading the field as a structured cube",
+    "text": "3 Reading the field as a structured cube\nThe tasks below assume the field has been reshaped from the flat table into a \\(200^3\\) NumPy array per velocity component. The grid spacing is that of the parent \\(1024^3\\) simulation, \\(dx = 2\\pi/1024\\), so the sub-cube has side \\(L = 200\\,dx = 2\\pi\\,(200/1024)\\).\n\nimport numpy as np\nimport pandas as pd\n\nnu = 1.85e-4                       # kinematic viscosity of the JHTDB isotropic DNS\ndx = 2 * np.pi / 1024              # grid spacing of the parent 1024^3 simulation\ndim = 200                          # our sub-cube is 200^3\n\ndf = pd.read_parquet(\"/project/60004/00_Assignment1/isotropic.parquet\")\n\ndef to_cube(component):\n    \"\"\"Scatter a flat velocity column onto the structured 200^3 grid.\"\"\"\n    cube = np.zeros((dim, dim, dim), dtype=np.float64)\n    ix = (df[\"x\"] / dx).round().astype(int)\n    iy = (df[\"y\"] / dx).round().astype(int)\n    iz = (df[\"z\"] / dx).round().astype(int)\n    cube[ix, iy, iz] = df[component].values\n    return cube\n\nu = to_cube(\"velocity_x\")\nv = to_cube(\"velocity_y\")\nw = to_cube(\"velocity_z\")\nprint(u.shape, u.dtype)",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part B: The turbulent kinetic energy budget"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-kequation.html#sec-task1",
+    "href": "tutorials/assignment-01-kequation.html#sec-task1",
+    "title": "Assignment 1 · Part B: The turbulent kinetic energy budget",
+    "section": "4 Task 1 — Reynolds decomposition",
+    "text": "4 Task 1 — Reynolds decomposition\n\n\n\n\n\n\nImportantTask 1\n\n\n\nBecause the flow is homogeneous, the ensemble average of lecture is, by ergodicity, the spatial average over the cube. Compute the mean of each velocity component, \\(\\langle u_i\\rangle\\), and confirm it is small compared to the fluctuations. Then form the fluctuations \\(u_i' = u_i - \\langle u_i\\rangle\\) and compute the three component variances \\(\\langle u_i'^2\\rangle\\).\nReport the three variances and comment (1–2 sentences): are they approximately equal, and what does that tell you about isotropy?",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part B: The turbulent kinetic energy budget"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-kequation.html#sec-task2",
+    "href": "tutorials/assignment-01-kequation.html#sec-task2",
+    "title": "Assignment 1 · Part B: The turbulent kinetic energy budget",
+    "section": "5 Task 2 — Turbulent kinetic energy",
+    "text": "5 Task 2 — Turbulent kinetic energy\n\n\n\n\n\n\nImportantTask 2\n\n\n\nCompute the turbulent kinetic energy\n\\[\nk = \\tfrac12\\langle u_i' u_i'\\rangle\n  = \\tfrac12\\!\\left(\\langle u_1'^2\\rangle + \\langle u_2'^2\\rangle + \\langle u_3'^2\\rangle\\right).\n\\]\nReport \\(k\\) and the equivalent single-component rms velocity \\(u_{\\mathrm{rms}} = \\sqrt{2k/3}\\).",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part B: The turbulent kinetic energy budget"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-kequation.html#sec-task3",
+    "href": "tutorials/assignment-01-kequation.html#sec-task3",
+    "title": "Assignment 1 · Part B: The turbulent kinetic energy budget",
+    "section": "6 Task 3 — Dissipation rate",
+    "text": "6 Task 3 — Dissipation rate\n\n\n\n\n\n\nImportantTask 3\n\n\n\nEvaluate the dissipation rate from its definition, Eq. 2. Use numpy.gradient with spacing dx to obtain the nine fluctuating velocity gradients \\(\\partial u_i'/\\partial x_j\\), build the fluctuating strain-rate tensor \\(s_{ij}'\\), and average:\n\\[\n\\varepsilon = 2\\nu\\,\\langle s_{ij}' s_{ij}'\\rangle .\n\\]\nThen compute the isotropic surrogate \\(\\varepsilon_{\\mathrm{iso}} = 15\\,\\nu\\,\\big\\langle (\\partial u_1'/\\partial x_1)^2\\big\\rangle\\), which uses a single gradient, and compare the two. How close are they, and why should they agree for this flow?",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part B: The turbulent kinetic energy budget"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-kequation.html#sec-task4",
+    "href": "tutorials/assignment-01-kequation.html#sec-task4",
+    "title": "Assignment 1 · Part B: The turbulent kinetic energy budget",
+    "section": "7 Task 4 — Characteristic scales",
+    "text": "7 Task 4 — Characteristic scales\n\n\n\n\n\n\nImportantTask 4\n\n\n\nFrom \\(k\\), \\(\\varepsilon\\) and \\(\\nu\\) alone, compute:\n\nthe Kolmogorov scales \\(\\eta = (\\nu^3/\\varepsilon)^{1/4}\\), \\(\\tau_\\eta = (\\nu/\\varepsilon)^{1/2}\\), \\(u_\\eta = (\\nu\\varepsilon)^{1/4}\\);\nthe Taylor microscale \\(\\lambda = \\sqrt{10\\,\\nu k/\\varepsilon}\\);\nthe Taylor-microscale Reynolds number \\(\\mathrm{Re}_\\lambda = \\dfrac{u_{\\mathrm{rms}}\\,\\lambda}{\\nu} = \\sqrt{\\dfrac{20\\,k^2}{3\\,\\nu\\,\\varepsilon}}\\).\n\nCompare your \\(\\mathrm{Re}_\\lambda\\) to the published value for this dataset, \\(\\mathrm{Re}_\\lambda \\approx 433\\). Do they agree?",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part B: The turbulent kinetic energy budget"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-kequation.html#sec-task5",
+    "href": "tutorials/assignment-01-kequation.html#sec-task5",
+    "title": "Assignment 1 · Part B: The turbulent kinetic energy budget",
+    "section": "8 Task 5 — Resolution and the budget",
+    "text": "8 Task 5 — Resolution and the budget\n\n\n\n\n\n\nImportantTask 5\n\n\n\nTwo short written answers, backed by a number each:\n\nResolution. The largest resolved wavenumber is \\(\\kappa_{\\max} = \\pi/dx\\). Compute \\(\\kappa_{\\max}\\eta\\). A well-resolved DNS has \\(\\kappa_{\\max}\\eta \\gtrsim 1\\). Is this field well resolved at the dissipative scale?\nThe budget. Using Eq. 1 and the argument in the callout above, explain in 2–3 sentences why, for this flow, your measured \\(\\varepsilon\\) is also (in the mean) the rate at which the forcing injects energy — even though you never computed the forcing.\n\n\n\n\n\n\n\n\n\nTipLooking ahead\n\n\n\n\n\nThe two-point correlation, the integral length scale and the full energy spectrum — the scale-by-scale picture of the same cube — are the subject of a later tutorial. Here you characterised the flow by its integral quantities (\\(k\\), \\(\\varepsilon\\)) and the scales built from them; next you will resolve how energy is distributed across wavenumbers.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part B: The turbulent kinetic energy budget"
+    ]
+  },
+  {
     "objectID": "tutorials/tutorial-01.html",
     "href": "tutorials/tutorial-01.html",
     "title": "Tutorial 1: The law of the wall",
@@ -33,72 +597,6 @@
     "title": "Tutorial 1: The law of the wall",
     "section": "4 Working on the cluster",
     "text": "4 Working on the cluster\nYou can run the Python examples locally or on the course cluster.\n\nLocal machineCluster (SLURM)\n\n\n# create an environment once\npython3 -m venv mech501\nsource mech501/bin/activate\npip install numpy matplotlib scipy\n\n# run a script\npython task1.py\n\n\n# log in (use your course account)\nssh username@cluster.example.ca      # TODO: actual hostname\n\n# load modules\nmodule load python/3.11 scipy-stack\n\n# submit a job\nsbatch job.sh\nsqueue -u $USER          # check status\nExample job.sh:\n#!/bin/bash\n#SBATCH --job-name=mech501-t1\n#SBATCH --time=00:10:00\n#SBATCH --cpus-per-task=1\n#SBATCH --mem=2G\n\nmodule load python/3.11 scipy-stack\npython task1.py\n\n\n\n\n\n\n\n\n\nImportantTask 3 — First contact with the cluster\n\n\n\nLog in to the cluster, run hostname and module list, and include a screenshot (or copied terminal output) in your Crowdmark submission.\n\n\n\n\n\n\n\n\nTipHint: SSH keys\n\n\n\n\n\nSet up an SSH key pair (ssh-keygen, then ssh-copy-id) so you don’t have to type your password every time."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "MECH 501/600 — Computational Turbulence",
-    "section": "",
-    "text": "Welcome! These pages are the practical, hands-on side of MECH 501/600 — Computational Turbulence. Where the lectures build the theory, here you will use it: refresh your scientific Python, get onto the course computing cluster, and work through tutorials that combine turbulence theory, OpenFOAM simulations, and Python post-processing.",
-    "crumbs": [
-      "Home",
-      "MECH 501/600 — Computational Turbulence"
-    ]
-  },
-  {
-    "objectID": "index.html#start-here",
-    "href": "index.html#start-here",
-    "title": "MECH 501/600 — Computational Turbulence",
-    "section": "1 Start here",
-    "text": "1 Start here\n\n\n\n\n\n\n\n\nNoteCluster\n\n\n\nCreate your account on the course computing cluster and run notebooks or VS Code right in your browser — no local install required. Do this first, since account approval takes a day or two.\n\n\n\n\n\n\n\n\n\n\nNotePython\n\n\n\nLevel up from “a 300-line script and a prayer” to clean, reusable scientific code — efficient plotting, good structure, and building your own package.\n\n\n\n\n\n\n\n\n\n\nNoteTutorials\n\n\n\nGuided exercises that tie theory to practice, with numbered Tasks you complete and hand in. Start with the prerequisites check.",
-    "crumbs": [
-      "Home",
-      "MECH 501/600 — Computational Turbulence"
-    ]
-  },
-  {
-    "objectID": "index.html#how-it-all-fits-together",
-    "href": "index.html#how-it-all-fits-together",
-    "title": "MECH 501/600 — Computational Turbulence",
-    "section": "2 How it all fits together",
-    "text": "2 How it all fits together\nThe lectures develop the equations and models. These tutorials put them to work: you will run simulations, post-process the results in Python, and often do so on the cluster. Each tutorial contains numbered Tasks — derivations, plots, and short discussions — which you collect into a single PDF and upload to Crowdmark by the posted deadline.\nIf your Python or command-line skills feel rusty, work through the Python section and get comfortable with the Cluster before the first tutorial that needs them — it will make everything afterwards much smoother.",
-    "crumbs": [
-      "Home",
-      "MECH 501/600 — Computational Turbulence"
-    ]
-  },
-  {
-    "objectID": "index.html#working-through-a-tutorial",
-    "href": "index.html#working-through-a-tutorial",
-    "title": "MECH 501/600 — Computational Turbulence",
-    "section": "3 Working through a tutorial",
-    "text": "3 Working through a tutorial\n\nRead the background and run the provided code yourself — don’t just read it.\nAnswer every Task box (derivations, plots, short written answers).\nExport your answers as a single PDF and upload it to Crowdmark before the deadline.",
-    "crumbs": [
-      "Home",
-      "MECH 501/600 — Computational Turbulence"
-    ]
-  },
-  {
-    "objectID": "index.html#tutorials-1",
-    "href": "index.html#tutorials-1",
-    "title": "MECH 501/600 — Computational Turbulence",
-    "section": "4 Tutorials",
-    "text": "4 Tutorials\n\nMore tutorials will appear here as the term progresses.\n\n\n\n\n\n\n\n#\nTopic\nCrowdmark due\n\n\n\n\n0\nPrerequisites — what you should already know\n—",
-    "crumbs": [
-      "Home",
-      "MECH 501/600 — Computational Turbulence"
-    ]
-  },
-  {
-    "objectID": "index.html#what-youll-need",
-    "href": "index.html#what-youll-need",
-    "title": "MECH 501/600 — Computational Turbulence",
-    "section": "5 What you’ll need",
-    "text": "5 What you’ll need\n\nPython ≥ 3.10 with numpy, matplotlib, scipy (and later pyvista / fluidfoam).\nOpenFOAM, introduced from Tutorial 2 onward.\nAn account on the course cluster — see the Cluster page.\n\nEverything above is already installed in the cluster’s JupyterLab environment, so if you work there you can skip local setup entirely.\n\n\n\n\n\n\nTipGetting help\n\n\n\nStuck? Post on the course discussion board or drop by office hours — and if something on these pages is wrong or unclear, let us know so we can fix it.",
-    "crumbs": [
-      "Home",
-      "MECH 501/600 — Computational Turbulence"
-    ]
   },
   {
     "objectID": "tutorials/tutorial-00.html",
@@ -182,6 +680,612 @@
       "Home",
       "Tutorials",
       "Tutorial 0: Prerequisites"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "MECH 501/600 — Computational Turbulence",
+    "section": "",
+    "text": "Welcome! These pages are the practical, hands-on side of MECH 501/600 — Computational Turbulence. Where the lectures build the theory, here you will use it: refresh your scientific Python, get onto the course computing cluster, and work through tutorials that combine turbulence theory, OpenFOAM simulations, and Python post-processing.",
+    "crumbs": [
+      "Home",
+      "MECH 501/600 — Computational Turbulence"
+    ]
+  },
+  {
+    "objectID": "index.html#start-here",
+    "href": "index.html#start-here",
+    "title": "MECH 501/600 — Computational Turbulence",
+    "section": "1 Start here",
+    "text": "1 Start here\n\n\n\n\n\n\n\n\nNoteCluster\n\n\n\nCreate your account on the course computing cluster and run notebooks or VS Code right in your browser — no local install required. Do this first, since account approval takes a day or two.\n\n\n\n\n\n\n\n\n\n\nNotePython\n\n\n\nLevel up from “a 300-line script and a prayer” to clean, reusable scientific code — efficient plotting, good structure, and building your own package.\n\n\n\n\n\n\n\n\n\n\nNoteTutorials\n\n\n\nGuided exercises that tie theory to practice, with numbered Tasks you complete and hand in. Start with the prerequisites check.",
+    "crumbs": [
+      "Home",
+      "MECH 501/600 — Computational Turbulence"
+    ]
+  },
+  {
+    "objectID": "index.html#how-it-all-fits-together",
+    "href": "index.html#how-it-all-fits-together",
+    "title": "MECH 501/600 — Computational Turbulence",
+    "section": "2 How it all fits together",
+    "text": "2 How it all fits together\nThe lectures develop the equations and models. These tutorials put them to work: you will run simulations, post-process the results in Python, and often do so on the cluster. Each tutorial contains numbered Tasks — derivations, plots, and short discussions — which you collect into a single PDF and upload to Crowdmark by the posted deadline.\nIf your Python or command-line skills feel rusty, work through the Python section and get comfortable with the Cluster before the first tutorial that needs them — it will make everything afterwards much smoother.",
+    "crumbs": [
+      "Home",
+      "MECH 501/600 — Computational Turbulence"
+    ]
+  },
+  {
+    "objectID": "index.html#working-through-a-tutorial",
+    "href": "index.html#working-through-a-tutorial",
+    "title": "MECH 501/600 — Computational Turbulence",
+    "section": "3 Working through a tutorial",
+    "text": "3 Working through a tutorial\n\nRead the background and run the provided code yourself — don’t just read it.\nAnswer every Task box (derivations, plots, short written answers).\nExport your answers as a single PDF and upload it to Crowdmark before the deadline.",
+    "crumbs": [
+      "Home",
+      "MECH 501/600 — Computational Turbulence"
+    ]
+  },
+  {
+    "objectID": "index.html#tutorials-1",
+    "href": "index.html#tutorials-1",
+    "title": "MECH 501/600 — Computational Turbulence",
+    "section": "4 Tutorials",
+    "text": "4 Tutorials\n\nMore tutorials will appear here as the term progresses.\n\n\n\n\n\n\n\n#\nTopic\nCrowdmark due\n\n\n\n\n0\nPrerequisites — what you should already know\n—",
+    "crumbs": [
+      "Home",
+      "MECH 501/600 — Computational Turbulence"
+    ]
+  },
+  {
+    "objectID": "index.html#what-youll-need",
+    "href": "index.html#what-youll-need",
+    "title": "MECH 501/600 — Computational Turbulence",
+    "section": "5 What you’ll need",
+    "text": "5 What you’ll need\n\nPython ≥ 3.10 with numpy, matplotlib, scipy (and later pyvista / fluidfoam).\nOpenFOAM, introduced from Tutorial 2 onward.\nAn account on the course cluster — see the Cluster page.\n\nEverything above is already installed in the cluster’s JupyterLab environment, so if you work there you can skip local setup entirely.\n\n\n\n\n\n\nTipGetting help\n\n\n\nStuck? Post on the course discussion board or drop by office hours — and if something on these pages is wrong or unclear, let us know so we can fix it.",
+    "crumbs": [
+      "Home",
+      "MECH 501/600 — Computational Turbulence"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-dns.html",
+    "href": "tutorials/assignment-01-dns.html",
+    "title": "Tutorial 1: Isotropic DNS turbulence",
+    "section": "",
+    "text": "NoteWhat this tutorial is about\n\n\n\nFor the rest of the course you will not plot toy spectra — you will compute turbulence statistics from a real direct numerical simulation (DNS) of homogeneous isotropic turbulence. This page sets the scene: where the data comes from, how it was produced, where it lives on the cluster, and what file format it is stored in. The hands-on work follows in the assignment notebooks.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Tutorial 1: Isotropic DNS turbulence"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-dns.html#where-the-data-comes-from",
+    "href": "tutorials/assignment-01-dns.html#where-the-data-comes-from",
+    "title": "Tutorial 1: Isotropic DNS turbulence",
+    "section": "1 Where the data comes from",
+    "text": "1 Where the data comes from\nThe velocity fields you will analyse are a subset of the forced isotropic turbulence dataset from the Johns Hopkins Turbulence Databases (JHTDB) — an open “simulation laboratory” that stores entire space–time histories of large turbulence simulations and serves them to anyone [1, 2]. Instead of re-running an expensive DNS, researchers query the stored fields directly, which is exactly what we do here.\n\n\n\n\n\n\nImportantAcknowledgement\n\n\n\nThis dataset is provided by the Johns Hopkins Turbulence Databases (JHTDB), developed at the Johns Hopkins University and available at https://turbulence.idies.jhu.edu. If you use these data outside this course, please cite Li et al. (2008) and Perlman et al. (2007) [1, 2].\n\n\n\n1.1 How it was computed: forced homogeneous isotropic turbulence\nHomogeneous isotropic turbulence (HIT) is the simplest conceptual setting for turbulence: the statistics are the same at every point (homogeneous) and in every direction (isotropic). There are no walls, no mean shear, and no preferred orientation — which makes it the canonical test case for the theory you meet in lectures (the energy cascade, the \\(-5/3\\) Kolmogorov spectrum, the Taylor microscale).\nThe JHTDB field was produced by a direct numerical simulation — the Navier–Stokes equations are solved without any turbulence model, so every scale of motion from the largest eddies down to the dissipative (Kolmogorov) scale is resolved on the grid. The essentials:\n\nMethod — pseudo-spectral. Spatial derivatives are evaluated in Fourier space on a triply periodic cube of side \\(2\\pi\\), using a \\(1024^3\\) grid (about \\(10^9\\) points per snapshot). Pseudo-spectral schemes are the standard choice for isotropic DNS because periodic boundaries fit a box with no walls and because spectral derivatives are essentially exact.\nForcing keeps it stationary. Real turbulence decays as it dissipates energy. To hold the flow statistically steady, energy is continuously injected at the large scales (low wavenumbers). It then cascades through the inertial range and is removed by viscosity at the small scales — a steady statistical balance rather than a decaying transient.\nReynolds number. The Taylor-microscale Reynolds number is \\(\\mathrm{Re}_\\lambda \\approx 433\\), well into the turbulent regime, giving a clear inertial range in which to look for the \\(-5/3\\) law.\n\nThe full database stores thousands of snapshots in time. For this course we use a manageable extract — a \\(200^3\\) sub-cube of the domain (and, for the time-history exercises, a record of several hundred snapshots at selected points) — so that everything runs comfortably in a notebook on the cluster rather than needing a supercomputer.\n\n\n\n\n\n\nTipWhy HIT is the right first dataset\n\n\n\nBecause HIT has no mean flow and no walls, the fluctuations are the whole signal: a Reynolds decomposition \\(u_i = \\langle u_i\\rangle + u_i'\\) has \\(\\langle u_i\\rangle \\approx 0\\), so \\(u_i' \\approx u_i\\). That lets you focus on the statistics themselves — variances, two-point correlations, spectra — without first having to subtract a complicated mean profile. You will add that complication later, with wall-bounded flows.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Tutorial 1: Isotropic DNS turbulence"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-dns.html#where-the-data-lives",
+    "href": "tutorials/assignment-01-dns.html#where-the-data-lives",
+    "title": "Tutorial 1: Isotropic DNS turbulence",
+    "section": "2 Where the data lives",
+    "text": "2 Where the data lives\nOn the course cluster the extracted field is stored at:\n/project/60004/00_Assignment1/isotropic.parquet\nYou do not need to download it or copy it into your home directory — read it in place from your notebook. In Python:\n\nimport pandas as pd\n\npath = \"/project/60004/00_Assignment1/isotropic.parquet\"\ndf = pd.read_parquet(path)      # needs pyarrow (or fastparquet)\nprint(df.shape)\ndf.head()\n\nEach row is one sample; the columns are the coordinates x, y, z, the three velocity components velocity_x, velocity_y, velocity_z, and a Timestep index for the time-history points. Because Parquet is columnar (see below), you can even read just the columns you need — for example only the velocities — without loading the whole file.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Tutorial 1: Isotropic DNS turbulence"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-dns.html#a-note-on-file-formats-what-is-parquet",
+    "href": "tutorials/assignment-01-dns.html#a-note-on-file-formats-what-is-parquet",
+    "title": "Tutorial 1: Isotropic DNS turbulence",
+    "section": "3 A note on file formats: what is Parquet?",
+    "text": "3 A note on file formats: what is Parquet?\nScientific data is rarely stored as plain text .csv for anything large — CSV is slow to parse, stores every number as human-readable characters (wasteful), and keeps no type information. Apache Parquet (.parquet) is one of several binary, high-performance formats built to fix that. Its key properties:\n\nColumnar. Values are stored column-by-column, not row-by-row. All the \\(u_x\\) values sit together, then all the \\(u_y\\), and so on. This means you can read only the columns you need (say, the velocities) and skip the rest — a huge saving when a file has many columns.\nCompressed. Each column is a run of same-typed numbers, which compresses extremely well (Snappy, ZSTD, gzip). A Parquet file is typically several times smaller than the equivalent CSV.\nTyped. The schema (column names and data types) is stored inside the file. float64 stays float64; there is no guessing or re-parsing when you read it back.\nFast and portable. It is the storage format of the Apache Arrow ecosystem and is read natively by pandas, Polars, Dask, and Spark, so the same file works across tools and languages.\n\n\n3.1 Other formats you will meet\nParquet is excellent for tabular data (rows and columns). Turbulence data is often naturally an N-dimensional array — a \\(200^3\\) velocity field is really a 4-D array (three space indices, plus the component). Different formats specialise in that:\n\nHDF5 (.h5, read with h5py) — the workhorse for scientific N-dimensional arrays. It stores multiple datasets and metadata in one file in a filesystem-like hierarchy and supports partial (sliced) reads, so you can pull one 2-D plane out of a huge 3-D field without loading all of it. Most DNS and CFD codes write HDF5.\nNetCDF — widely used in climate and geophysical fluid dynamics; a self-describing, HDF5-based format with rich metadata conventions.\nZarr — like HDF5 but chunked and cloud-native: arrays are split into many small pieces that can be read in parallel and streamed from object storage (S3, etc.). Well suited to very large fields and cluster workflows.\nFeather / Arrow IPC — the in-memory Arrow format written to disk; extremely fast for handing tables between processes, though less compressed than Parquet for long-term storage.\n\nThe common thread: all of these are binary, typed, and support compression and partial reads — which is what makes working with multi-gigabyte turbulence fields practical. For the tabular extract in this assignment, Parquet is the natural choice; when you later work with raw 3-D snapshots, expect HDF5.\n\n\n\n\n\n\nNoteReading only what you need\n\n\n\n\n\nBecause Parquet is columnar, you can ask for specific columns at read time:\n\n# read only the velocity columns — coordinates are skipped on disk\nu = pd.read_parquet(path, columns=[\"velocity_x\", \"velocity_y\", \"velocity_z\"])\n\nThis is the columnar advantage in one line: less I/O, less memory, faster load.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Tutorial 1: Isotropic DNS turbulence"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-dns.html#what-comes-next",
+    "href": "tutorials/assignment-01-dns.html#what-comes-next",
+    "title": "Tutorial 1: Isotropic DNS turbulence",
+    "section": "4 What comes next",
+    "text": "4 What comes next\nWith the data located and understood, the assignment notebooks walk you through the actual turbulence analysis: reading the field, computing means and variances, two-point correlations and the integral length scale, and finally the 3-D energy spectrum and the turbulent kinetic energy. Everything you practised in the Python section — vectorised NumPy, clean figures, reusable functions — now gets pointed at real DNS data.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Tutorial 1: Isotropic DNS turbulence"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-processing.html",
+    "href": "tutorials/assignment-01-processing.html",
+    "title": "Assignment 1 · Part A: Processing data in Python",
+    "section": "",
+    "text": "Data processing in turbulence is critical because it enables the extraction of meaningful insights from complex and chaotic flow data, helping researchers understand turbulent structures, energy transfer, and flow dynamics. Effective data processing ensures accurate analysis, facilitates comparisons with theoretical models, and supports the validation of simulations and experiments. We use Python for this due to its powerful libraries like NumPy, and Pandas for numerical computations and Matplotlib for visualization.\nGOAL: By the end of this tutorial, you will have a strong understanding of how to process data using Pandas and NumPy. Additionally, you will be able to visualize the data effectively with Matplotlib, providing you with a solid foundation for analyzing and interpreting turbulent flow data.\nPrerequisites: Although many concepts are explained in detail in this tutorial, a certain level of prior knowledge is still required. If you have never worked with Python before, we recommend taking the Udacity tutorial first.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part A: Processing data in Python"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-processing.html#setup",
+    "href": "tutorials/assignment-01-processing.html#setup",
+    "title": "Assignment 1 · Part A: Processing data in Python",
+    "section": "1 Setup",
+    "text": "1 Setup\nRun this cell once at the top. It imports the libraries used throughout and applies the shared course plotting style, so every figure below is consistent in font, colours and size without repeating styling code.\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Shared McGill course style (relative to this tutorial folder)\nplt.style.use(\"../python/plotting-styles/mystyle.mplstyle\")",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part A: Processing data in Python"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-processing.html#handling-data-with-pandas",
+    "href": "tutorials/assignment-01-processing.html#handling-data-with-pandas",
+    "title": "Assignment 1 · Part A: Processing data in Python",
+    "section": "2 Handling data with pandas",
+    "text": "2 Handling data with pandas\nPandas is a powerful and widely-used library in Python for data manipulation and analysis. It provides intuitive and efficient tools to handle structured data, such as tables and time series, making it an essential tool for data processing tasks. With pandas, you can load, clean, transform, and analyze data using flexible data structures like DataFrames (2D tabular data) and Series (1D labeled arrays). Whether you’re working with simple CSV files or complex datasets, pandas allows you to explore and preprocess your data with ease, enabling seamless integration into machine learning, data visualization, or statistical analysis workflows.\n\n2.1 Loading data into a pandas DataFrame\nFor this tutorial we use part of a dataset from the JHTDB: DNS data of a \\(200^3\\) cube of isotropic turbulence, including the first 800 timesteps. For convenience it has been packaged into a single compact .parquet file — see the Assignment 1 overview for what Parquet is and where the file lives on the cluster.\nTo get a visual impression of the flow, watch a short JHTDB visualization.\nThe first step is to load the file and understand its structure.\n\n# Load pandas and read the packaged dataset.\n# On the cluster the file is at /project/60004/00_Assignment1/isotropic.parquet\nimport pandas as pd\n\ndf = pd.read_parquet(\"isotropic.parquet\")\n\n\n\n2.2 Printing the DataFrame\nFirst of all we want to take a first look into the DataFrame. In order to print the DataFrame you can use print(df_name)or just type df_name.\n\ndf\n\nIn the DataFrame, each point of the mesh in the computational domain is represented by the x,y,z coordinates. The first column “Timestep” indicates the respective time step. This means that a specific point can be assigned to a specific time for each row. For each of these points, the respective velocity components in each spatial direction is stored in further columns.\n\n\n2.3 Printing the columns names\nIf we are working with a larger DataFrame, it is practical to first look at the columns only, as we immediately know the parameters that are stored in the Dataframe. Therefore we can use print(list(df_name)).\n\nprint(list(df))\n\n\n\n2.4 Summary of DataFrame\nIf you want to get an overview of the DataFrame first you can use the function info(). You can use it and see what information you get out of it.\n\ndf.info()\n\n\n\n2.5 Access specific points and values\nTo access certain columns we can use df_name['column_name'].\n\ndf['velocity_x']\n\nWith .iloc[row] certain rows can be accessed.\n\ndf.iloc[0]\n\nFinally, access a specific data frame entry by selecting the corresponding column and row.\n\n\n\n\n\n\nImportantTask 1\n\n\n\nPrint the velocity in the \\(x\\) direction at the last point of the DataFrame.\n\n\n\n\n\n\nTipHint\n\n\n\n\n\nNegative indexing lets you access elements in reverse order.\n\n\n\n\n\n\n2.5.1 Adding columns\nWe can add new columns by giving them a new name and assigning specific values. For example, we could add the column “Temperature” and give the value 300 for each point, i.e. each row.\n\n#Creates a new column with all the values equal to 300\ndf['Temperature'] = 300\ndf\n\nSince a column with only the same entries makes little sense, it is more likely that additional data, which is stored in a list for example, must be added to the DataFrame.\n\n# Generates a list with random numbers between 290 and 1000 in the length of the data frame.\nimport random\ntemperature = [random.randint(290, 1000) for _ in range(len(df))]\n\n# Adds the list to the DataFrame\ndf['Temperature'] = temperature\ndf\n\nSpecific entries can also be changed by specifying the corresponding row.\n\ndf.loc[4, 'Temperature'] = 1000\ndf.loc[4, 'Temperature']\n\n\n\n2.5.2 Removing columns and rows\nTo remove the column again we can use the function drop('column_came', axis=1). You can also remove specific rows by using drop(index, axis=0). The 0 for axis indicates that a row is to be removed and 1 for a column.\n\n# Removing the column Temperature from the DataFrame\ndf = df.drop('Temperature', axis=1)\ndf\n\n\n\n\n2.6 Calculating with DataFrames\nIn order to make our calculations as simple and efficient as possible we use Numpy.\nNumPy is a powerful Python library for numerical computing and the foundation for many data science and machine learning tools. It provides the ndarray, a fast and memory-efficient array structure that allows for vectorized operations—making it much faster than using Python lists for numerical tasks. With NumPy, you can easily perform mathematical operations like squaring (np.square), square roots (np.sqrt), and even linear algebra and statistical functions. This makes it essential for tasks like scientific simulations, data processing, and machine learning.\nYou can learn more at the official NumPy documentation.\n\n# Time comparison \nimport numpy as np\n\n# Calculate like a list using only python\n%timeit [x**2 for x in df['velocity_x']]\n\n# Normal operation with Pandas\n%timeit df['velocity_x']**2\n\n# Using Numpy operations\n%timeit np.square(df['velocity_x'])\n\nEven though all three approaches produce the same result, the list comprehension is much slower because it runs in pure Python and processes elements one by one. Both the pandas-native (**2) and NumPy (np.square) methods are vectorized and rely on fast, compiled code. Since pandas is built on top of NumPy, it already uses NumPy under the hood—so using either approach gives you similar performance, and both are much more efficient for large datasets.\nThe first calculations can now be made. For example, we can calculate the distance from a point to the origin using:\n\\[\nr = \\sqrt{x^2 + y^2 + z^2}\n\\]\nHerefore we use the library NumPy (Numerical Python). The library is used for numerical computing and offers among other things a wider range of mathematical functions. For our calculation we use np.sqrt to use the square root.\n\n# Import the library numpy with the shorthand np\nimport numpy as np\n\nr = np.sqrt(df.loc[10, 'x']**2 + df.loc[10, 'y']**2 + df.loc[10, 'z']**2)\nprint(f'r =  {r}')\n\n\n\n\n\n\n\nImportantTask 2\n\n\n\nCalculate the absolute velocity \\(|\\mathbf{v}| = \\sqrt{v_x^2 + v_y^2 + v_z^2}\\) for every point and store it in a new column. Check how much extra storage this adds by comparing df.info() before and after.\n\n\n\n\n\n\nTipHint\n\n\n\n\n\nInstead of a single point as in the example above, operate on the whole columns at once (vectorised), then assign the result to a new column.\n\n\n\n\n\n\n\nShow a solution\n# Solution\ndf['abs_velocity'] = np.sqrt(df['velocity_x']**2 + df['velocity_y']**2 + df['velocity_z']**2)\ndf\n\n\n\n\n2.7 Statistical values\nThe function .describe() is very useful to view statistic data of a certain column. Try it out and see what data are printed out.\n\ndf['abs_velocity'].describe()\n\n\n\n2.8 Slice the DataFrame\nTo further visualize the data, we cut a slice out of the three-dimensional space. The slice should represent the x-y plane. Therefore we create a new Dataframe “sliced_df” including all the data of the DataFrame “df” where the z value equals 0.\n\n# first select a z value for the slice (in this case z=0),\n# then delete the rows in which z is not equal to 0\nsliced_df = df[df['z'] == 0] \n\n# delete the z column as it no longer contains an additional values\nsliced_df = sliced_df.drop('z', axis=1)\n\n# print the sliced df\nsliced_df\n\n\n\n\n\n\n\nTipSelf-test\n\n\n\nHow many grid points lie in the \\(z=0\\) slice at a single timestep? Slice sliced_df to Timestep == 1 and print the number of rows.\n\n\n\n\nShow answer\nprint(len(sliced_df[sliced_df['Timestep'] == 1.0]))",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part A: Processing data in Python"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-processing.html#plotting-in-python",
+    "href": "tutorials/assignment-01-processing.html#plotting-in-python",
+    "title": "Assignment 1 · Part A: Processing data in Python",
+    "section": "3 Plotting in Python",
+    "text": "3 Plotting in Python\n\n3.1 What is matplotlib?\nMatplotlib is a versatile and widely-used library in Python for creating static, animated, and interactive visualizations. It provides a robust framework for generating a wide range of plots, from simple line charts to complex 3D graphics. With its intuitive syntax and extensive customization options, Matplotlib allows you to effectively visualize your data, helping to uncover trends, patterns, and insights. Whether you’re building quick exploratory plots or publishing high-quality figures, Matplotlib serves as the foundation for turning raw data into meaningful visuals.\n\n\n3.2 Lineplot\nLine plots are a fundamental visualization tool used to display data points connected by straight lines, making it easy to observe trends, patterns, or changes over a continuous variable like time. They are particularly useful for comparing multiple datasets and highlighting relationships or variations in a clear and concise manner.\nTo begin with, we want to plot the absolute velocity at a point over time. To do this, we must first remove all other points from the DataFrame.\n\n\n\n\n\n\nImportantTask 3\n\n\n\nCreate a DataFrame containing only the point \\(x=0,\\; y=0,\\; z=0\\).\n\n\n\n\n\n\nTipHint\n\n\n\n\n\nSlice the DataFrame the same way we did before, but for both the \\(x\\) and \\(y\\) axes. Print the result to check it worked.\n\n\n\n\n\n\n\nShow a solution\n# Solution\noneD_df = sliced_df[(sliced_df['x'] == 0) & (sliced_df['y'] == 0)]\noneD_df = oneD_df.drop('x', axis=1)\noneD_df = oneD_df.drop('y', axis=1)\noneD_df\n\n\nNow we want to visualize the data. To do this, we first import the matplolib.pyplot library. We can then plot our data using the .plot function. The first entry refers to the x-axis and the second to the y-axis.\n\nimport matplotlib.pyplot as plt\n\nplt.plot(oneD_df['Timestep'], oneD_df['abs_velocity'])\n\nA consistent definition of axis labels (and limits) is essential for creating high quality figures. The axis labels can be defined with plt.xlabeland plt.ylabel and a heading with plt.title. You should choose a sufficiently large font size so that they are easy to read in presentations. With plt.xlim limits can be set for the axes.\n\nTmin = oneD_df['Timestep'].min()\nTmax = oneD_df['Timestep'].max()\n\nplt.plot(oneD_df['Timestep'], oneD_df['abs_velocity'])\nplt.xlabel('Timestep [-]')\nplt.ylabel('Velocity [-]')\nplt.title('Velocity over time')\nplt.xlim(Tmin, Tmax)\n\nMatplotlib provides extensive options to customize your line plots, allowing you to create visuals tailored to your needs. You can control aspects like the line style, color, and markers used to indicate data points.\nIn this example:\n\nlinestyle='--' creates a dashed line.\ncolor='r' sets the line color to red.\nmarker='o' uses circular markers for data points.\nmarkersize=2 adjusts the size of the markers.\n\nYou can choose from a wide variety of colors (e.g., ‘r’ for red, ‘g’ for green) and marker styles (e.g., ‘o’ for circles, ‘^’ for triangles).\n\nplt.plot(oneD_df['Timestep'], oneD_df['abs_velocity'],\n         linestyle='--', color='r', marker='o',\n         markersize=2, label='Sample Data')\nplt.xlabel('Timestep [-]')\nplt.ylabel('Velocity [-]')\nplt.title('Velocity over time')\nplt.xlim(Tmin, Tmax)\n\n\n\n\n\n\n\nNoteNote\n\n\n\n\n\nOften it doesn’t make sense to make many adjustments — as you can see, the plot above is arguably more legible before the extra styling. For a full list of line styles, markers and colours, see the Matplotlib documentation.\n\n\n\nWith the shared style applied in Setup, you rarely need to set fonts or sizes by hand — the stylesheet does it for you. When you do want a one-off override, define a variable once (e.g. linewidth) and reuse it, so a single change updates every call.\n\nlinewidth=0.85\n\nplt.plot(oneD_df['Timestep'], oneD_df['abs_velocity'], linewidth=linewidth)\nplt.xlabel('Timestep [-]')\nplt.ylabel('Velocity [-]')\nplt.title('Velocity over time')\nplt.xlim(Tmin, Tmax)\n\nSeveral graphs can also be plotted in one plot. To do this, simply plot several functions with plt.plot, which are then automatically placed in a plot. To keep them apart you should add a legend. This is done with plt.legend(). In the brackets you can also specify the position of the legend with loc= (best: 0, upper right: 1, upper left: 2, lower left: 3, lower right: 4, if nothing is used it equals the 0). The different graphs are named by adding label= name of your plot to the plot.\n\n\n\n\n\n\nImportantTask 4\n\n\n\nCreate a second DataFrame for the point \\(x=0,\\;\\) \\(y=\\) (one grid step further)\\(,\\; z=0\\). Then plot the velocity over time for both points in one figure, with a legend.\n\n\n\n\n\n\nTipHint\n\n\n\n\n\nSlice as before, and use .iloc[1] to pick the next \\(y\\) value.\n\n\n\n\n\n\n\nShow a solution\n# Solution\n# second point: same x, z but the next y grid value\noneD_df2 = df[(df['x'] == 0) & (df['y'] == df['y'].iloc[1]) & (df['z'] == 0)]\n\nplt.plot(oneD_df['Timestep'], oneD_df['abs_velocity'],\n         linewidth=linewidth, label='x=0, y=0, z=0')\nplt.plot(oneD_df2['Timestep'], oneD_df2['abs_velocity'],\n         linewidth=linewidth, label='x=0, y=next, z=0')\nplt.xlabel('Timestep [-]')\nplt.ylabel('Velocity [-]')\nplt.title('Velocity over time')\nplt.xlim(Tmin, Tmax)\nplt.legend()\n\n\nIf you plot multiple graphs, there are a few more useful tricks. For example, you can create lists of the line styles and colors and then loop over them when you create your plots. This will give the different plots the desired color and linestyle. It is also practical to create a dictionary for your labels, especially for larger tasks with many variables. This way, you don’t always have to rename the units and remain consistent. At the end you can save your plots with plt.savefig(path_data /'figures '/figure_name.png', dpi=1000). It is important to use meaningful names to keep the overview and to choose a high resolution.\nTo do this, you create a figure at the beginning in which you then plot your graph. This allows us not only to save our plots, but also to set the size of the plot beforehand. It should be noted that the values are given in inches, so pay attention to the conversion. In the example below you can see, how to make a plot with the of the TU template, for the height we use in this case a 5:3 aspect ratio.\n\n\n\n# Create figure with an explicit size (in inches)\nfig, ax = plt.subplots()\n\ndfs = [oneD_df, oneD_df2]\nvar_label_dict = {\"Timestep\": \"Timestep [-]\", \"abs_velocity\": \"Velocity [-]\"}\ncolors = ['#006BA4', '#FF800E']\nlinestyles = ['-', '--']\nlabels = ['x = 0, y = 0, z = 0',\n          f'x = 0, y = {round(df[\"y\"].iloc[1], 5)}, z = 0']\n\nx_var, y_var = \"Timestep\", \"abs_velocity\"\nfor df_line, color, ls, label in zip(dfs, colors, linestyles, labels):\n    ax.plot(df_line[x_var], df_line[y_var], color=color, linestyle=ls, label=label)\n\nax.set_xlabel(var_label_dict.get(x_var, x_var))\nax.set_ylabel(var_label_dict.get(y_var, y_var))\nax.set_title('Velocity over time')\nax.legend()\nax.grid(True)\n\n# To save: fig.savefig('Velocity_over_time.png')   # dpi comes from the stylesheet\nplt.show()\n\n\nFigure 1\n\n\n\nThe possibilities for designing your plots are almost unlimited. Below is a small example of how you can create a figure within a figure to zoom into the data.\n\n'''\nStep 1:\nWe start by plotting a normal graph. For example, take the one from your task.\nIt is also important to mention that you can set the size of the figure with figsize=(Width, height)(in inches).\n\n'''\n\nTmin = oneD_df['Timestep'].min()\nTmax = oneD_df['Timestep'].max()\n\nfig, axes = plt.subplots(figsize=(8,8), nrows=1, ncols=1)\n\nplt.plot(oneD_df['Timestep'], oneD_df['abs_velocity'], label='x=0, y=0, z=0', color='#006BA4')\nplt.plot(oneD_df2['Timestep'], oneD_df2['abs_velocity'],\n        label=f\"x=0, y={sliced_df['y'].iloc[1].round(4)}, z=0\", color='#FF800E') \nplt.xlabel('Timestep [-]')\nplt.ylabel('Velocity [-]')\nplt.title('Velocity over time')\n\nfig.tight_layout()\n\nplt.legend()\nplt.xlim(Tmin, Tmax)\n\n'''\nStep 2:\nNow we create the layout for the zoomed-in section of the graph. To do this, we create a dictionary with all the relevant data for our layout.\nThis has the advantage that if we want to make adjustments, we have everything in the same place and \nif we want to look at a different part of the graph, we just need to make changes in the dictionary. \nWe then create the axes and enter the sizes from the dictionary. Finally, we plot our data again in our new axes.\n'''\n\nzoom_dict = {'x': [300, 400],           # x limits for zoomed area\n             'y': [1, 1.27],            # y limits for zoomed area\n             'zoom_size': [0.4, 0.7,    # location in x and y (bottom left point of the zoomed window)\n                           0.3, 0.3],   # relative size in x and y of zoomed window (width, height of the rectangle)\n             'loc': [3, 4]              # corners to be connected to highlighting frame (step 3)\n            }\n\n# create axes for zoomed area inside the bottom plot\nax_new = axes.inset_axes(zoom_dict['zoom_size'])\nax_new.grid(False) \n\n# set limit of zoomed area\nax_new.set_xlim(zoom_dict['x'][0],zoom_dict['x'][1])\nax_new.set_ylim(zoom_dict['y'][0],zoom_dict['y'][1])\n\n# hide ticks --&gt; not needed since a frame is used to highlight zoomed area\nax_new.set_xticks([])\nax_new.set_yticks([])\n\n# also plot data to new axis\nax_new.plot(oneD_df['Timestep'], oneD_df['abs_velocity'],\n            color='#006BA4', linestyle='-', linewidth=0.85)\nax_new.plot(oneD_df2['Timestep'], oneD_df2['abs_velocity'],\n            color='#FF800E', linestyle='-', linewidth=0.85)\n\n'''\nStep 3:\nAt the end we can create a frame that points to the zoomed area in the full scale view.\nAfter that, we can already save our beautiful plot.\n'''\n\nfrom mpl_toolkits.axes_grid1.inset_locator import mark_inset\n\n# loc1 and loc2 are the corners of the zoomed plot to be connected with frame\n# Corners are labeled as:\n#       2 - 1\n#       |.  |\n#       3 - 4\nmark_inset(axes, ax_new, loc1=zoom_dict['loc'][0], loc2=zoom_dict['loc'][1], \n           #fc=\"none\", \n           fc=\"C0\", # fill color of highlighting frame\n           ec=\"C1\", # edge color of highlighting frame\n           alpha=0.5)\n\n# plt.savefig('velocity_over_time.pdf')\n\n\n\n\n\n\n\nImportantTask 5\n\n\n\nCreate a properly formatted plot (axis labels, title, …) of the mean velocity over time, and save it as a PNG or PDF. Submit it in Crowdmark.\n\n\n\n\n\n\nTipHint\n\n\n\n\n\nUse .groupby('Timestep') to average over all points at each timestep.\n\n\n\n\n\n\n\nShow a solution\n# Possible solution\n\n# Group by timestep and average the velocity magnitude at each timestep\nmean_velocity = df.groupby('Timestep')['abs_velocity'].mean()\n\nfig, ax = plt.subplots()\nax.plot(mean_velocity.index, mean_velocity.values)\nax.set_xlabel('Timestep [-]')\nax.set_ylabel('Mean velocity [-]')\nax.set_title('Mean velocity over time')\nax.grid(True)\n\n# To save: fig.savefig('mean_velocity.png')\n\n\n\n\n3.3 Tricontourplot\nTricontour plots are used to visualize scalar fields over irregularly spaced triangular grids, making them ideal for representing data distributed over non-uniform domains. They display contour lines or filled contours, helping to reveal variations and gradients in the scalar field effectively.\nPlot the absolute velocity using the tricontourf function. The third entry specifies which size is colored.\n\n3.3.1 Create a DataFrame including only the first Timestep\nSince we only want to look at one time step for the time being, we can remove the other time steps from the DataFrame to avoid transporting the data unnecessarily.\n\n# Slice the DataFrame only including the first Timestep\nt1_df = sliced_df[sliced_df['Timestep'] == 1.0] \n\n# Drop the column z\nt1_df = t1_df.drop('Timestep', axis=1)\n\n# print the sliced df\nt1_df\n\n\nplt.tricontourf(t1_df['x'], t1_df['y'], t1_df['abs_velocity'])\nplt.title(\"TS 1\")\n\nTo be able to evaluate the plot, we need to add a colorbar to assign the different color in values. With cmap='colormap name' you can specify which colormap should be used. Here you can find a selection of different colormaps. You can also set levels, this defines how many contours (or at what values) to draw between your vmin and vmax.\n\n\n\nplt.tricontourf(t1_df['x'], t1_df['y'], t1_df['abs_velocity'], cmap = 'viridis', levels=500)\ncbar = plt.colorbar() \ncbar.set_label('Absolute Velocity') \nplt.title(\"TS 1\")\nplt.show()\n\n\nFigure 2\n\n\n\n\n\n\n\n\n\nTipSelf-test\n\n\n\nRedraw the filled contour for timestep 1, but colour by the \\(x\\)-velocity velocity_x instead of the magnitude. Notice that it now takes both signs.\n\n\n\n\nShow answer\nplt.tricontourf(t1_df['x'], t1_df['y'], t1_df['velocity_x'],\n                cmap='viridis', levels=200)\nplt.colorbar(label='velocity_x')\nplt.title('TS 1 - x-velocity')\nplt.show()\n\n\n\n\n\n3.4 Subplots\nSubplots are a feature in data visualization that allows multiple plots to be displayed within a single figure, arranged in a grid-like layout. They are ideal for comparing different datasets or aspects of data side-by-side, enabling a clearer and more comprehensive analysis.\nAs we have already learned in the section we first create our own figure. A figure is an object that contains all the plot elements. This includes not only the size, but also the number of plots. It can contain many axes, nrows as the amount of rows and ncolsdefines the ammount of columns. With tight_layout=True it automatically adjusts subplots parametes so that the subplots fits in the figure area. With ax[row,col] you can determine the position of the individual plots.\n\nfig, ax = plt.subplots(figsize=(10,10), nrows=2, ncols=2, tight_layout=True)\n\nlevels = 500\nfiltered_df = df[df['Timestep'] == 5]\n# the tricontour plot is defined as \"im\" short for \"image\",\n# so it can be used to create a colorbar that is assigned to the correct subplot\nim = ax[0,0].tricontourf(filtered_df['x'], filtered_df['y'],\n                         filtered_df['abs_velocity'], cmap = 'viridis', levels=levels)\ncbar = fig.colorbar(im, pad = 0.01)\nax[0,0].set_title('TS 5')\n\nfiltered_df = df[df['Timestep'] == 10]\nim = ax[0,1].tricontourf(filtered_df['x'], filtered_df['y'],\n                         filtered_df['abs_velocity'], cmap = 'viridis', levels=levels)\ncbar = fig.colorbar(im, pad = 0.01)\nax[0,1].set_title('TS 10')\n\nfiltered_df = df[df['Timestep'] == 15]\nim = ax[1,0].tricontourf(filtered_df['x'], filtered_df['y'],\n                         filtered_df['abs_velocity'], cmap = 'viridis', levels=levels)\ncbar = fig.colorbar(im, pad = 0.01)\nax[1,0].set_title('TS 15')\n\nfiltered_df = df[df['Timestep'] == 20]\nim = ax[1,1].tricontourf(filtered_df['x'], filtered_df['y'],\n                         filtered_df['abs_velocity'], cmap = 'viridis', levels=levels)\ncbar = fig.colorbar(im, pad = 0.01)\nax[1,1].set_title('TS 20')\n\nNow we have plotted the velocity profiles of different time steps side by side. However, we often have the same lines of code with only slight differences and with small changes to what we want to plot, we would have to change them everywhere. For this reason, it usually makes sense to use loops to create the plots, especially with subplots.\n\nfig, ax = plt.subplots(figsize=(10,10), nrows=2, ncols=2, tight_layout=True)\n\nfor i in range(4):\n    filtered_df = df[df['Timestep'] == (i + 1) * 5]\n    im = ax[divmod(i, 2)].tricontourf(filtered_df['x'], filtered_df['y'],\n                                 filtered_df['abs_velocity'], cmap = 'viridis', levels=levels) # divmod display the quotient and the remainder \n    cbar = fig.colorbar(im, pad = 0.01)\n    ax[divmod(i, 2)].set_title(f'TS {(i + 1) * 5}')\n\nIf we now want to look at other time steps, for example, we can simply copy the code from above and only have to replace a single thing.\n\n\n\n\n\n\nImportantTask 6\n\n\n\nAdjust the subplot code above so that timesteps 2, 4, 6 and 8 are displayed. Save the figure for submission in Crowdmark.\n\n\n\n\nShow a solution\n# Solution\nfig, ax = plt.subplots(figsize=(10,10), nrows=2, ncols=2, tight_layout=True)\n\nfor i in range(4):\n    filtered_df = df[df['Timestep'] == (i + 1) * 2]\n    im = ax[divmod(i, 2)].tricontourf(filtered_df['x'], filtered_df['y'],\n                                 filtered_df['abs_velocity'], cmap = 'viridis', levels=levels) # divmod display the quotient and the remainder \n    cbar = fig.colorbar(im, pad = 0.01)\n    ax[divmod(i, 2)].set_title(f'TS {(i + 1) * 2}')\n\n# plt.savefig('task6.png')\n\n\nFor subplots with colorbars, instead of having a colorbar for each individual plot, it makes sense to create one that applies to all plots. This makes the plots easier to compare, as the scaling is the same everywhere. We can also make our code even more variable. If we define the time steps and the distance between the time steps beforehand, we only have to change the number of time steps, for example, and instead of 4 we can create 8 subplots.\n\n\n\n# Set the number of timesteps to visualize\nnum_timesteps = 8  # You can change this to plot a different number of timesteps\ntimestep_interval = 5  # Interval between each selected timestep\nncols = 2  # Number of columns for subplot layout\ncmap = 'viridis'  # Color map to use for the plots\nlevels = 500  # Number of contour levels\nlabelsize = 14  # Font size for axis tick labels\n\n# Create a list of specific timesteps we want to plot, spaced by timestep_interval\ntimestep_values = [(i + 1) * timestep_interval for i in range(num_timesteps)]\n\n# Filter the DataFrame to only include the selected timesteps\nfiltered_df = df[df[\"Timestep\"].isin(timestep_values)]\n\n# Aggregate the minimum and maximum velocity magnitudes for each selected timestep\nagg_results = filtered_df.groupby(\"Timestep\")[\"abs_velocity\"].agg([\"min\", \"max\"])\n\n# Determine the global minimum and maximum velocity values for consistent color scaling\nvmin, vmax = agg_results[\"min\"].min(), agg_results[\"max\"].max()\n\n# Calculate the number of rows needed based on the number of columns\nnrows = -(-num_timesteps // ncols)  # Ceiling division to ensure enough rows\n\n# Create a figure and array of axes for the subplots\nfig, ax = plt.subplots(\n    nrows, ncols,\n    figsize=(ncols * 5, nrows * 5),  # Size of the full figure\n    constrained_layout=True,  # Automatically adjust spacing to fit everything\n    sharex=True, sharey=True  # Share x and y axes across subplots\n)\nax = ax.flatten()  # Flatten the axes array for easy indexing\n\n# Loop through each timestep and create a contour plot\nfor i, timestep in enumerate(timestep_values):\n    # Filter data for the current timestep\n    timestep_df = filtered_df[filtered_df[\"Timestep\"] == timestep]\n    \n    # Create a filled contour plot for the current timestep\n    im = ax[i].tricontourf(\n        timestep_df[\"x\"], timestep_df[\"y\"], timestep_df[\"abs_velocity\"],\n        vmin=vmin, vmax=vmax, cmap=cmap, levels=levels\n    )\n    \n    # Set the title and customize tick labels\n    ax[i].set_title(f\"Timestep {timestep}\")\n    ax[i].tick_params(direction=\"in\", labelsize=labelsize)\n\n# Remove any unused axes if the number of timesteps is less than the total subplots\nfor i in range(num_timesteps, len(ax)):\n    fig.delaxes(ax[i])\n\n# Add a horizontal colorbar that spans the width of the subplots\ncbar = fig.colorbar(im, ax=ax[:num_timesteps], orientation=\"horizontal\", fraction=0.5, pad=0.01)\ncbar.set_label(\"Velocity Magnitude\")\ncbar.ax.tick_params(labelsize=labelsize)\n\n# Display the final figure\nplt.show()\n\n# fig.savefig('velocity_profiles.png')\n\n\nFigure 3\n\n\n\nWe have now written our code quite flexibly so that we can use it more often. However, to keep our notebook simple and clear, we can write our code as a function. To do this, we basically just have to define a name with the parameters and insert our code from above.\n\nimport matplotlib.pyplot as plt\n\ndef plot_velocity_profiles(\n    df, \n    num_timesteps=8, \n    timestep_interval=5, \n    ncols=2, \n    cmap='viridis', \n    levels=500, \n    labelsize=14,\n    save_path=None\n):\n    \"\"\"\n    Plot multiple velocity profiles from a DataFrame across selected timesteps.\n    \n    Parameters:\n    - df: DataFrame with 'Timestep', 'x', 'y', 'abs_velocity' columns\n    - num_timesteps: Number of timesteps to plot\n    - timestep_interval: Interval between timesteps\n    - ncols: Number of subplot columns\n    - cmap: Colormap for the velocity field\n    - levels: Number of contour levels\n    - fontsize: Font size for titles\n    - labelsize: Font size for ticks\n    - save_path: Optional path to save the figure (Path object or string)\n    \"\"\"\n    \n    # Select the timesteps\n    timestep_values = [(i + 1) * timestep_interval for i in range(num_timesteps)]\n    filtered_df = df[df[\"Timestep\"].isin(timestep_values)]\n    \n    # Determine vmin and vmax globally across selected timesteps\n    agg_results = filtered_df.groupby(\"Timestep\")[\"abs_velocity\"].agg([\"min\", \"max\"])\n    vmin, vmax = agg_results[\"min\"].min(), agg_results[\"max\"].max()\n    \n    # Setup figure and axes\n    nrows = -(-num_timesteps // ncols)  # Ceiling division\n    fig, ax = plt.subplots(\n        nrows, ncols, figsize=(ncols * 5, nrows * 5),\n        constrained_layout=True, sharex=True, sharey=True\n    )\n    ax = ax.flatten()\n    \n    # Plot each timestep\n    for i, timestep in enumerate(timestep_values):\n        timestep_df = filtered_df[filtered_df[\"Timestep\"] == timestep]\n        im = ax[i].tricontourf(\n            timestep_df[\"x\"], timestep_df[\"y\"], timestep_df[\"abs_velocity\"],\n            vmin=vmin, vmax=vmax, cmap=cmap, levels=levels\n        )\n        ax[i].set_title(f\"Timestep {timestep}\")\n        ax[i].tick_params(direction=\"in\", labelsize=labelsize)\n    \n    # Hide any unused subplots\n    for empty_ax in ax[num_timesteps:]:\n        empty_ax.remove()\n    \n    # Add a horizontal colorbar\n    cbar = fig.colorbar(im, ax=ax[:num_timesteps], orientation=\"horizontal\", fraction=0.5, pad=0.01)\n    cbar.set_label(\"Velocity Magnitude\")\n    cbar.ax.tick_params(labelsize=labelsize)\n    \n    # Save the figure if a path is provided\n    if save_path:\n        fig.savefig(save_path, dpi=1000)\n    \n    plt.show()\n\n\nplot_velocity_profiles(df, num_timesteps=6, timestep_interval=10, ncols=3)\n\nAs you can see, we only need one line of code and can set the number of plots, as well as the time interval, font size etc. as required.\nAs you can see, I have made a few more changes. For example, that the axis labels are only on the outer plots or that the ticks on the axes point inwards. You can change a lot of different things when designing your graphs. Feel free to play around and find your preferences.\nHint: This could be useful for a possible plotting contest :-O\n\n\n3.5 Scatter and Hexbin plots\nIt is not only possible to plot in spatial space, but sometimes data evaluation is also more useful in state space, e.g. to obtain a dependency on a certain variable. In these plots a huge number of sample points are shown to display some kind of distribution.\nTo visualize this data, multiple kind of plots exist, each having their distinct advantages. In the following we will show some of our personal favorites: - scatter plots: A scatter plot displays individual data points as dots on a 2D plane, showing the relationship between two variables.) - hexbin plots: A hexbin plot aggregates data points into hexagonal bins, where the color intensity represents the density of points in each bin, making it useful for visualizing large datasets.)\n\n\n\n# Create figure and gridspec\nfig = plt.figure(figsize=(10, 6))\ngs = fig.add_gridspec(1, 3, width_ratios=[1, 1, 0.1])\n\n# Create subplots using gridspec\nax = [fig.add_subplot(gs[0, 0]), fig.add_subplot(gs[0, 1])]\ncbar_ax = fig.add_subplot(gs[0, 2])\n\n# Scatter plot\nax[0].scatter(t1_df[\"velocity_x\"], t1_df[\"velocity_y\"], s=0.5, color=\"C0\")\nax[0].set_title(\"scatter\")\n\n# Hexbin plot\nim = ax[1].hexbin(t1_df[\"velocity_x\"], t1_df[\"velocity_y\"], cmap='Blues', mincnt=1)\nax[1].set_title(\"hexbin\")\n\n# Labels\nax[0].set_xlabel('$v_x$ [-]')\nax[1].set_xlabel('$v_x$ [-]')\nax[0].set_ylabel('$v_y$ [-]')\n\n# Colorbar for hexbin plot\nfig.colorbar(im, cax=cbar_ax)\nplt.show()\n\n\nFigure 4\n\n\n\nIn the plot above we see the benefit of the hexbin over the scatter plot for data distribution. While the first scatter plot (left) is able to visualize the area in which the data points are located, we lose lots of details of the actual distribution of the data due to overlapping points. We can slightly overcome this problem, by using a transparent marker (middle). However, in the areas with a high point density we still lose lot’s of insights. Here, the hexbin gives the best results, since all the data points inside the hexbin is summed up and we can visualize the data-distribution (and we even can choose the color map for this).\n\n\n\n\n\n\nTipSelf-test\n\n\n\nMake a hexbin of velocity_x against velocity_z for the first timestep. Is the joint distribution as round as the \\(v_x\\)-\\(v_y\\) one?\n\n\n\n\nShow answer\nplt.hexbin(t1_df['velocity_x'], t1_df['velocity_z'], cmap='Blues', mincnt=1)\nplt.xlabel(r'$v_x$ [-]')\nplt.ylabel(r'$v_z$ [-]')\nplt.colorbar(label='count')\nplt.show()\n\n\n\n\n3.6 How to define a plotting style\nOne of the key aspects in the generation of high-quality figures is a consistent design of the plots, which includes - Font-size - Typeface - Text-rendering - Color-schemes - Axis position and design - …\nIf you have to do a lot of plotting, it can be a tedious and time-consuming job. In the following, we will show you an easy way to define a consistent design using matplotlib stylesheets.\nThe Pros of this methods are: - Central style definition - Easy reuse - Highly flexible - Very clean code\nAfter answering the question Why to use matplotlib stylesheets, we will now give you a short overview on how to use matplotlib plotting styles. A broader overview can also be found in here.\nThere are several stylesheets on the matplotlib page that can be used or modified. Next, we will create our own stylesheet using the things we have learned so far.\n\n\n\n\n\n\nImportantTask 7\n\n\n\nExperiment with different marker sizes, line widths and colours, then set your favourites in the stylesheet defined below. Because roughly 8% of men and 0.4% of women have a colour-vision deficiency, avoid relying on red-vs-green contrasts. Browse colour palettes here.\n\n\n\n\nShow a solution\n# Possible solution\nfrom pathlib import Path\n\nstyle_path = Path(\"myStyle.mplstyle\")\n\nstyle_lines = [\n    \"# Fonts / math (mathtext -&gt; no external LaTeX needed)\",\n    \"font.family      : serif\",\n    \"mathtext.fontset : cm\",\n    \"font.size        : 12\",\n    \"\",\n    \"# Lines\",\n    \"lines.markersize : 3\",\n    \"lines.linewidth  : 1.0\",\n    \"\",\n    \"# Figure\",\n    \"figure.figsize   : 7.0, 4.2   # inches (5:3 aspect ratio)\",\n    \"savefig.dpi      : 300\",\n    \"\",\n    \"# Ticks\",\n    \"xtick.direction  : in\",\n    \"ytick.direction  : in\",\n    \"\",\n    \"# Legend\",\n    \"legend.frameon   : false\",\n    \"legend.fontsize  : medium\",\n    \"\",\n    \"# Colour-blind-friendly colour cycle (tableau 10-blind)\",\n    \"axes.prop_cycle  : cycler('color', ['006BA4', 'FF800E', 'ABABAB', '595959', '5F9ED1', 'C85200', '898989', 'A2C8EC', 'FFBC79', 'CFCFCF'])\",\n    \"patch.facecolor  : 006BA4\",\n    \"\",\n    \"image.cmap       : viridis\",\n]\n\nstyle_path.write_text(\"\\n\".join(style_lines))\nprint(f\"Custom style saved to: {style_path}\")\n\n\n\n\n\n\n\n\nImportantTask 8\n\n\n\nNow test your stylesheet: create a line plot with at least two curves without specifying colours or font sizes by hand. Load your stylesheet with plt.style.use(['path/to/style.mplstyle']), save the figure, and submit it in Crowdmark.\n\n\n\n\nShow a solution\n# Possible solution\n\n# Use the stylesheet we just created\nplt.style.use(['myStyle.mplstyle'])\n\ndfs = [oneD_df, oneD_df2]\nlabels = ['x = 0, y = 0, z = 0',\n          f'x = 0, y = {round(df[\"y\"].iloc[1], 5)}, z = 0']\n\nfor df_line, label in zip(dfs, labels):\n    plt.plot(df_line['Timestep'], df_line['abs_velocity'], label=label)\n\nplt.xlabel('Timestep [-]')\nplt.ylabel('Velocity [-]')\nplt.title('Velocity over time')\nplt.legend()\n\n# To save: plt.savefig('styled_lineplot.png')\n\n\nAs we can see, we can get a plot with a certain design without much effort. We will continue to use the stylesheet we have created in future tutorials. Feel free to customize or extend the stylesheet as the tutorial progresses. You can make adjustments in the file itself, further information can be found in the documentation.",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part A: Processing data in Python"
+    ]
+  },
+  {
+    "objectID": "tutorials/assignment-01-processing.html#summary",
+    "href": "tutorials/assignment-01-processing.html#summary",
+    "title": "Assignment 1 · Part A: Processing data in Python",
+    "section": "4 Summary",
+    "text": "4 Summary\nThe brave ones who have held out to the end are now able to:\n\nRead and handle data in tabular form:\n\nExplore data structure and summarize information\nAdd, remove, and manipulate data\nPerform calculations on the data\n\nVisualize data through:\n\nLine plots\nScatter and hexbin plots\nTricontour plots\nSubplots for comparison\n\nCustomize plotting style to suit your needs\n\n\n4.1 Guidelines\nHere are a few guidelines you can follow for the plots in the subsequent tutorials. - General plotting style - Consistent style - colorscheme, axis labels, … - Figure quality and resolution - .pdf: Line-plots and small plots - .png/.jpeg: Plots with color maps / contour plots - Sufficient resolution (~1000 dpi) - Labels and units - Consistent use - Units non-italic - Typical formatting - T / K -&gt; recommended by SI guidelines - T in K - T (K) - T [K]",
+    "crumbs": [
+      "Home",
+      "Tutorials",
+      "Assignment 1 · Part A: Processing data in Python"
+    ]
+  },
+  {
+    "objectID": "cluster/index.html",
+    "href": "cluster/index.html",
+    "title": "Using the Cluster",
+    "section": "",
+    "text": "Some tutorials require you to run computations on a high-performance computing (HPC) cluster. For this course we use a dedicated Magic Castle instance — a temporary cluster, built by Calcul Québec, that reproduces the Digital Research Alliance of Canada (DRAC) environment: the Slurm scheduler, software modules, and a JupyterHub web portal. It is allocated only for this class, so the skills you learn here carry over directly to the national clusters.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "Using the Cluster"
+    ]
+  },
+  {
+    "objectID": "cluster/index.html#on-this-page",
+    "href": "cluster/index.html#on-this-page",
+    "title": "Using the Cluster",
+    "section": "1 On this page",
+    "text": "1 On this page\n\nRegistration — create your account and log in.\nIntro — how the cluster is organised (login vs. compute nodes, storage, modules).\nJupyterLab — the main way you will work: notebooks in the browser.\nVS Code — an alternative editor (notebooks, Python, and LaTeX) in the browser.\nTerminal — command-line access (added later in the course).",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "Using the Cluster"
+    ]
+  },
+  {
+    "objectID": "cluster/index.html#acknowledgements",
+    "href": "cluster/index.html#acknowledgements",
+    "title": "Using the Cluster",
+    "section": "2 Acknowledgements",
+    "text": "2 Acknowledgements\nThe computing resources for this course are generously provided by the Digital Research Alliance of Canada (formerly Compute Canada) and its regional partner Calcul Québec, through their Magic Castle platform. We gratefully acknowledge their support in providing the training cluster used in these tutorials.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "Using the Cluster"
+    ]
+  },
+  {
+    "objectID": "cluster/registration.html",
+    "href": "cluster/registration.html",
+    "title": "Registration",
+    "section": "",
+    "text": "Our Magic Castle instance has its own accounts — you do not need a Digital Research Alliance (CCDB) account or a national allocation to use it. You register directly on the cluster’s web portal.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "Registration"
+    ]
+  },
+  {
+    "objectID": "cluster/registration.html#create-your-account",
+    "href": "cluster/registration.html#create-your-account",
+    "title": "Registration",
+    "section": "1 Create your account",
+    "text": "1 Create your account\n\nOpen the course cluster portal: https://mech501.calculquebec.cloud/.\nOn the sign-in page, click Create Account (see Fig. 1).\nChoose a username and password (enter the registration code from myCourses if you are prompted for one), then submit.\nReturn to the sign-in page and log in with your new credentials. Forgot your password later? Use Reset Password on the same page.\n\n\n\n\n\n\n\nTip\n\n\n\nPick a password you don’t use elsewhere — this is a temporary training account — and register early, so any issues are sorted out before the task is due.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "Registration"
+    ]
+  },
+  {
+    "objectID": "cluster/registration.html#starting-the-instance-for-the-first-time",
+    "href": "cluster/registration.html#starting-the-instance-for-the-first-time",
+    "title": "Registration",
+    "section": "2 Starting the instance for the first time",
+    "text": "2 Starting the instance for the first time\nAfter you log in, JupyterHub asks what kind of session you want and then starts it for you on a compute node. The first run looks like this.\n\n\n\n\n\n\nFigure 1: The JupyterHub sign-in page. The first time, click Create Account; afterwards, sign in with your username and password.\n\n\n\n\n\n\n\n\n\nFigure 2: The Server Options page. Choose the resources for your session — the defaults are fine for the tutorials (details on the JupyterLab page) — then click Start.\n\n\n\n\n\n\n\n\n\nFigure 3: Your session is queued and launched on a compute node. You are redirected to JupyterLab automatically once it is ready.\n\n\n\nOnce JupyterLab opens, you are ready to work — continue with JupyterLab.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "Registration"
+    ]
+  },
+  {
+    "objectID": "cluster/terminal.html",
+    "href": "cluster/terminal.html",
+    "title": "Terminal (later)",
+    "section": "",
+    "text": "NoteComing soon\n\n\n\nLater tutorials will use the cluster from the command line — logging in over SSH, loading modules, editing files, and submitting batch jobs with Slurm. This page will be expanded then. For now, use the JupyterLab portal, which already gives you a terminal (File ▸ New ▸ Terminal).",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "Terminal (later)"
+    ]
+  },
+  {
+    "objectID": "cluster/terminal.html#preview-logging-in-over-ssh",
+    "href": "cluster/terminal.html#preview-logging-in-over-ssh",
+    "title": "Terminal (later)",
+    "section": "1 Preview: logging in over SSH",
+    "text": "1 Preview: logging in over SSH\nOnce command-line access is introduced, you will connect with:\nssh &lt;your-username&gt;@&lt;login-host&gt;   # login host will be posted with this task\nusing the same username and password you created during Registration.",
+    "crumbs": [
+      "Home",
+      "Cluster",
+      "Terminal (later)"
+    ]
+  },
+  {
+    "objectID": "python/04-functional.html",
+    "href": "python/04-functional.html",
+    "title": "Functional programming",
+    "section": "",
+    "text": "In Python, functions are ordinary objects: you can store them in variables, pass them as arguments, and return them from other functions. This enables a clean functional style that pairs well with numerical work.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Functional programming"
+    ]
+  },
+  {
+    "objectID": "python/04-functional.html#functions-are-first-class-objects",
+    "href": "python/04-functional.html#functions-are-first-class-objects",
+    "title": "Functional programming",
+    "section": "1 Functions are first-class objects",
+    "text": "1 Functions are first-class objects\nA function can be assigned, put in a container, and passed around like any value.\n\nimport numpy as np\n\ndef csv(x):      return ', '.join(map(str, x))\ndef total(x):    return sum(x)\n\n# store functions in a dict and pick one at runtime\nops = {'join': csv, 'sum': total}\ndata = [1, 2, 3, 4]\nprint(ops['join'](data))\nprint(ops['sum'](data))\n\n# a function that TAKES a function (a 'higher-order' function)\ndef apply_twice(f, x):\n    return f(f(x))\nprint(apply_twice(lambda v: v * 3, 2))\n\n1, 2, 3, 4\n10\n18",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Functional programming"
+    ]
+  },
+  {
+    "objectID": "python/04-functional.html#lambdas-map-and-filter",
+    "href": "python/04-functional.html#lambdas-map-and-filter",
+    "title": "Functional programming",
+    "section": "2 Lambdas, map, and filter",
+    "text": "2 Lambdas, map, and filter\nA lambda is a small anonymous function. map/filter apply a function across an iterable lazily. For elementwise math on arrays, prefer NumPy vectorisation; map/lambda shine for light glue and custom keys.\n\nnums = range(1, 8)\n\nsquared = list(map(lambda n: n ** 2, nums))\nodd = list(filter(lambda n: n % 2, nums))\nprint('map   :', squared)\nprint('filter:', odd)\n\n# lambdas as sort keys\ncases = [('a', 5000), ('b', 200), ('c', 900)]\nprint('sorted:', sorted(cases, key=lambda t: t[1]))\n\n# the equivalent comprehensions (often more readable)\nprint('comp  :', [n ** 2 for n in nums])\n\nmap   : [1, 4, 9, 16, 25, 36, 49]\nfilter: [1, 3, 5, 7]\nsorted: [('b', 200), ('c', 900), ('a', 5000)]\ncomp  : [1, 4, 9, 16, 25, 36, 49]\n\n\nImagine you need a specialised version of a general function — always the same viscosity, always base 2. This is super easy in Python using functools.partial.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Functional programming"
+    ]
+  },
+  {
+    "objectID": "python/04-functional.html#functools-reduce-and-partial",
+    "href": "python/04-functional.html#functools-reduce-and-partial",
+    "title": "Functional programming",
+    "section": "3 functools: reduce and partial",
+    "text": "3 functools: reduce and partial\nreduce folds an iterable to a single value; partial pre-fills some arguments to make a new, specialised function.\n\nfrom functools import reduce, partial\n\nproduct = reduce(lambda a, b: a * b, [1, 2, 3, 4], 1)\nprint('reduce (4!):', product)\n\ndef power(base, exponent):\n    return base ** exponent\n\nsquare = partial(power, exponent=2)   # fix exponent=2\ncube = partial(power, exponent=3)\nprint('square(5):', square(5), '| cube(2):', cube(2))\n\nreduce (4!): 24\nsquare(5): 25 | cube(2): 8\n\n\nImagine you need to hand a module to a labmate and have their editor catch mistakes before running anything. This is super easy in Python using type hints.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Functional programming"
+    ]
+  },
+  {
+    "objectID": "python/04-functional.html#type-hints",
+    "href": "python/04-functional.html#type-hints",
+    "title": "Functional programming",
+    "section": "4 Type hints",
+    "text": "4 Type hints\nAnnotations document the intended types of arguments and return values. They do not change runtime behaviour, but they make code self-explanatory and let tools (IDEs, mypy) catch mistakes before you run.\n\nfrom typing import Callable, Optional\nfrom collections.abc import Sequence\n\ndef integrate(f: Callable[[float], float],\n              a: float, b: float, n: int = 100) -&gt; float:\n    \"\"\"Midpoint-rule integral of f over [a, b].\"\"\"\n    h = (b - a) / n\n    return h * sum(f(a + (i + 0.5) * h) for i in range(n))\n\ndef normalise(xs: Sequence[float],\n              scale: Optional[float] = None) -&gt; list[float]:\n    s = scale if scale is not None else max(abs(x) for x in xs)\n    return [x / s for x in xs]\n\nimport math\nprint('integral of sin on [0, pi] ~', round(integrate(math.sin, 0, math.pi), 4))\nprint('normalised:', normalise([1.0, -2.0, 4.0]))\n\nintegral of sin on [0, pi] ~ 2.0001\nnormalised: [0.25, -0.5, 1.0]",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Functional programming"
+    ]
+  },
+  {
+    "objectID": "python/04-functional.html#self-tests",
+    "href": "python/04-functional.html#self-tests",
+    "title": "Functional programming",
+    "section": "5 Self-tests",
+    "text": "5 Self-tests\n1. Use map (or a comprehension) to turn ['1','2','3'] into [1, 2, 3] (ints).\n\n\nShow solution\nprint(list(map(int, ['1', '2', '3'])))\n\n\n2. With functools.partial, make a function to_kelvin(celsius) from a general def shift(x, by): return x + by (water freezes at 273.15 K).\n\n\nShow solution\nfrom functools import partial\ndef shift(x, by):\n    return x + by\nto_kelvin = partial(shift, by=273.15)\nprint(to_kelvin(25))\n\n\n3. Add type hints to def mean(xs): return sum(xs)/len(xs) for a sequence of floats returning a float.\n\n\n\n\n\n\nTipSolution\n\n\n\n\n\nfrom collections.abc import Sequence\ndef mean(xs: Sequence[float]) -&gt; float:\n    return sum(xs) / len(xs)",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Functional programming"
+    ]
+  },
+  {
+    "objectID": "python/04-functional.html#turbulence-in-practice-tke-from-a-spectrum",
+    "href": "python/04-functional.html#turbulence-in-practice-tke-from-a-spectrum",
+    "title": "Functional programming",
+    "section": "6 Turbulence in practice: TKE from a spectrum",
+    "text": "6 Turbulence in practice: TKE from a spectrum\nThe turbulent kinetic energy is the integral of the spectrum, \\(k=\\int_0^\\infty E(\\kappa)\\,\\mathrm d\\kappa\\). Reuse the functional integrate from above, passing a model spectrum as a function.\n\nimport numpy as np\n\ndef model_spectrum(kappa, C=1.5, eps=1.0, k_max=1000.0):\n    # inertial range with a high-wavenumber cutoff (finite integral)\n    return C * eps ** (2 / 3) * kappa ** (-5 / 3) if kappa &lt;= k_max else 0.0\n\ntke = integrate(model_spectrum, 1.0, 1000.0, n=5000)\nprint(f'TKE = \\u222b E dk = {tke:.3f} m^2/s^2')\n\nTKE = ∫ E dk = 2.223 m^2/s^2\n\n\nSelf-test. Use functools.reduce to sum the per-band energies [0.5, 0.3, 0.15, 0.05] into the total.\n\n\nShow solution\nfrom functools import reduce\nprint(reduce(lambda a, b: a + b, [0.5, 0.3, 0.15, 0.05]))",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Functional programming"
+    ]
+  },
+  {
+    "objectID": "python/05-internals.html",
+    "href": "python/05-internals.html",
+    "title": "Advanced Python internals",
+    "section": "",
+    "text": "Three mechanisms that show up everywhere in real Python code — and let you process large datasets without exhausting memory.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Advanced Python internals"
+    ]
+  },
+  {
+    "objectID": "python/05-internals.html#decorators",
+    "href": "python/05-internals.html#decorators",
+    "title": "Advanced Python internals",
+    "section": "1 Decorators",
+    "text": "1 Decorators\nA decorator is a function that wraps another function to add behaviour (timing, logging, caching, validation) without editing it. @wraps preserves the wrapped function’s name and docstring.\n\nimport time\nfrom functools import wraps\n\ndef timed(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        t0 = time.perf_counter()\n        result = func(*args, **kwargs)\n        dt = time.perf_counter() - t0\n        print(f'{func.__name__} took {dt*1e3:.2f} ms')\n        return result\n    return wrapper\n\n@timed\ndef slow_sum(n):\n    \"\"\"Sum 0..n-1.\"\"\"\n    return sum(range(n))\n\nprint('result:', slow_sum(1_000_00))\nprint('name kept by @wraps:', slow_sum.__name__)\n\nslow_sum took 1.36 ms\nresult: 4999950000\nname kept by @wraps: slow_sum\n\n\n\n1.1 Decorators that take arguments\nAdd one more layer: a function that returns a decorator.\n\nfrom functools import wraps\n\ndef repeat(times):\n    def decorator(func):\n        @wraps(func)\n        def wrapper(*args, **kwargs):\n            for _ in range(times):\n                result = func(*args, **kwargs)\n            return result\n        return wrapper\n    return decorator\n\n@repeat(times=3)\ndef greet():\n    print('hello')\n\ngreet()\n\n# A very useful built-in decorator: memoisation\nfrom functools import lru_cache\n@lru_cache(maxsize=None)\ndef fib(n):\n    return n if n &lt; 2 else fib(n - 1) + fib(n - 2)\nprint('fib(30):', fib(30))\n\nhello\nhello\nhello\nfib(30): 832040",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Advanced Python internals"
+    ]
+  },
+  {
+    "objectID": "python/05-internals.html#iterators-iterables",
+    "href": "python/05-internals.html#iterators-iterables",
+    "title": "Advanced Python internals",
+    "section": "2 Iterators & iterables",
+    "text": "2 Iterators & iterables\nAn iterable can produce an iterator (via iter()); an iterator yields items one at a time (via next()) and raises StopIteration when done. for loops use this protocol under the hood.\n\nnums = [10, 20, 30]          # a list is iterable\nit = iter(nums)             # get an iterator\nprint(next(it), next(it), next(it))\ntry:\n    next(it)\nexcept StopIteration:\n    print('exhausted')\n\n# A custom iterator: countdown\nclass Countdown:\n    def __init__(self, start):\n        self.n = start\n    def __iter__(self):\n        return self\n    def __next__(self):\n        if self.n &lt;= 0:\n            raise StopIteration\n        self.n -= 1\n        return self.n + 1\n\nprint(list(Countdown(4)))\n\n10 20 30\nexhausted\n[4, 3, 2, 1]\n\n\nImagine you need to compute the mean of a velocity record too large to fit in memory. This is super easy in Python using a generator that yields one chunk at a time.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Advanced Python internals"
+    ]
+  },
+  {
+    "objectID": "python/05-internals.html#generators",
+    "href": "python/05-internals.html#generators",
+    "title": "Advanced Python internals",
+    "section": "3 Generators",
+    "text": "3 Generators\nA generator produces values lazily with yield — it computes each item on demand, so it uses almost no memory even for huge or infinite sequences. Ideal for streaming through large simulation output.\n\ndef read_in_chunks(seq, size):\n    \"\"\"Yield successive size-length chunks — nothing is materialised whole.\"\"\"\n    for i in range(0, len(seq), size):\n        yield seq[i:i + size]\n\nfor chunk in read_in_chunks(list(range(10)), 3):\n    print(chunk)\n\n# generator EXPRESSION: like a comprehension but lazy (parentheses)\nsquares = (n * n for n in range(1_000_000))\nprint('first three:', next(squares), next(squares), next(squares))\nprint('type:', type(squares).__name__)\n\n[0, 1, 2]\n[3, 4, 5]\n[6, 7, 8]\n[9]\nfirst three: 0 1 4\ntype: generator\n\n\n\n# itertools: composable, memory-light iterator building blocks\nimport itertools as it\n\nprint('count :', list(it.islice(it.count(0, 5), 4)))     # 0,5,10,15\nprint('cycle :', list(it.islice(it.cycle('AB'), 5)))     # A,B,A,B,A\nprint('chain :', list(it.chain([1, 2], [3, 4])))\nprint('pairs :', list(it.combinations('xyz', 2)))\n\ncount : [0, 5, 10, 15]\ncycle : ['A', 'B', 'A', 'B', 'A']\nchain : [1, 2, 3, 4]\npairs : [('x', 'y'), ('x', 'z'), ('y', 'z')]",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Advanced Python internals"
+    ]
+  },
+  {
+    "objectID": "python/05-internals.html#self-tests",
+    "href": "python/05-internals.html#self-tests",
+    "title": "Advanced Python internals",
+    "section": "4 Self-tests",
+    "text": "4 Self-tests\n1. Write a decorator announce that prints calling &lt;name&gt; before the function runs, then returns its result.\n\n\nShow solution\nfrom functools import wraps\ndef announce(func):\n    @wraps(func)\n    def wrapper(*a, **k):\n        print('calling', func.__name__)\n        return func(*a, **k)\n    return wrapper\n\n@announce\ndef add(a, b):\n    return a + b\nprint(add(2, 3))\n\n\n2. Write a generator evens(limit) yielding even numbers 0, 2, 4, … below limit.\n\n\nShow solution\ndef evens(limit):\n    n = 0\n    while n &lt; limit:\n        yield n\n        n += 2\nprint(list(evens(10)))",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Advanced Python internals"
+    ]
+  },
+  {
+    "objectID": "python/05-internals.html#turbulence-in-practice-streaming-statistics",
+    "href": "python/05-internals.html#turbulence-in-practice-streaming-statistics",
+    "title": "Advanced Python internals",
+    "section": "5 Turbulence in practice: streaming statistics",
+    "text": "5 Turbulence in practice: streaming statistics\nA long velocity record — or a stack of DNS snapshots — may not fit in memory. A generator streams it chunk by chunk, and Welford’s algorithm accumulates the mean and variance in a single pass with \\(O(1)\\) memory.\n\nimport numpy as np\n\ndef stream(seq, size):\n    for i in range(0, len(seq), size):\n        yield seq[i:i + size]\n\nsignal = 10 + np.random.default_rng(0).standard_normal(100_000)  # 'huge'\n\nn = 0\nmean = 0.0\nM2 = 0.0\nfor chunk in stream(signal, 1000):\n    for x in chunk:\n        n += 1\n        delta = x - mean\n        mean += delta / n\n        M2 += delta * (x - mean)\nprint(f'&lt;u&gt; = {mean:.4f},  u_rms = {(M2 / n) ** 0.5:.4f}  (one pass)')\n\n&lt;u&gt; = 9.9991,  u_rms = 1.0001  (one pass)\n\n\nSelf-test. Write a generator increments(seq, r) that yields \\(u(i{+}r)-u(i)\\) — the building block of a structure function.\n\n\nShow solution\ndef increments(seq, r):\n    for i in range(len(seq) - r):\n        yield seq[i + r] - seq[i]\n\nprint(list(increments([0, 1, 4, 9, 16], r=1)))",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Advanced Python internals"
+    ]
+  },
+  {
+    "objectID": "python/07-packaging.html",
+    "href": "python/07-packaging.html",
+    "title": "Packaging & distribution",
+    "section": "",
+    "text": "Once your code outgrows a single script, package it. A proper package can be pip install-ed, imported from anywhere, versioned, and shared with collaborators — no more sys.path hacks or copy-pasted files.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Packaging & distribution"
+    ]
+  },
+  {
+    "objectID": "python/07-packaging.html#the-modern-project-layout",
+    "href": "python/07-packaging.html#the-modern-project-layout",
+    "title": "Packaging & distribution",
+    "section": "1 The modern project layout",
+    "text": "1 The modern project layout\nThe recommended src layout keeps importable code under src/ and metadata in a single pyproject.toml:\nmyturb/\n├── pyproject.toml        # name, version, dependencies, build backend\n├── README.md\n└── src/\n    └── myturb/\n        ├── __init__.py    # marks the package; sets __version__, public API\n        └── stats.py       # a module\nA minimal pyproject.toml:\n[build-system]\nrequires = [\"hatchling\"]\nbuild-backend = \"hatchling.build\"\n\n[project]\nname = \"myturb\"\nversion = \"0.1.0\"\ndescription = \"Small turbulence post-processing helpers\"\nrequires-python = \"&gt;=3.10\"\ndependencies = [\"numpy\"]",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Packaging & distribution"
+    ]
+  },
+  {
+    "objectID": "python/07-packaging.html#build-a-real-package-here",
+    "href": "python/07-packaging.html#build-a-real-package-here",
+    "title": "Packaging & distribution",
+    "section": "2 Build a real package here",
+    "text": "2 Build a real package here\nThe cell below writes that layout to a temporary folder, so you can see the files a package is made of. (In a normal project these live in your repo.)\n\nfrom pathlib import Path\nimport tempfile, textwrap, sys\n\nroot = Path(tempfile.mkdtemp()) / 'myturb'\npkg = root / 'src' / 'myturb'\npkg.mkdir(parents=True)\n\n(root / 'pyproject.toml').write_text(textwrap.dedent('''\n    [build-system]\n    requires = [\"hatchling\"]\n    build-backend = \"hatchling.build\"\n\n    [project]\n    name = \"myturb\"\n    version = \"0.1.0\"\n    requires-python = \"&gt;=3.10\"\n'''))\n\n(pkg / '__init__.py').write_text(textwrap.dedent('''\n    \"\"\"myturb - tiny turbulence helpers.\"\"\"\n    __version__ = '0.1.0'\n    from .stats import tke          # expose a clean public API\n'''))\n\n(pkg / 'stats.py').write_text(textwrap.dedent('''\n    import numpy as np\n    def tke(u, v, w):\n        \"\"\"Turbulent kinetic energy from fluctuation arrays.\"\"\"\n        u, v, w = map(np.asarray, (u, v, w))\n        return 0.5 * (u**2 + v**2 + w**2).mean()\n'''))\n\nfor p in sorted(root.rglob('*')):\n    print(p.relative_to(root.parent))\n\nmyturb/pyproject.toml\nmyturb/src\nmyturb/src/myturb\nmyturb/src/myturb/__init__.py\nmyturb/src/myturb/stats.py",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Packaging & distribution"
+    ]
+  },
+  {
+    "objectID": "python/07-packaging.html#import-and-use-it",
+    "href": "python/07-packaging.html#import-and-use-it",
+    "title": "Packaging & distribution",
+    "section": "3 Import and use it",
+    "text": "3 Import and use it\nNormally you would run pip install -e . from the project root (an editable install) so the package is importable everywhere. Here we mimic that by adding src/ to the import path.\n\nimport sys, importlib\nsys.path.insert(0, str(root / 'src'))\nimport myturb\nimportlib.reload(myturb)\n\nprint('version:', myturb.__version__)\nprint('tke     :', round(myturb.tke([1, -1], [2, -2], [0, 0]), 3))\n\nversion: 0.1.0\ntke     : 2.5\n\n\nImagine you need to keep editing your library while a dozen scripts already import it. This is super easy in Python using an editable install, pip install -e ..",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Packaging & distribution"
+    ]
+  },
+  {
+    "objectID": "python/07-packaging.html#installing-building-and-distributing",
+    "href": "python/07-packaging.html#installing-building-and-distributing",
+    "title": "Packaging & distribution",
+    "section": "4 Installing, building, and distributing",
+    "text": "4 Installing, building, and distributing\nThe commands you would actually run from the project root (shown, not executed here):\n\n# editable install for development (changes picked up immediately)\npip install -e .\n\n# build distributables (wheel + sdist) into dist/\npython -m build\n\n# upload to (Test)PyPI with twine\npython -m twine upload --repository testpypi dist/*\n\nGood habits for a shareable package: pin a requires-python, list runtime dependencies, add a README.md and a LICENSE, keep a single source of truth for the version, and add tests (see Software engineering practices).",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Packaging & distribution"
+    ]
+  },
+  {
+    "objectID": "python/07-packaging.html#self-tests",
+    "href": "python/07-packaging.html#self-tests",
+    "title": "Packaging & distribution",
+    "section": "5 Self-tests",
+    "text": "5 Self-tests\n1. What is the purpose of __init__.py in a package directory?\n\n\n\n\n\n\nTipSolution\n\n\n\n\n\nIt marks the directory as a Python package and runs when the package is imported — a natural place to set __version__ and to re-export the public API (e.g. from .stats import tke) so users can write from myturb import tke.\n\n\n\n2. Add a moments.py module to the temp package with a function rms(x) returning the root-mean-square, expose it in __init__, and call it.\n\n\nShow solution\nimport textwrap, importlib\n(pkg / 'moments.py').write_text(textwrap.dedent('''\n    import numpy as np\n    def rms(x):\n        x = np.asarray(x)\n        return float(np.sqrt((x**2).mean()))\n'''))\n# re-expose and reload\ninit = (pkg / '__init__.py')\ninit.write_text(init.read_text() + 'from .moments import rms\\n')\nimport myturb, importlib\nimportlib.reload(myturb)\nprint(myturb.rms([3, 4]))   # -&gt; 3.5355...",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Packaging & distribution"
+    ]
+  },
+  {
+    "objectID": "python/07-packaging.html#turbulence-in-practice-grow-the-package",
+    "href": "python/07-packaging.html#turbulence-in-practice-grow-the-package",
+    "title": "Packaging & distribution",
+    "section": "6 Turbulence in practice: grow the package",
+    "text": "6 Turbulence in practice: grow the package\nA package is meant to accumulate your toolkit. Add a reynolds_stress helper to stats.py, re-expose it in the public API, and use it.\n\nimport importlib, textwrap\nimport myturb, myturb.stats\n\nstats = pkg / 'stats.py'\nstats.write_text(stats.read_text() + textwrap.dedent('''\n    def reynolds_stress(u, v):\n        # Reynolds shear stress &lt;u'v'&gt; from two fluctuation arrays\n        u, v = map(np.asarray, (u, v))\n        return float((u * v).mean())\n'''))\ninit = pkg / '__init__.py'\ninit.write_text(init.read_text() + 'from .stats import reynolds_stress\\n')\n\nimportlib.reload(myturb.stats)   # refresh the submodule first...\nimportlib.reload(myturb)         # ...then re-run the package __init__\nprint(\"&lt;u'v'&gt; =\", myturb.reynolds_stress([1, -1, 2], [2, -2, 1]))\n\n&lt;u'v'&gt; = 2.0\n\n\nSelf-test. Add a turbulence_intensity(u_rms, u_mean) function to stats.py, expose it, and call it.\n\n\nShow solution\nstats.write_text(stats.read_text()\n    + '\\ndef turbulence_intensity(u_rms, u_mean):\\n'\n    + '    return u_rms / u_mean\\n')\ninit.write_text(init.read_text()\n    + 'from .stats import turbulence_intensity\\n')\nimport importlib\nimportlib.reload(myturb.stats)\nimportlib.reload(myturb)\nprint(myturb.turbulence_intensity(1.1, 10.0))",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Packaging & distribution"
+    ]
+  },
+  {
+    "objectID": "python/06-engineering.html",
+    "href": "python/06-engineering.html",
+    "title": "Software engineering practices",
+    "section": "",
+    "text": "Research code still deserves to be correct, debuggable, and readable. These practices cost little and repay themselves the first time a result looks wrong.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Software engineering practices"
+    ]
+  },
+  {
+    "objectID": "python/06-engineering.html#validation-exceptions",
+    "href": "python/06-engineering.html#validation-exceptions",
+    "title": "Software engineering practices",
+    "section": "1 Validation & exceptions",
+    "text": "1 Validation & exceptions\nFail early and clearly. Validate inputs and raise a specific exception with a helpful message rather than returning a silent wrong answer.\n\ndef reynolds(rho, u, length, mu):\n    if mu &lt;= 0:\n        raise ValueError(f\"viscosity must be &gt; 0, got {mu}\")\n    return rho * u * length / mu\n\ntry:\n    reynolds(1000, 1.0, 0.05, mu=0)\nexcept ValueError as e:\n    print('caught:', e)\n\nprint('ok:', reynolds(1000, 1.0, 0.05, mu=1e-3))\n\ncaught: viscosity must be &gt; 0, got 0\nok: 50000.0\n\n\nThe full form is try / except / else / finally: else runs only if no exception occurred; finally always runs (cleanup). You can also define custom exceptions for your domain.\n\nclass ConvergenceError(RuntimeError):\n    \"\"\"Raised when an iterative solver fails to converge.\"\"\"\n\ndef solve(max_iter=5):\n    residual = 1.0\n    for i in range(max_iter):\n        residual *= 0.5\n    if residual &gt; 1e-6:\n        raise ConvergenceError(f'stalled at residual={residual:.2e}')\n    return residual\n\ntry:\n    solve()\nexcept ConvergenceError as e:\n    print('solver problem:', e)\nelse:\n    print('converged')\nfinally:\n    print('cleanup always runs')\n\nsolver problem: stalled at residual=3.12e-02\ncleanup always runs\n\n\nImagine you need to change your normalise routine and be sure you didn’t break it. This is super easy in Python using a quick assert or a unittest case.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Software engineering practices"
+    ]
+  },
+  {
+    "objectID": "python/06-engineering.html#testing",
+    "href": "python/06-engineering.html#testing",
+    "title": "Software engineering practices",
+    "section": "2 Testing",
+    "text": "2 Testing\nAutomated tests let you change code with confidence. assert is enough for quick checks; the standard-library unittest structures larger suites (the popular pytest is similar but a third-party install).\n\ndef normalise(xs):\n    m = max(abs(x) for x in xs)\n    return [x / m for x in xs]\n\n# quick inline checks\nassert normalise([2, -4]) == [0.5, -1.0]\nassert abs(sum(normalise([1, 1, 1])) - 3.0) &lt; 1e-12\nprint('inline asserts passed')\n\ninline asserts passed\n\n\n\nimport unittest\n\nclass TestNormalise(unittest.TestCase):\n    def test_scaling(self):\n        self.assertEqual(normalise([2, -4]), [0.5, -1.0])\n    def test_all_ones(self):\n        self.assertAlmostEqual(max(normalise([1, 1, 1])), 1.0)\n\n# run the suite inside the notebook\nunittest.main(argv=['ignored', '-v'], exit=False)\n\ntest_all_ones (__main__.TestNormalise.test_all_ones) ... ok\ntest_scaling (__main__.TestNormalise.test_scaling) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.003s\n\nOK\n\n\n&lt;unittest.main.TestProgram at 0x7fb20793c4d0&gt;\n\n\nImagine you need to find where a twelve-hour run stalled, without scattering print statements everywhere. This is super easy in Python using the logging module with timestamps and levels.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Software engineering practices"
+    ]
+  },
+  {
+    "objectID": "python/06-engineering.html#logging",
+    "href": "python/06-engineering.html#logging",
+    "title": "Software engineering practices",
+    "section": "3 Logging",
+    "text": "3 Logging\nPrefer logging over scattered print calls: you get severity levels (DEBUG/INFO/WARNING/ERROR), timestamps, and the ability to turn detail up or down without deleting code.\n\nimport logging, sys\n\nlogger = logging.getLogger('mech501.demo')\nlogger.handlers.clear()\nhandler = logging.StreamHandler(sys.stdout)\nhandler.setFormatter(logging.Formatter('%(levelname)s | %(name)s | %(message)s'))\nlogger.addHandler(handler)\nlogger.setLevel(logging.INFO)      # INFO and above are shown; DEBUG hidden\n\nlogger.debug('you will NOT see this (below the level)')\nlogger.info('starting run, Re=5000')\nlogger.warning('residual increased at step 12')\n\nINFO | mech501.demo | starting run, Re=5000\nWARNING | mech501.demo | residual increased at step 12",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Software engineering practices"
+    ]
+  },
+  {
+    "objectID": "python/06-engineering.html#documentation",
+    "href": "python/06-engineering.html#documentation",
+    "title": "Software engineering practices",
+    "section": "4 Documentation",
+    "text": "4 Documentation\nWrite docstrings (what a thing does, its parameters and returns) and use type hints as living documentation. A common, tooling-friendly style is NumPy/Google format, which tools like Sphinx turn into web docs.\n\ndef darcy_friction(re: float) -&gt; float:\n    \"\"\"Blasius correlation for turbulent pipe friction.\n\n    Parameters\n    ----------\n    re : float\n        Reynolds number (valid ~4e3 to 1e5).\n\n    Returns\n    -------\n    float\n        Darcy friction factor.\n    \"\"\"\n    return 0.316 * re ** -0.25\n\nhelp(darcy_friction)\n\nHelp on function darcy_friction in module __main__:\n\ndarcy_friction(re: float) -&gt; float\n    Blasius correlation for turbulent pipe friction.\n    \n    Parameters\n    ----------\n    re : float\n        Reynolds number (valid ~4e3 to 1e5).\n    \n    Returns\n    -------\n    float\n        Darcy friction factor.",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Software engineering practices"
+    ]
+  },
+  {
+    "objectID": "python/06-engineering.html#self-tests",
+    "href": "python/06-engineering.html#self-tests",
+    "title": "Software engineering practices",
+    "section": "5 Self-tests",
+    "text": "5 Self-tests\n1. Write safe_sqrt(x) that raises ValueError('negative input') for x &lt; 0, else returns x ** 0.5.\n\n\nShow solution\ndef safe_sqrt(x):\n    if x &lt; 0:\n        raise ValueError('negative input')\n    return x ** 0.5\n\nprint(safe_sqrt(9))\ntry:\n    safe_sqrt(-1)\nexcept ValueError as e:\n    print('caught:', e)\n\n\n2. Add an assert-based test that safe_sqrt(16) == 4.\n\n\nShow solution\nassert safe_sqrt(16) == 4\nprint('passed')",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Software engineering practices"
+    ]
+  },
+  {
+    "objectID": "python/06-engineering.html#turbulence-in-practice-a-realizability-check",
+    "href": "python/06-engineering.html#turbulence-in-practice-a-realizability-check",
+    "title": "Software engineering practices",
+    "section": "6 Turbulence in practice: a realizability check",
+    "text": "6 Turbulence in practice: a realizability check\nA physically valid Reynolds-stress tensor must have non-negative normal stresses and satisfy the Cauchy–Schwarz bound \\(\\langle u'v'\\rangle^2 \\le \\langle u'^2\\rangle\\langle v'^2\\rangle\\). Validate it and raise on a violation (compare with Assignment 1, Q3).\n\ndef check_realizable(uu, vv, uv, tol=1e-12):\n    \"\"\"Raise ValueError if the Reynolds stresses are not realizable.\"\"\"\n    if uu &lt; -tol or vv &lt; -tol:\n        raise ValueError('normal stresses must be non-negative')\n    if uv ** 2 &gt; uu * vv + tol:\n        raise ValueError('Cauchy-Schwarz violated')\n    return True\n\nprint('valid   :', check_realizable(1.0, 0.5, 0.4))\ntry:\n    check_realizable(1.0, 0.5, 0.9)   # 0.81 &gt; 0.5\nexcept ValueError as e:\n    print('rejected:', e)\n\nvalid   : True\nrejected: Cauchy-Schwarz violated\n\n\nSelf-test. Write check_tke(k) that raises ValueError if the turbulent kinetic energy is negative, and returns k otherwise.\n\n\nShow solution\ndef check_tke(k):\n    if k &lt; 0:\n        raise ValueError('TKE must be non-negative')\n    return k\n\nprint(check_tke(0.75))",
+    "crumbs": [
+      "Home",
+      "Python",
+      "Software engineering practices"
     ]
   }
 ]

@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="MECH 501 — Computational Turbulence">
+<meta name="author" content="MECH 501/600 — Computational Turbulence">
 <meta name="dcterms.date" content="2026-09-09">
 
-<title>Tutorial 1: The law of the wall – MECH 501/600 — Computational Turbulence</title>
+<title>Object-oriented programming – MECH 501/600 — Computational Turbulence</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -367,7 +367,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Tutorial 1: The law of the wall</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../python/index.html">Python</a></li><li class="breadcrumb-item"><a href="../python/03-oop.html">Object-oriented programming</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -448,13 +448,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">Python</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../python/index.html" class="sidebar-item-text sidebar-link">
@@ -475,7 +475,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../python/03-oop.html" class="sidebar-item-text sidebar-link">
+  <a href="../python/03-oop.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Object-oriented programming</span></a>
   </div>
 </li>
@@ -550,10 +550,13 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background"><span class="header-section-number">1</span> Background</a></li>
-  <li><a href="#python-post-processing-example" id="toc-python-post-processing-example" class="nav-link" data-scroll-target="#python-post-processing-example"><span class="header-section-number">2</span> Python post-processing example</a></li>
-  <li><a href="#a-first-look-at-openfoam" id="toc-a-first-look-at-openfoam" class="nav-link" data-scroll-target="#a-first-look-at-openfoam"><span class="header-section-number">3</span> A first look at OpenFOAM</a></li>
-  <li><a href="#working-on-the-cluster" id="toc-working-on-the-cluster" class="nav-link" data-scroll-target="#working-on-the-cluster"><span class="header-section-number">4</span> Working on the cluster</a></li>
+  <li><a href="#a-first-class" id="toc-a-first-class" class="nav-link active" data-scroll-target="#a-first-class"><span class="header-section-number">1</span> A first class</a></li>
+  <li><a href="#properties-and-encapsulation" id="toc-properties-and-encapsulation" class="nav-link" data-scroll-target="#properties-and-encapsulation"><span class="header-section-number">2</span> Properties and encapsulation</a></li>
+  <li><a href="#inheritance" id="toc-inheritance" class="nav-link" data-scroll-target="#inheritance"><span class="header-section-number">3</span> Inheritance</a></li>
+  <li><a href="#dunder-methods-make-objects-feel-native" id="toc-dunder-methods-make-objects-feel-native" class="nav-link" data-scroll-target="#dunder-methods-make-objects-feel-native"><span class="header-section-number">4</span> Dunder methods make objects feel native</a></li>
+  <li><a href="#dataclass-classes-without-boilerplate" id="toc-dataclass-classes-without-boilerplate" class="nav-link" data-scroll-target="#dataclass-classes-without-boilerplate"><span class="header-section-number">5</span> <code>dataclass</code> — classes without boilerplate</a></li>
+  <li><a href="#self-tests" id="toc-self-tests" class="nav-link" data-scroll-target="#self-tests"><span class="header-section-number">6</span> Self-tests</a></li>
+  <li><a href="#turbulence-in-practice-a-signal-class" id="toc-turbulence-in-practice-a-signal-class" class="nav-link" data-scroll-target="#turbulence-in-practice-a-signal-class"><span class="header-section-number">7</span> Turbulence in practice: a <code>Signal</code> class</a></li>
   </ul>
 </nav>
     </div>
@@ -561,10 +564,10 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../python/index.html">Python</a></li><li class="breadcrumb-item"><a href="../python/03-oop.html">Object-oriented programming</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Tutorial 1: The law of the wall</h1>
-<p class="subtitle lead">Wall-bounded turbulence &amp; Python post-processing</p>
+<div class="quarto-title-block"><div><h1 class="title">Object-oriented programming</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+<p class="subtitle lead">Classes, properties, inheritance, and dataclasses</p>
 </div>
 
 
@@ -574,7 +577,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>MECH 501 — Computational Turbulence </p>
+             <p>MECH 501/600 — Computational Turbulence </p>
           </div>
   </div>
     
@@ -593,212 +596,231 @@ window.Quarto = {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Deliverables
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Answer <strong>Tasks 1–3</strong> below and upload a single PDF to <strong>Crowdmark</strong> by the posted deadline. Include all requested plots and short written answers.</p>
-</div>
-</div>
-<section id="background" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="background"><span class="header-section-number">1</span> Background</h2>
-<p>In wall-bounded turbulent flows, the mean streamwise velocity near the wall follows universal scaling laws when expressed in <em>viscous (wall) units</em>:</p>
-<p><span class="math display">\[
-u^+ = \frac{\bar{u}}{u_\tau}, \qquad
-y^+ = \frac{y \, u_\tau}{\nu}, \qquad
-u_\tau = \sqrt{\frac{\tau_w}{\rho}}
-\]</span></p>
-<p>Two regions are of particular interest:</p>
-<ul>
-<li><strong>Viscous sublayer</strong> (<span class="math inline">\(y^+ \lesssim 5\)</span>): <span class="math inline">\(\; u^+ = y^+\)</span></li>
-<li><strong>Log-law region</strong> (<span class="math inline">\(y^+ \gtrsim 30\)</span>): <span class="math inline">\(\; u^+ = \frac{1}{\kappa} \ln y^+ + B\)</span></li>
-</ul>
-<p>with <span class="math inline">\(\kappa \approx 0.41\)</span> and <span class="math inline">\(B \approx 5.2\)</span>.</p>
-</section>
-<section id="python-post-processing-example" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="python-post-processing-example"><span class="header-section-number">2</span> Python post-processing example</h2>
-<p>The cell below builds a composite mean-velocity profile (Spalding’s law) and compares it to the two limiting behaviours. Run it yourself — you will adapt this code in the tasks.</p>
-<div id="cell-fig-law-of-the-wall" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>kappa, B <span class="op">=</span> <span class="fl">0.41</span>, <span class="fl">5.2</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Spalding's law gives y+ as a function of u+ (implicit profile)</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>u_plus <span class="op">=</span> np.linspace(<span class="fl">0.01</span>, <span class="dv">25</span>, <span class="dv">400</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>y_plus <span class="op">=</span> u_plus <span class="op">+</span> np.exp(<span class="op">-</span>kappa <span class="op">*</span> B) <span class="op">*</span> (</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    np.exp(kappa <span class="op">*</span> u_plus) <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> kappa <span class="op">*</span> u_plus</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> (kappa <span class="op">*</span> u_plus) <span class="op">**</span> <span class="dv">2</span> <span class="op">/</span> <span class="dv">2</span> <span class="op">-</span> (kappa <span class="op">*</span> u_plus) <span class="op">**</span> <span class="dv">3</span> <span class="op">/</span> <span class="dv">6</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="fl">4.5</span>))</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>ax.semilogx(y_plus, u_plus, <span class="st">"k-"</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"Spalding (composite)"</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>yp <span class="op">=</span> np.logspace(<span class="op">-</span><span class="dv">1</span>, <span class="fl">1.2</span>, <span class="dv">50</span>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>ax.semilogx(yp, yp, <span class="st">"b--"</span>, label<span class="op">=</span><span class="vs">r"</span><span class="dv">$</span><span class="vs">u</span><span class="dv">^</span><span class="op">+</span><span class="vs"> = y</span><span class="dv">^</span><span class="op">+</span><span class="dv">$</span><span class="vs"> </span><span class="kw">(</span><span class="vs">viscous sublayer</span><span class="kw">)</span><span class="vs">"</span>)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>yp <span class="op">=</span> np.logspace(<span class="dv">1</span>, <span class="fl">3.5</span>, <span class="dv">50</span>)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>ax.semilogx(yp, np.log(yp) <span class="op">/</span> kappa <span class="op">+</span> B, <span class="st">"r--"</span>,</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            label<span class="op">=</span><span class="vs">r"</span><span class="dv">$</span><span class="vs">u</span><span class="dv">^</span><span class="op">+</span><span class="vs"> = </span><span class="ch">\f</span><span class="vs">rac</span><span class="op">{1}</span><span class="vs">{</span><span class="er">\</span><span class="vs">kappa}</span><span class="er">\</span><span class="vs">ln y</span><span class="dv">^</span><span class="op">+</span><span class="vs"> </span><span class="op">+</span><span class="vs"> B</span><span class="dv">$</span><span class="vs"> </span><span class="kw">(</span><span class="vs">log law</span><span class="kw">)</span><span class="vs">"</span>)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="vs">r"</span><span class="dv">$</span><span class="vs">y</span><span class="dv">^</span><span class="op">+</span><span class="dv">$</span><span class="vs">"</span>)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="vs">r"</span><span class="dv">$</span><span class="vs">u</span><span class="dv">^</span><span class="op">+</span><span class="dv">$</span><span class="vs">"</span>)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="fl">0.1</span>, <span class="dv">3000</span>)</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="dv">27</span>)</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>, which<span class="op">=</span><span class="st">"both"</span>)</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div id="fig-law-of-the-wall" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-law-of-the-wall-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="tutorial-01_files/figure-html/fig-law-of-the-wall-output-1.png" width="660" height="418" class="figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-law-of-the-wall-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Law of the wall: Spalding’s composite profile vs.&nbsp;the viscous sublayer and log law.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Task 1 — Sublayer/log-law crossover
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Using the code above as a starting point, find (numerically) the value of <span class="math inline">\(y^+\)</span> where the viscous-sublayer law and the log law intersect. Plot both laws, mark the intersection point, and briefly comment (2–3 sentences) on why neither law is accurate in the <em>buffer layer</em>.</p>
-</div>
-</div>
-</section>
-<section id="a-first-look-at-openfoam" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="a-first-look-at-openfoam"><span class="header-section-number">3</span> A first look at OpenFOAM</h2>
-<p>From Tutorial 2 you will run turbulent channel-flow simulations in OpenFOAM. As a preview, turbulence modelling is configured in <code>constant/turbulenceProperties</code>:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>constant/turbulenceProperties</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-2" data-filename="constant/turbulenceProperties"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*--------------------------------*- C++ -*----------------------------------*\</span></span>
-<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a><span class="co">| =========                 |                                                 |</span></span>
-<span id="annotated-cell-2-3"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a><span class="co">| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |</span></span>
-<span id="annotated-cell-2-4"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a><span class="co">\*---------------------------------------------------------------------------*/</span></span>
-<span id="annotated-cell-2-5"><a href="#annotated-cell-2-5" aria-hidden="true" tabindex="-1"></a>FoamFile</span>
-<span id="annotated-cell-2-6"><a href="#annotated-cell-2-6" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="annotated-cell-2-7"><a href="#annotated-cell-2-7" aria-hidden="true" tabindex="-1"></a>    version     <span class="fl">2.0</span><span class="op">;</span></span>
-<span id="annotated-cell-2-8"><a href="#annotated-cell-2-8" aria-hidden="true" tabindex="-1"></a>    format      ascii<span class="op">;</span></span>
-<span id="annotated-cell-2-9"><a href="#annotated-cell-2-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span>       dictionary<span class="op">;</span></span>
-<span id="annotated-cell-2-10"><a href="#annotated-cell-2-10" aria-hidden="true" tabindex="-1"></a>    object      turbulenceProperties<span class="op">;</span></span>
-<span id="annotated-cell-2-11"><a href="#annotated-cell-2-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="annotated-cell-2-12"><a href="#annotated-cell-2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-2-13"><a href="#annotated-cell-2-13" aria-hidden="true" tabindex="-1"></a>simulationType  RAS<span class="op">;</span></span>
-<span id="annotated-cell-2-14"><a href="#annotated-cell-2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-2-15"><a href="#annotated-cell-2-15" aria-hidden="true" tabindex="-1"></a>RAS</span>
-<span id="annotated-cell-2-16"><a href="#annotated-cell-2-16" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-2-17" class="code-annotation-target"><a href="#annotated-cell-2-17" aria-hidden="true" tabindex="-1"></a>    RASModel        kOmegaSST<span class="op">;</span></span>
-<span id="annotated-cell-2-18"><a href="#annotated-cell-2-18" aria-hidden="true" tabindex="-1"></a>    turbulence      on<span class="op">;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-2-19" class="code-annotation-target"><a href="#annotated-cell-2-19" aria-hidden="true" tabindex="-1"></a>    printCoeffs     on<span class="op">;</span></span>
-<span id="annotated-cell-2-20"><a href="#annotated-cell-2-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="17" data-code-annotation="1">The turbulence model — we will compare <code>kOmegaSST</code> and <code>kEpsilon</code> later in the course.</span>
-</dd>
-<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
-<dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="19" data-code-annotation="2">Prints the model coefficients to the log at startup, useful for reproducibility.</span>
-</dd>
-</dl>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Task 2 — Wall treatment
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>In one short paragraph: what near-wall mesh resolution (in terms of the first-cell <span class="math inline">\(y^+\)</span>) does a <em>wall-resolved</em> RANS computation require, and how does this differ when <em>wall functions</em> are used? Relate your answer to the regions identified in Task 1.</p>
-</div>
-</div>
-</section>
-<section id="working-on-the-cluster" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="working-on-the-cluster"><span class="header-section-number">4</span> Working on the cluster</h2>
-<p>You can run the Python examples locally or on the course cluster.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Local machine</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Cluster (SLURM)</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create an environment once</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv mech501</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> mech501/bin/activate</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install numpy matplotlib scipy</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># run a script</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> task1.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># log in (use your course account)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> username@cluster.example.ca      <span class="co"># </span><span class="al">TODO</span><span class="co">: actual hostname</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># load modules</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load python/3.11 scipy-stack</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># submit a job</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> job.sh</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span>          <span class="co"># check status</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Example <code>job.sh</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=mech501-t1</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=00:10:00</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=1</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=2G</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load python/3.11 scipy-stack</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> task1.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Task 3 — First contact with the cluster
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Log in to the cluster, run <code>hostname</code> and <code>module list</code>, and include a screenshot (or copied terminal output) in your Crowdmark submission.</p>
-</div>
-</div>
+<p>Classes bundle <strong>data</strong> (attributes) with the <strong>behaviour</strong> that acts on it (methods). In scientific code they are ideal for things like a <em>simulation case</em>, a <em>mesh</em>, or a <em>material model</em> — a coherent object you pass around and extend.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Hint: SSH keys
+<span class="screen-reader-only">Tip</span>Why learn this?
 </div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Set up an SSH key pair (<code>ssh-keygen</code>, then <code>ssh-copy-id</code>) so you don’t have to type your password every time.</p>
+<p>When a script grows past a couple hundred lines, passing a dozen loose variables around becomes a nightmare. Bundling the data with the behaviour that acts on it — a <code>Case</code>, a <code>Signal</code>, a <code>Mesh</code> — keeps large code understandable.</p>
+<ul>
+<li><strong>Imagine you need</strong> to carry a simulation’s velocity, density and grid together and ask it for its Reynolds number — an <em>object</em> holds all of that and answers with one method call.</li>
+<li><strong>Imagine you need</strong> a <code>ChannelCase</code> and a <code>JetCase</code> that share 90% of their code — <em>inheritance</em> lets you write the shared part once.</li>
+</ul>
 </div>
 </div>
+<section id="a-first-class" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="a-first-class"><span class="header-section-number">1</span> A first class</h2>
+<p><code>__init__</code> sets up each instance; <code>self</code> is the instance the method is called on. <code>__repr__</code> gives a useful printed form.</p>
+<div id="75662fba" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-09T02:09:18.742623Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-09T02:09:18.742406Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-09T02:09:18.752307Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-09T02:09:18.751371Z&quot;}}" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Fluid:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""A simple incompressible fluid."""</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name, rho, mu):</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.name <span class="op">=</span> name</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.rho <span class="op">=</span> rho          <span class="co"># density  [kg/m^3]</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mu <span class="op">=</span> mu            <span class="co"># dyn. viscosity [Pa s]</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> reynolds(<span class="va">self</span>, u, length):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Reynolds number for velocity u and length scale."""</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.rho <span class="op">*</span> u <span class="op">*</span> length <span class="op">/</span> <span class="va">self</span>.mu</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__repr__</span>(<span class="va">self</span>):</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"Fluid(name=</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>name<span class="sc">!r}</span><span class="ss">, rho=</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>rho<span class="sc">}</span><span class="ss">, mu=</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>mu<span class="sc">}</span><span class="ss">)"</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>water <span class="op">=</span> Fluid(<span class="st">'water'</span>, <span class="fl">1000.0</span>, <span class="fl">1.0e-3</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(water)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Re ='</span>, water.reynolds(u<span class="op">=</span><span class="fl">1.0</span>, length<span class="op">=</span><span class="fl">0.05</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fluid(name='water', rho=1000.0, mu=0.001)
+Re = 50000.0</code></pre>
+</div>
+</div>
+</section>
+<section id="properties-and-encapsulation" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="properties-and-encapsulation"><span class="header-section-number">2</span> Properties and encapsulation</h2>
+<p>A <code>@property</code> exposes a <em>computed</em> value as if it were an attribute, and lets you validate on assignment — without changing how callers use the object.</p>
+<div id="6ad9a6fd" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-09T02:09:18.754546Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-09T02:09:18.754336Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-09T02:09:18.759741Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-09T02:09:18.758620Z&quot;}}" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Pipe:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, diameter):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.diameter <span class="op">=</span> diameter        <span class="co"># goes through the setter below</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> diameter(<span class="va">self</span>):</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>._d</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">@diameter.setter</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> diameter(<span class="va">self</span>, value):</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> value <span class="op">&lt;=</span> <span class="dv">0</span>:</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"diameter must be positive"</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._d <span class="op">=</span> value</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> area(<span class="va">self</span>):</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Cross-sectional area — computed, read-only."""</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        <span class="im">import</span> math</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> math.pi <span class="op">*</span> (<span class="va">self</span>._d <span class="op">/</span> <span class="dv">2</span>) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> Pipe(<span class="fl">0.05</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'area ='</span>, pipe.area)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    pipe.diameter <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ValueError</span> <span class="im">as</span> e:</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'rejected:'</span>, e)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>area = 0.001963495408493621
+rejected: diameter must be positive</code></pre>
+</div>
+</div>
+<p><strong>Imagine you need</strong> a <code>ChannelCase</code>, a <code>PipeCase</code> and a <code>JetCase</code> that differ only in their geometry but share all the post-processing. This is super easy in Python using <em>inheritance</em> from a common base class.</p>
+</section>
+<section id="inheritance" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="inheritance"><span class="header-section-number">3</span> Inheritance</h2>
+<p>A subclass reuses and extends a base class; <code>super()</code> calls the parent’s implementation.</p>
+<div id="ccf0918c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-09T02:09:18.761745Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-09T02:09:18.761541Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-09T02:09:18.767158Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-09T02:09:18.766001Z&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> NonNewtonianFluid(Fluid):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Adds a power-law index n on top of a Fluid."""</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name, rho, mu, n):</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(name, rho, mu)   <span class="co"># reuse Fluid.__init__</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.n <span class="op">=</span> n</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__repr__</span>(<span class="va">self</span>):</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        base <span class="op">=</span> <span class="bu">super</span>().<span class="fu">__repr__</span>()[:<span class="op">-</span><span class="dv">1</span>]     <span class="co"># drop trailing ')'</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f'</span><span class="sc">{</span>base<span class="sc">}</span><span class="ss">, n=</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>n<span class="sc">}</span><span class="ss">)'</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>blood <span class="op">=</span> NonNewtonianFluid(<span class="st">'blood'</span>, <span class="fl">1060.0</span>, <span class="fl">3.5e-3</span>, <span class="fl">0.7</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(blood)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'inherited method Re ='</span>, <span class="bu">round</span>(blood.reynolds(<span class="fl">0.2</span>, <span class="fl">0.004</span>), <span class="dv">2</span>))</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'is a Fluid?'</span>, <span class="bu">isinstance</span>(blood, Fluid))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fluid(name='blood', rho=1060.0, mu=0.0035, n=0.7)
+inherited method Re = 242.29
+is a Fluid? True</code></pre>
+</div>
+</div>
+</section>
+<section id="dunder-methods-make-objects-feel-native" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="dunder-methods-make-objects-feel-native"><span class="header-section-number">4</span> Dunder methods make objects feel native</h2>
+<p>Implementing special (<code>__dunder__</code>) methods lets your objects work with <code>len()</code>, <code>==</code>, <code>[]</code>, arithmetic, and so on.</p>
+<div id="570edde5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-09T02:09:18.769461Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-09T02:09:18.769221Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-09T02:09:18.775420Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-09T02:09:18.774526Z&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Vector:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, <span class="op">*</span>components):</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.c <span class="op">=</span> <span class="bu">tuple</span>(components)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>):</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">len</span>(<span class="va">self</span>.c)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, i):</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.c[i]</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__add__</span>(<span class="va">self</span>, other):</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> Vector(<span class="op">*</span>(a <span class="op">+</span> b <span class="cf">for</span> a, b <span class="kw">in</span> <span class="bu">zip</span>(<span class="va">self</span>.c, other.c)))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__eq__</span>(<span class="va">self</span>, other):</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.c <span class="op">==</span> other.c</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__repr__</span>(<span class="va">self</span>):</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f'Vector</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>c<span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> Vector(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> Vector(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(v <span class="op">+</span> w, <span class="st">'| len ='</span>, <span class="bu">len</span>(v), <span class="st">'| v[0] ='</span>, v[<span class="dv">0</span>], <span class="st">'| v==v:'</span>, v <span class="op">==</span> Vector(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Vector(5, 7, 9) | len = 3 | v[0] = 1 | v==v: True</code></pre>
+</div>
+</div>
+<p><strong>Imagine you need</strong> a config object with a dozen fields and a readable printout. This is super easy in Python using <code>@dataclass</code>, which writes the boilerplate for you.</p>
+</section>
+<section id="dataclass-classes-without-boilerplate" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="dataclass-classes-without-boilerplate"><span class="header-section-number">5</span> <code>dataclass</code> — classes without boilerplate</h2>
+<p>For plain data containers, <code>@dataclass</code> writes <code>__init__</code>, <code>__repr__</code>, and <code>__eq__</code> for you.</p>
+<div id="3ca7f42f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-09T02:09:18.777676Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-09T02:09:18.777482Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-09T02:09:18.782914Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-09T02:09:18.781456Z&quot;}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass, field</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimCase:</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    name: <span class="bu">str</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    reynolds: <span class="bu">float</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    mesh_cells: <span class="bu">int</span> <span class="op">=</span> <span class="dv">10_000</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    tags: <span class="bu">list</span> <span class="op">=</span> field(default_factory<span class="op">=</span><span class="bu">list</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>case <span class="op">=</span> SimCase(<span class="st">'channel'</span>, <span class="dv">5000</span>, tags<span class="op">=</span>[<span class="st">'LES'</span>])</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(case)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'equal?'</span>, case <span class="op">==</span> SimCase(<span class="st">'channel'</span>, <span class="dv">5000</span>, tags<span class="op">=</span>[<span class="st">'LES'</span>]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>SimCase(name='channel', reynolds=5000, mesh_cells=10000, tags=['LES'])
+equal? True</code></pre>
+</div>
+</div>
+</section>
+<section id="self-tests" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="self-tests"><span class="header-section-number">6</span> Self-tests</h2>
+<p><strong>1.</strong> Give <code>Fluid</code> a <code>kinematic_viscosity</code> <strong>property</strong> returning <span class="math inline">\(\nu=\mu/\rho\)</span>.</p>
+<div id="ccc1b667" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-09T02:09:18.785128Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-09T02:09:18.784927Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-09T02:09:18.789760Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-09T02:09:18.788459Z&quot;}}">
+<details class="code-fold">
+<summary>Show solution</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Fluid2(Fluid):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> kinematic_viscosity(<span class="va">self</span>):</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.mu <span class="op">/</span> <span class="va">self</span>.rho</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Fluid2(<span class="st">'water'</span>, <span class="fl">1000.0</span>, <span class="fl">1.0e-3</span>).kinematic_viscosity)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p><strong>2.</strong> Make a <code>@dataclass</code> <code>Airfoil</code> with fields <code>name: str</code>, <code>chord: float</code>, <code>alpha: float = 0.0</code>.</p>
+<div id="885afce7" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-09T02:09:18.791929Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-09T02:09:18.791719Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-09T02:09:18.796543Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-09T02:09:18.795387Z&quot;}}">
+<details class="code-fold">
+<summary>Show solution</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Airfoil:</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    name: <span class="bu">str</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    chord: <span class="bu">float</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    alpha: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Airfoil(<span class="st">'NACA0012'</span>, <span class="fl">0.1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="turbulence-in-practice-a-signal-class" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="turbulence-in-practice-a-signal-class"><span class="header-section-number">7</span> Turbulence in practice: a <code>Signal</code> class</h2>
+<p>Wrap a velocity record in a class whose methods are the standard Reynolds operations — mean, fluctuation, and rms.</p>
+<div id="e673413f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-09T02:09:18.798520Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-09T02:09:18.798296Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-09T02:09:18.846479Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-09T02:09:18.845872Z&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Signal:</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""A time series of one velocity component."""</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, t, u):</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.t <span class="op">=</span> np.asarray(t)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.u <span class="op">=</span> np.asarray(u)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> mean(<span class="va">self</span>):</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.u.mean()</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fluctuations(<span class="va">self</span>):</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.u <span class="op">-</span> <span class="va">self</span>.mean</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> rms(<span class="va">self</span>):</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">float</span>(np.sqrt((<span class="va">self</span>.fluctuations() <span class="op">**</span> <span class="dv">2</span>).mean()))</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>):</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.u.size</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">500</span>)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> Signal(t, <span class="dv">10</span> <span class="op">+</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">5</span> <span class="op">*</span> t))</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'len=</span><span class="sc">{</span><span class="bu">len</span>(s)<span class="sc">}</span><span class="ss">, &lt;u&gt;=</span><span class="sc">{</span>s<span class="sc">.</span>mean<span class="sc">:.3f}</span><span class="ss">, u_rms=</span><span class="sc">{</span>s<span class="sc">.</span>rms()<span class="sc">:.4f}</span><span class="ss">'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>len=500, &lt;u&gt;=10.000, u_rms=0.7064</code></pre>
+</div>
+</div>
+<p><strong>Self-test.</strong> Subclass <code>Signal</code> and add an <code>intensity</code> <strong>property</strong> returning the turbulence intensity <span class="math inline">\(I = u_{\mathrm{rms}}/\langle u\rangle\)</span>.</p>
+<div id="a0bbccbf" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-09T02:09:18.849048Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-09T02:09:18.848786Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-09T02:09:18.853250Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-09T02:09:18.852602Z&quot;}}">
+<details class="code-fold">
+<summary>Show solution</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Signal2(Signal):</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> intensity(<span class="va">self</span>):</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.rms() <span class="op">/</span> <span class="va">self</span>.mean</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Signal2(t, <span class="dv">10</span> <span class="op">+</span> np.sin(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> <span class="dv">5</span> <span class="op">*</span> t)).intensity)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 
 
@@ -907,6 +929,57 @@ window.addEventListener('load', function () {
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
