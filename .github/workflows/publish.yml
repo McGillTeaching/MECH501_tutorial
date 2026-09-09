@@ -26,7 +26,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install Python dependencies
-        run: pip install jupyter numpy matplotlib scipy
+        run: pip install jupyter numpy matplotlib scipy pandas pyarrow
 
       - name: Render and publish (student profile)
         uses: quarto-dev/quarto-actions/publish@v2

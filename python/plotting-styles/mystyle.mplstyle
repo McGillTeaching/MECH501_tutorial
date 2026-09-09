@@ -1,0 +1,24 @@
+### Base plotting style (no LaTeX required). ###
+
+## Figure options ##
+figure.figsize   : 6.0, 4.0   ## figure size in inches
+figure.dpi       : 200        ## on-screen scaling
+savefig.dpi      : 500        ## dpi when saving raster (png) output
+
+## Fonts / math (mathtext -> no external LaTeX needed) ##
+font.family      : serif
+mathtext.fontset : cm
+font.size        : 14
+
+## Axes ticks ##
+xtick.direction  : in
+ytick.direction  : in
+axes.formatter.limits : -3, 4
+
+## Legend ##
+legend.frameon   : false
+legend.fontsize  : medium
+
+## Colour-blind-friendly colour + line-style cycle (tableau 10-blind) ##
+axes.prop_cycle  : (cycler('color', ['006BA4', 'FF800E', 'ABABAB', '595959', '5F9ED1', 'C85200', '898989', 'A2C8EC', 'FFBC79', 'CFCFCF']) + cycler('linestyle', ['-', '--', '-.', ':', '-', '--', '-.', ':', '-', '--']))
+image.cmap       : turbo

@@ -1,0 +1,151 @@
+---
+title: "Intermediate & advanced Python"
+subtitle: "A hands-on tutorial for scientific computing"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+---
+
+At this point, you should have a solid foundation in Python and programming in
+general. We won't be covering the basics here — there are approximately 4.7
+million tutorials on loops, conditionals, and functions online, and you should
+know this stuff anyway.
+
+What we *will* do is help you graduate from the "I write 300 lines of spaghetti
+code in a single script and pray it works" phase to becoming a proper programmer
+who knows how to abstract, modularize, and eventually build their own Python
+package.
+
+Each section is a **Jupyter notebook** — the code and its output are rendered on
+the page, the code blocks are copyable and foldable, and every section ends with
+short **self-tests** whose solutions you can reveal.
+
+::: {.callout-tip}
+## Run the notebooks yourself
+To *run and edit* a section interactively, download its notebook with the
+**`</>` Source Code** menu (top-right of each page) and open it in JupyterLab or
+VS Code — for example on the [course cluster](../cluster/index.qmd), where the
+Python environment is already set up.
+:::
+
+## Sections
+
+1. [Efficient scientific plotting](01-plotting.ipynb) — golden rules for
+   publication-quality figures, and the Matplotlib code to produce them.
+2. [Python foundations](02-foundations.ipynb) — program entry points, data
+   structures (comprehensions, `collections`), and file I/O with `pathlib`.
+3. [Object-oriented programming](03-oop.ipynb) — classes, properties,
+   inheritance, dunder methods, and dataclasses.
+4. [Functional programming](04-functional.ipynb) — functions as first-class
+   objects, lambdas & `map`, and type hints.
+5. [Advanced Python internals](05-internals.ipynb) — decorators, iterators &
+   iterables, and generators.
+6. [Software engineering practices](06-engineering.ipynb) — validation &
+   exceptions, testing, logging, and documentation.
+7. [Packaging & distribution](07-packaging.ipynb) — turn your code into an
+   installable Python package.
+
+## Package environment
+
+One of the biggest advantages of Python is its rich and well-maintained
+ecosystem of packages and libraries. The main downside is that managing these
+packages can sometimes become cumbersome, especially when different projects
+require different versions.
+
+Python comes with its own package manager, `pip`, which works well —
+particularly when used together with **virtual environments**. Another option,
+which I personally recommend, is
+[Miniforge3](https://github.com/conda-forge/miniforge). It provides a
+lightweight Conda-based environment similar to Anaconda, but without unnecessary
+extras, and it uses the `conda-forge` channel by default. This often results in
+more reliable and consistent package installations, especially for scientific
+computing.
+
+### Required Python packages
+
+For this course, we will mainly rely on the following core scientific Python
+packages:
+
+- **NumPy** — efficient array operations, linear algebra, and numerical
+  computations.
+- **SciPy** — numerical algorithms such as solvers, optimization, integration,
+  and interpolation.
+- **Matplotlib** — plotting and visualization of results.
+
+Together, these packages form the foundation of the scientific Python ecosystem
+and are sufficient for all assignments and projects in this course.
+
+## `.py` vs `.ipynb`
+
+Python code can be written either as plain script files (`.py`) or as Jupyter
+notebooks (`.ipynb`). Both formats are useful, but they serve different
+purposes.
+
+**`.py` files**
+
+- Best for clean, reproducible code.
+- Easy to version control (Git).
+- Suitable for larger projects and scripts.
+- Less interactive for exploration.
+
+**`.ipynb` files (Jupyter notebooks)**
+
+- Excellent for exploration, learning, and visualization.
+- Combine code, text, equations, and plots in one place.
+- Very convenient for tutorials and reports.
+- Harder to version control cleanly.
+- Execution order can be confusing if cells are run out of order.
+- Need the extra packages `jupyter` and `ipykernel`.
+
+::: {.callout-tip}
+## Recommendation
+Use Jupyter notebooks for learning, experimentation, and visualization, and
+switch to `.py` files once the code becomes larger or more structured.
+:::
+
+## References
+
+### Core Python
+
+- Official website: <https://www.python.org>
+- Official documentation: <https://docs.python.org/3/>
+- Python tutorial (official): <https://docs.python.org/3/tutorial/>
+- Standard library reference: <https://docs.python.org/3/library/>
+
+### NumPy
+
+- Official website: <https://numpy.org>
+- Documentation: <https://numpy.org/doc/>
+- User guide: <https://numpy.org/doc/stable/user/index.html>
+- API reference: <https://numpy.org/doc/stable/reference/>
+
+### Matplotlib
+
+- Official website: <https://matplotlib.org>
+- Documentation: <https://matplotlib.org/stable/>
+- Tutorials & examples: <https://matplotlib.org/stable/tutorials/index.html>
+- Gallery: <https://matplotlib.org/stable/gallery/index.html>
+- Style-sheets reference:
+  <https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html>
+
+### SciPy
+
+- Official website: <https://scipy.org>
+- Documentation: <https://docs.scipy.org/doc/scipy/>
+- Tutorial: <https://docs.scipy.org/doc/scipy/tutorial/index.html>
+- API reference: <https://docs.scipy.org/doc/scipy/reference/>
+
+### Not covered here, but very helpful
+
+*Formatting & linting*
+
+- Black formatter: <https://pypi.org/project/black/>
+- Flake8: <https://flake8.pycqa.org/>
+- pylint: <https://pylint.org/>
+- Formatting in VS Code:
+  <https://code.visualstudio.com/docs/python/editing#_formatting>
+
+*Testing*
+
+- pytest: <https://docs.pytest.org/>
+- Testing in VS Code (pytest/unittest):
+  <https://code.visualstudio.com/docs/python/testing>

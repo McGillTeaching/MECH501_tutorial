@@ -1,0 +1,19 @@
+<script>
+// Keep the "Tutorials" sidebar section expanded by default (Cluster & Python
+// start collapsed via collapse-level: 1). Progressive enhancement — guarded.
+window.addEventListener('load', function () {
+  try {
+    document.querySelectorAll('.sidebar-item-section').forEach(function (sec) {
+      var label = sec.querySelector('.menu-text');
+      if (label && label.textContent.trim() === 'Tutorials') {
+        var ul = sec.querySelector('ul');
+        if (ul) { ul.classList.add('show'); ul.classList.remove('collapse'); }
+        sec.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function (b) {
+          b.classList.remove('collapsed');
+          b.setAttribute('aria-expanded', 'true');
+        });
+      }
+    });
+  } catch (e) { /* no-op */ }
+});
+</script>

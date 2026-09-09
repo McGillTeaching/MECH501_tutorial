@@ -1,0 +1,42 @@
+---
+title: "VS Code"
+subtitle: "Editing and running code on the cluster in VS Code"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+---
+
+If you prefer **VS Code** to the JupyterLab interface, the cluster provides it in
+the browser (code-server) — nothing to install locally. It runs on the same
+compute node as your session and can edit and run Jupyter notebooks, Python
+scripts, and LaTeX.
+
+## Open VS Code
+
+1. Start a session and open the **Launcher** (see [JupyterLab](jupyterlab.qmd)).
+2. Under **Notebook**, click the **VS Code** tile. VS Code opens in a new browser
+   tab, running on the cluster.
+3. In VS Code, open your working folder with **File ▸ Open Folder…** and select
+   **`scratch`**, so the Explorer is rooted there. Keep all your work in
+   `scratch` (see [Intro](intro.qmd)).
+
+## Notebooks and Python
+
+Open a `.ipynb` notebook (or a `.py` file) from the Explorer. The first time you
+run a cell, click **Select Kernel** (top-right) and choose **Python 3.11**. Then
+run cells as usual — output and plots appear inline, just as in JupyterLab.
+
+![A Jupyter notebook open in VS Code on the cluster: the Explorer is rooted at `scratch`, and the plot renders inline.](Figures/VSCode_python.png){#fig-vscode-python width="95%"}
+
+## LaTeX
+
+You can also edit LaTeX in the same VS Code window — handy for writing up your
+Crowdmark submission next to your code.
+
+![Editing a LaTeX file in VS Code on the cluster.](Figures/VSCode_tex.png){#fig-vscode-tex width="95%"}
+
+::: {.callout-note}
+## Harmless warnings
+You may see pop-ups such as a read-only `settings.json` message, or a prompt to
+install a language extension (e.g. Julia). These are expected on the shared
+image — dismiss them; they don't affect your Python or LaTeX work.
+:::

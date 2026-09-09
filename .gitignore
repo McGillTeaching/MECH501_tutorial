@@ -16,3 +16,10 @@ mech501/
 .DS_Store
 
 **/*.quarto_ipynb
+
+# Quarto intermediates & scratch
+**/*.quarto_ipynb_*
+/_to_delete/
+
+# Large datasets (baked into _freeze, never committed)
+*.parquet

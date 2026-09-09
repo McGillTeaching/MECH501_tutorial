@@ -1,0 +1,35 @@
+---
+title: "Terminal (later)"
+subtitle: "Command-line access to the cluster"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+---
+
+::: {.callout-note}
+## Coming soon
+Later tutorials will use the cluster from the **command line** — logging in over
+SSH, loading modules, editing files, and submitting batch jobs with **Slurm**.
+This page will be expanded then. For now, use the [JupyterLab](jupyterlab.qmd)
+portal, which already gives you a terminal (**File ▸ New ▸ Terminal**).
+:::
+
+## Preview: logging in over SSH
+
+Once command-line access is introduced, you will connect with:
+
+```bash
+ssh <your-username>@<login-host>   # login host will be posted with this task
+```
+
+using the same username and password you created during
+[Registration](registration.qmd).
+
+::: {.content-visible when-profile="solutions"}
+::: {.callout-warning}
+## Instructor TODO (solutions build only)
+Fill in the **SSH login host** for this Magic Castle instance (e.g.
+`login1.mech501.calculquebec.cloud` or the login-node IP), and note whether SSH
+keys or passwords (and any TOTP) are used. Expand this page when the terminal
+tutorial is introduced.
+:::
+:::

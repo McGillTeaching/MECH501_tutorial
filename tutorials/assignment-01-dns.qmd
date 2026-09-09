@@ -1,0 +1,185 @@
+---
+title: "Tutorial 1: Isotropic DNS turbulence"
+subtitle: "Working with the Johns Hopkins isotropic dataset"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+jupyter: python3
+---
+
+::: {.callout-note}
+## What this tutorial is about
+
+For the rest of the course you will not plot *toy* spectra — you will
+compute turbulence statistics from a **real direct numerical simulation
+(DNS)** of homogeneous isotropic turbulence. This page sets the scene:
+where the data comes from, how it was produced, where it lives on the
+cluster, and what file format it is stored in. The hands-on work follows
+in the assignment notebooks.
+:::
+
+## Where the data comes from
+
+The velocity fields you will analyse are a subset of the **forced isotropic
+turbulence** dataset from the **Johns Hopkins Turbulence Databases
+(JHTDB)** — an open "simulation laboratory" that stores entire
+space–time histories of large turbulence simulations and serves them to
+anyone [@li2008; @perlman2007]. Instead of re-running an expensive DNS,
+researchers query the stored fields directly, which is exactly what we do
+here.
+
+::: {.callout-important appearance="simple"}
+## Acknowledgement
+
+This dataset is provided by the **Johns Hopkins Turbulence Databases
+(JHTDB)**, developed at the Johns Hopkins University and available at
+<https://turbulence.idies.jhu.edu>. If you use these data outside this
+course, please cite Li et al. (2008) and Perlman et al. (2007)
+[@li2008; @perlman2007].
+:::
+
+### How it was computed: forced homogeneous isotropic turbulence
+
+**Homogeneous isotropic turbulence (HIT)** is the simplest conceptual
+setting for turbulence: the statistics are the same at every point
+(homogeneous) and in every direction (isotropic). There are no walls, no
+mean shear, and no preferred orientation — which makes it the canonical
+test case for the theory you meet in lectures (the energy cascade, the
+$-5/3$ Kolmogorov spectrum, the Taylor microscale).
+
+The JHTDB field was produced by a **direct numerical simulation** — the
+Navier–Stokes equations are solved *without any turbulence model*, so every
+scale of motion from the largest eddies down to the dissipative
+(Kolmogorov) scale is resolved on the grid. The essentials:
+
+- **Method — pseudo-spectral.** Spatial derivatives are evaluated in
+  Fourier space on a triply **periodic** cube of side $2\pi$, using a
+  $1024^3$ grid (about $10^9$ points per snapshot). Pseudo-spectral schemes
+  are the standard choice for isotropic DNS because periodic boundaries fit
+  a box with no walls and because spectral derivatives are essentially
+  exact.
+- **Forcing keeps it stationary.** Real turbulence decays as it dissipates
+  energy. To hold the flow *statistically steady*, energy is continuously
+  injected at the **large scales** (low wavenumbers). It then cascades
+  through the inertial range and is removed by viscosity at the small
+  scales — a steady statistical balance rather than a decaying transient.
+- **Reynolds number.** The Taylor-microscale Reynolds number is
+  $\mathrm{Re}_\lambda \approx 433$, well into the turbulent regime, giving
+  a clear inertial range in which to look for the $-5/3$ law.
+
+The full database stores thousands of snapshots in time. For this course we
+use a **manageable extract** — a $200^3$ sub-cube of the domain (and, for
+the time-history exercises, a record of several hundred snapshots at
+selected points) — so that everything runs comfortably in a notebook on the
+cluster rather than needing a supercomputer.
+
+::: {.callout-tip}
+## Why HIT is the right first dataset
+
+Because HIT has no mean flow and no walls, the **fluctuations are the whole
+signal**: a Reynolds decomposition $u_i = \langle u_i\rangle + u_i'$ has
+$\langle u_i\rangle \approx 0$, so $u_i' \approx u_i$. That lets you focus
+on the statistics themselves — variances, two-point correlations, spectra —
+without first having to subtract a complicated mean profile. You will add
+that complication later, with wall-bounded flows.
+:::
+
+## Where the data lives
+
+On the course cluster the extracted field is stored at:
+
+```bash
+/project/60004/00_Assignment1/isotropic.parquet
+```
+
+You do **not** need to download it or copy it into your home directory —
+read it in place from your notebook. In Python:
+
+```{python}
+#| eval: false
+import pandas as pd
+
+path = "/project/60004/00_Assignment1/isotropic.parquet"
+df = pd.read_parquet(path)      # needs pyarrow (or fastparquet)
+print(df.shape)
+df.head()
+```
+
+Each row is one sample; the columns are the coordinates
+`x, y, z`, the three velocity components `velocity_x, velocity_y,
+velocity_z`, and a `Timestep` index for the time-history points. Because
+Parquet is *columnar* (see below), you can even read just the columns you
+need — for example only the velocities — without loading the whole file.
+
+## A note on file formats: what is Parquet?
+
+Scientific data is rarely stored as plain text `.csv` for anything large —
+CSV is slow to parse, stores every number as human-readable characters
+(wasteful), and keeps no type information. **Apache Parquet** (`.parquet`)
+is one of several *binary, high-performance* formats built to fix that.
+Its key properties:
+
+- **Columnar.** Values are stored column-by-column, not row-by-row. All the
+  $u_x$ values sit together, then all the $u_y$, and so on. This means you
+  can read *only the columns you need* (say, the velocities) and skip the
+  rest — a huge saving when a file has many columns.
+- **Compressed.** Each column is a run of same-typed numbers, which
+  compresses extremely well (Snappy, ZSTD, gzip). A Parquet file is
+  typically several times smaller than the equivalent CSV.
+- **Typed.** The schema (column names and data types) is stored *inside*
+  the file. `float64` stays `float64`; there is no guessing or re-parsing
+  when you read it back.
+- **Fast and portable.** It is the storage format of the Apache Arrow
+  ecosystem and is read natively by pandas, Polars, Dask, and Spark, so the
+  same file works across tools and languages.
+
+### Other formats you will meet
+
+Parquet is excellent for *tabular* data (rows and columns). Turbulence data
+is often naturally an **N-dimensional array** — a $200^3$ velocity field is
+really a 4-D array (three space indices, plus the component). Different
+formats specialise in that:
+
+- **HDF5** (`.h5`, read with `h5py`) — the workhorse for scientific
+  N-dimensional arrays. It stores multiple datasets and metadata in one
+  file in a filesystem-like hierarchy and supports **partial (sliced)
+  reads**, so you can pull one 2-D plane out of a huge 3-D field without
+  loading all of it. Most DNS and CFD codes write HDF5.
+- **NetCDF** — widely used in climate and geophysical fluid dynamics; a
+  self-describing, HDF5-based format with rich metadata conventions.
+- **Zarr** — like HDF5 but *chunked and cloud-native*: arrays are split into
+  many small pieces that can be read in parallel and streamed from object
+  storage (S3, etc.). Well suited to very large fields and cluster
+  workflows.
+- **Feather / Arrow IPC** — the in-memory Arrow format written to disk;
+  extremely fast for handing tables between processes, though less
+  compressed than Parquet for long-term storage.
+
+The common thread: all of these are **binary, typed, and support
+compression and partial reads** — which is what makes working with
+multi-gigabyte turbulence fields practical. For the tabular extract in this
+assignment, **Parquet** is the natural choice; when you later work with raw
+3-D snapshots, expect **HDF5**.
+
+::: {.callout-note collapse="true"}
+## Reading only what you need
+
+Because Parquet is columnar, you can ask for specific columns at read time:
+
+```{python}
+#| eval: false
+# read only the velocity columns — coordinates are skipped on disk
+u = pd.read_parquet(path, columns=["velocity_x", "velocity_y", "velocity_z"])
+```
+
+This is the columnar advantage in one line: less I/O, less memory, faster
+load.
+:::
+
+## What comes next
+
+With the data located and understood, the assignment notebooks walk you
+through the actual turbulence analysis: reading the field, computing means
+and variances, two-point correlations and the integral length scale, and
+finally the 3-D energy spectrum and the turbulent kinetic energy. Everything
+you practised in the Python section — vectorised NumPy, clean figures,
+reusable functions — now gets pointed at real DNS data.

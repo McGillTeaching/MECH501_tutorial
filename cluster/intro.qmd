@@ -1,0 +1,45 @@
+---
+title: "Intro"
+subtitle: "How the cluster is organised"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+---
+
+The course cluster looks and behaves like a real Alliance cluster. A few
+concepts before you run anything.
+
+## Login vs. compute nodes
+
+- **Login node** — where you land when you connect. Use it only for light work:
+  editing files, moving data, launching jobs. **Never run heavy computations on
+  the login node.**
+- **Compute nodes** — where real work runs. You don't use them directly; you
+  **request** them through the **Slurm** scheduler, which queues your request and
+  runs it when resources are free. The [JupyterLab](jupyterlab.qmd) portal does
+  this for you automatically.
+
+## Storage
+
+| Space | Path | Use it for | Notes |
+|-------|------|-----------|-------|
+| Home | `/home/$USER` | code, scripts, small files | your personal space |
+| Scratch | `/scratch/$USER` | large temporary run data | for big / short-lived files |
+| Project | `/project` | shared course data | read the tutorial data from here |
+
+::: {.callout-warning}
+## Nothing here is permanent
+This is a disposable training cluster — **all storage is wiped when the instance
+is torn down at the end of the course.** Download anything you want to keep.
+:::
+
+## Software
+
+Software is provided through **environment modules**, exactly as on the national
+clusters:
+
+```bash
+module avail             # list available software
+module load python/3.11  # load a specific version
+```
+
+Inside JupyterLab the Python environment is already set up for you.

@@ -1,0 +1,306 @@
+---
+title: "Assignment 1 · Part B: The turbulent kinetic energy budget"
+subtitle: "Reynolds decomposition, TKE and dissipation from isotropic DNS"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+jupyter: python3
+---
+
+::: {.callout-note}
+## Deliverables
+
+Complete **Tasks 1–5** and upload a single PDF (code, figures and short
+written answers) to **Crowdmark** by the posted deadline. This part is
+graded. You work from the isotropic DNS field introduced in the
+[Assignment 1 overview](assignment-01-dns.qmd); make sure you have read it
+first.
+:::
+
+## What you will do
+
+In the [data-processing tutorial](assignment-01-dns.qmd) you learned to read
+the field and manipulate it. Here you use it to evaluate the two central
+quantities of any turbulence calculation — the **turbulent kinetic energy**
+$k$ and its **dissipation rate** $\varepsilon$ — directly from the DNS, and
+then build the characteristic scales of the flow from them. This mirrors the
+$k$-equation analysis from lecture: instead of *modelling* these terms, you
+*measure* them.
+
+## The turbulent kinetic energy equation
+
+Applying the Reynolds decomposition $u_i = \langle u_i\rangle + u_i'$ to the
+Navier–Stokes equations and taking the mean gives the transport equation for
+the turbulent kinetic energy $k = \tfrac12\langle u_i' u_i'\rangle$:
+
+$$
+\underbrace{\frac{\partial k}{\partial t}}_{\text{unsteady}}
++ \underbrace{\langle u_j\rangle \frac{\partial k}{\partial x_j}}_{\text{advection}}
+= \underbrace{-\langle u_i' u_j'\rangle \frac{\partial \langle u_i\rangle}{\partial x_j}}_{\text{production } \mathcal{P}}
+- \underbrace{\varepsilon}_{\text{dissipation}}
++ \underbrace{\frac{\partial}{\partial x_j}\!\left(\cdots\right)}_{\text{transport } \mathcal{T}}
+$$ {#eq-tke}
+
+with the dissipation rate
+
+$$
+\varepsilon = 2\nu \langle s_{ij}' s_{ij}'\rangle,
+\qquad
+s_{ij}' = \tfrac12\!\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_j'}{\partial x_i}\right).
+$$ {#eq-eps}
+
+::: {.callout-tip}
+## Why the budget collapses for our flow
+
+Forced homogeneous isotropic turbulence is the cleanest possible case for
+@eq-tke, because almost every term drops out:
+
+- **No mean shear.** $\langle u_i\rangle \approx 0$ everywhere, so the mean
+  advection term *and* the production term $\mathcal{P} = -\langle u_i' u_j'\rangle\,\partial_j\langle u_i\rangle$ **both vanish** — there is no
+  mean gradient to extract energy from.
+- **Homogeneity.** Statistics do not depend on position, so every spatial
+  divergence — the transport term $\mathcal{T}$ — averages to **zero**.
+- **Stationarity.** The forcing injects energy at the large scales at a mean
+  rate $\mathcal{F}$ that, on average, holds $\partial k/\partial t = 0$.
+
+What remains is a single statement: **injection balances dissipation**,
+$\mathcal{F} = \varepsilon$. You cannot measure the artificial forcing
+$\mathcal{F}$ from a snapshot, but you *can* measure $k$ and $\varepsilon$
+directly — and from them every characteristic scale of the flow. That is the
+task.
+:::
+
+## Reading the field as a structured cube
+
+The tasks below assume the field has been reshaped from the flat table into a
+$200^3$ NumPy array per velocity component. The grid spacing is that of the
+parent $1024^3$ simulation, $dx = 2\pi/1024$, so the sub-cube has side
+$L = 200\,dx = 2\pi\,(200/1024)$.
+
+```{python}
+#| eval: false
+import numpy as np
+import pandas as pd
+
+nu = 1.85e-4                       # kinematic viscosity of the JHTDB isotropic DNS
+dx = 2 * np.pi / 1024              # grid spacing of the parent 1024^3 simulation
+dim = 200                          # our sub-cube is 200^3
+
+df = pd.read_parquet("/project/60004/00_Assignment1/isotropic.parquet")
+
+def to_cube(component):
+    """Scatter a flat velocity column onto the structured 200^3 grid."""
+    cube = np.zeros((dim, dim, dim), dtype=np.float64)
+    ix = (df["x"] / dx).round().astype(int)
+    iy = (df["y"] / dx).round().astype(int)
+    iz = (df["z"] / dx).round().astype(int)
+    cube[ix, iy, iz] = df[component].values
+    return cube
+
+u = to_cube("velocity_x")
+v = to_cube("velocity_y")
+w = to_cube("velocity_z")
+print(u.shape, u.dtype)
+```
+
+---
+
+## Task 1 — Reynolds decomposition {#sec-task1}
+
+::: {.callout-important}
+## Task 1
+
+Because the flow is homogeneous, the ensemble average of lecture is, by
+ergodicity, the **spatial average over the cube**. Compute the mean of each
+velocity component, $\langle u_i\rangle$, and confirm it is small compared to
+the fluctuations. Then form the fluctuations $u_i' = u_i - \langle u_i\rangle$
+and compute the three component variances $\langle u_i'^2\rangle$.
+
+Report the three variances and comment (1–2 sentences): are they
+approximately equal, and what does that tell you about **isotropy**?
+:::
+
+::: {.content-visible when-profile="solutions"}
+::: {.solution-box}
+The three normal stresses are nearly equal — the signature of isotropy: no
+direction is preferred, so $\langle u_1'^2\rangle \approx \langle u_2'^2\rangle
+\approx \langle u_3'^2\rangle$. The means are $O(10^{-2})$ or smaller
+relative to the rms, confirming $\langle u_i\rangle \approx 0$.
+
+```{python}
+#| eval: false
+means = {c: a.mean() for c, a in zip("uvw", (u, v, w))}
+up, vp, wp = (a - a.mean() for a in (u, v, w))
+var = {c: (a ** 2).mean() for c, a in zip("uvw", (up, vp, wp))}
+print("means    :", means)
+print("variances:", var)
+```
+:::
+:::
+
+## Task 2 — Turbulent kinetic energy {#sec-task2}
+
+::: {.callout-important}
+## Task 2
+
+Compute the turbulent kinetic energy
+
+$$
+k = \tfrac12\langle u_i' u_i'\rangle
+  = \tfrac12\!\left(\langle u_1'^2\rangle + \langle u_2'^2\rangle + \langle u_3'^2\rangle\right).
+$$
+
+Report $k$ and the equivalent single-component rms velocity
+$u_{\mathrm{rms}} = \sqrt{2k/3}$.
+:::
+
+::: {.content-visible when-profile="solutions"}
+::: {.solution-box}
+```{python}
+#| eval: false
+k = 0.5 * (var["u"] + var["v"] + var["w"])
+u_rms = np.sqrt(2 * k / 3)
+print(f"k       = {k:.4e} m^2/s^2")
+print(f"u_rms   = {u_rms:.4e} m/s")
+```
+:::
+:::
+
+## Task 3 — Dissipation rate {#sec-task3}
+
+::: {.callout-important}
+## Task 3
+
+Evaluate the dissipation rate from its definition, @eq-eps. Use
+`numpy.gradient` with spacing `dx` to obtain the nine fluctuating velocity
+gradients $\partial u_i'/\partial x_j$, build the fluctuating strain-rate
+tensor $s_{ij}'$, and average:
+
+$$
+\varepsilon = 2\nu\,\langle s_{ij}' s_{ij}'\rangle .
+$$
+
+Then compute the **isotropic surrogate**
+$\varepsilon_{\mathrm{iso}} = 15\,\nu\,\big\langle (\partial u_1'/\partial x_1)^2\big\rangle$,
+which uses a single gradient, and compare the two. How close are they, and
+why should they agree for this flow?
+:::
+
+::: {.content-visible when-profile="solutions"}
+::: {.solution-box}
+For isotropic turbulence the full 12-gradient average and the single-gradient
+surrogate are equal in the mean, so the two estimates should differ only by a
+few percent (finite-sample and finite-difference error). Larger differences
+would flag anisotropy or under-resolution.
+
+```{python}
+#| eval: false
+# gradients: axis 0->x, 1->y, 2->z
+g = {}
+for name, a in zip("uvw", (up, vp, wp)):
+    gx, gy, gz = np.gradient(a, dx, dx, dx)
+    g[name] = (gx, gy, gz)
+
+# strain-rate tensor s_ij = 1/2 (du_i/dx_j + du_j/dx_i)
+comp = {"u": 0, "v": 1, "w": 2}
+S2 = np.zeros_like(up)
+for a in "uvw":
+    for b, j in comp.items():
+        i = comp[a]
+        s_ij = 0.5 * (g[a][j] + g[b][comp[a]])  # symmetric part
+        S2 += s_ij ** 2
+eps = 2 * nu * S2.mean()
+
+eps_iso = 15 * nu * (g["u"][0] ** 2).mean()
+print(f"eps      = {eps:.4e} m^2/s^3")
+print(f"eps_iso  = {eps_iso:.4e} m^2/s^3   (ratio {eps/eps_iso:.3f})")
+```
+:::
+:::
+
+## Task 4 — Characteristic scales {#sec-task4}
+
+::: {.callout-important}
+## Task 4
+
+From $k$, $\varepsilon$ and $\nu$ alone, compute:
+
+- the **Kolmogorov scales** $\eta = (\nu^3/\varepsilon)^{1/4}$,
+  $\tau_\eta = (\nu/\varepsilon)^{1/2}$, $u_\eta = (\nu\varepsilon)^{1/4}$;
+- the **Taylor microscale** $\lambda = \sqrt{10\,\nu k/\varepsilon}$;
+- the **Taylor-microscale Reynolds number**
+  $\mathrm{Re}_\lambda = \dfrac{u_{\mathrm{rms}}\,\lambda}{\nu} = \sqrt{\dfrac{20\,k^2}{3\,\nu\,\varepsilon}}$.
+
+Compare your $\mathrm{Re}_\lambda$ to the published value for this dataset,
+$\mathrm{Re}_\lambda \approx 433$. Do they agree?
+:::
+
+::: {.content-visible when-profile="solutions"}
+::: {.solution-box}
+With the correct $k$ and $\varepsilon$, $\mathrm{Re}_\lambda$ should land near
+the published $\approx 433$. A large discrepancy usually means $\varepsilon$
+was under-estimated because the smallest scales are under-resolved by the
+finite differences.
+
+```{python}
+#| eval: false
+eta   = (nu ** 3 / eps) ** 0.25
+tau_e = (nu / eps) ** 0.5
+u_eta = (nu * eps) ** 0.25
+lam   = np.sqrt(10 * nu * k / eps)
+Re_lam = u_rms * lam / nu
+print(f"eta      = {eta:.4e} m")
+print(f"tau_eta  = {tau_e:.4e} s")
+print(f"lambda   = {lam:.4e} m")
+print(f"Re_lambda= {Re_lam:.1f}   (published ~ 433)")
+```
+:::
+:::
+
+## Task 5 — Resolution and the budget {#sec-task5}
+
+::: {.callout-important}
+## Task 5
+
+Two short written answers, backed by a number each:
+
+1. **Resolution.** The largest resolved wavenumber is
+   $\kappa_{\max} = \pi/dx$. Compute $\kappa_{\max}\eta$. A well-resolved DNS
+   has $\kappa_{\max}\eta \gtrsim 1$. Is this field well resolved at the
+   dissipative scale?
+2. **The budget.** Using @eq-tke and the argument in the callout above,
+   explain in 2–3 sentences why, for this flow, your measured $\varepsilon$
+   is also (in the mean) the rate at which the forcing injects energy — even
+   though you never computed the forcing.
+:::
+
+::: {.content-visible when-profile="solutions"}
+::: {.solution-box}
+1. $\kappa_{\max}\eta = (\pi/dx)\,\eta$. For the JHTDB isotropic field this is
+   of order unity (the "coarse" storage is right at the edge of resolving
+   $\eta$), so the smallest scales are marginally resolved — good enough for
+   statistics, and a reason $\varepsilon$ from finite differences is a slight
+   under-estimate.
+2. In stationary, homogeneous, isotropic turbulence @eq-tke reduces to
+   $0 = \mathcal{F} - \varepsilon$: production and transport vanish (no mean
+   shear, homogeneity) and $\partial_t k = 0$ on average (stationarity). Hence
+   the injection rate equals the dissipation rate, $\mathcal{F} = \varepsilon$
+   — the energy poured in at the large scales cascades through the inertial
+   range and is dissipated at rate $\varepsilon$.
+
+```{python}
+#| eval: false
+kmax = np.pi / dx
+print(f"kmax*eta = {kmax * eta:.3f}")
+```
+:::
+:::
+
+::: {.callout-tip collapse="true"}
+## Looking ahead
+
+The two-point correlation, the integral length scale and the full energy
+spectrum — the *scale-by-scale* picture of the same cube — are the subject of
+a later tutorial. Here you characterised the flow by its integral quantities
+($k$, $\varepsilon$) and the scales built from them; next you will resolve how
+energy is distributed across wavenumbers.
+:::

@@ -1,0 +1,12 @@
+## Journal style (Proceedings of the Combustion Institute) -- needs a LaTeX toolchain ##
+font.family : serif
+font.serif  : Times New Roman
+text.usetex : true
+font.size   : 7
+
+text.latex.preamble : \usepackage{amsmath}\usepackage{times}\usepackage[version=4]{mhchem}
+
+lines.markersize : 3
+lines.linewidth  : 1.0
+savefig.bbox     : tight
+text.kerning_factor : 6

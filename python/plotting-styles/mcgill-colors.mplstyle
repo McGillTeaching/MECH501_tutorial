@@ -1,0 +1,3 @@
+# McGill colour scheme (drop-in colour override)
+axes.prop_cycle : (cycler('color', ['ED1B2F', 'F7941D', '27B0BE', '305534', '024F6D', 'B2D235', '673567', '5D6770']) + cycler('linestyle', ['-', '--', '-.', ':', '-', '--', '-.', ':']))
+image.cmap      : Greys
