@@ -53,12 +53,13 @@ website:
       - section: "OpenFOAM"
         contents:
           - openfoam/how-to.qmd
-          - openfoam/paraview.qmd
       - section: "Tutorials and Assignments"
         contents:
           - tutorials/tutorial-00.qmd
+          - tutorials/tutorial-01.qmd
           - tutorials/assignment-01-dns.qmd
           - tutorials/assignment-01-processing.ipynb
+          - tutorials/assignment-01-kequation.qmd
           - tutorials/assignment-02-correlations.qmd
           - tutorials/assignment-02b-openfoam.qmd
   page-footer:

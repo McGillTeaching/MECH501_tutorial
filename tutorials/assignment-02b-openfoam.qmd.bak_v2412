@@ -1,0 +1,261 @@
+---
+title: "Assignment 2b: Do your own OpenFOAM simulation"
+subtitle: "A guided parameter study on the backward-facing step"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+jupyter: python3
+---
+
+::: {.callout-note}
+## What you will do
+
+Starting from the converged `pitzDaily` case of the
+[OpenFOAM how-to](../openfoam/how-to.qmd), you will run a **controlled parameter
+study**: change *one* numerical ingredient at a time — the **mesh** and the
+**discretization scheme** — and measure how the solution responds. This is
+exactly how a practising CFD engineer builds trust in a result.
+
+Two skills run through the whole assignment:
+
+1. a reusable **Python measure** — the **reattachment length** behind the step —
+   that turns each run into a single number you can compare (Task 1);
+2. **research data management (RDM)**: organising your cases so that *you in six
+   months*, or a collaborator, can tell at a glance what each run was and
+   reproduce it.
+
+We keep the turbulence model fixed at $k$–$\varepsilon$ throughout; comparing
+turbulence models ($k$–$\omega$ SST and others) comes in a later assignment.
+
+**You do *not* submit the cases themselves.** Instead you submit a **screenshot of
+your folder structure**, your **README**, your **script names**, and a few key
+plots — see [What to submit](#what-to-submit).
+:::
+
+## Research data management {#sec-rdm}
+
+A simulation you cannot find, explain, or rerun in a year is worth very little —
+and "a year" often turns out to be "next week". Good data management makes your
+work **findable, accessible, interoperable and reusable** (the *FAIR* principles [@wilkinson2016]):
+it is what separates a result you can defend in your thesis from a folder of
+`test`, `test2`, `test_final` nobody can decode. Get into the habit now, on a
+five-case study, so it is automatic when you have five hundred.
+
+For this assignment, follow three rules:
+
+- **Number every folder and standalone script** with a three-digit, zero-padded
+  prefix, in steps of ten (`000_`, `010_`, `020_`, …) so they sort in run order and
+  you can slot a new one in between later. Name each after the *one thing* it is —
+  the case's single change, or what the script does. The one exception: files that
+  live *inside* an importable Python package are **not** prefixed, because a leading
+  digit is not a valid module name — the package name carries the ordering instead.
+- **Write a README** at the top of the study that says who/what/when, the software
+  and version, what each case varies, how to reproduce it, and the headline result.
+- **Keep post-processing in numbered scripts**, not in your shell history — a
+  committed script *is* the reproducibility.
+
+A structure that satisfies all three:
+
+```text
+2b_backward_step/
+├── README.md                   # the map to everything below
+├── 000_baseline/               # reference: baseline mesh, linearUpwind
+├── 010_mesh_fine/              # Study A: refined mesh, everything else identical
+├── 020_scheme_upwind/          # Study B: 1st-order upwind
+├── 030_scheme_linear/          # Study B: central (linear)
+└── 900_postproc/               # analysis, kept apart from the run data
+    └── 010_reattachment.py     # Task 1 — one script, run on every case
+```
+
+A minimal `README.md` (Markdown, so it renders anywhere):
+
+```markdown
+# Assignment 2b — backward-facing step parameter study
+Author: <name> · Date: 2026-10 · Solver: simpleFoam (OpenFOAM v2412)
+
+Quantity of interest: reattachment length x_r behind the step (see 900_postproc/).
+
+| case               | changed vs. baseline        | x_r / h |
+|--------------------|-----------------------------|:-------:|
+| 000_baseline       | —                           |         |
+| 010_mesh_fine      | ~2x cells in blockMeshDict  |         |
+| 020_scheme_upwind  | div(phi,U) = upwind         |         |
+| 030_scheme_linear  | div(phi,U) = linear         |         |
+
+Reproduce: in each case run `blockMesh && simpleFoam`, then
+`python 900_postproc/010_reattachment.py <case>`.
+```
+
+## Baseline
+
+Create the study folder following the structure above, copy a **fresh**
+`pitzDaily` from the OpenFOAM tutorials in as `000_baseline`, and run it once ---
+this converged baseline is the reference every other run is compared against:
+
+```bash
+module load openfoam/v2412
+cd /scratch/$USER
+mkdir -p 2b_backward_step/900_postproc && cd 2b_backward_step
+cp -r $FOAM_TUTORIALS/incompressible/simpleFoam/pitzDaily 000_baseline
+cd 000_baseline && blockMesh && simpleFoam && cd ..
+```
+
+Start the `README.md` now and fill the results table as you go — not the night
+before the deadline.
+
+## Task 1 — Find the reattachment point
+
+Behind the step the flow separates and rolls up into a recirculation bubble, then
+**reattaches** to the lower wall further downstream. The distance from the step to
+that point, the **reattachment length** $x_r$, is *the* classic scalar for this
+flow — one number that summarises the whole recirculation and reacts sharply to
+mesh and scheme. You will compute it in Python and reuse it for every case.
+
+Formally, reattachment is where the **wall shear stress changes sign**
+($\tau_w=0$). A robust, mesh-friendly surrogate is the **near-wall streamwise
+velocity**: just above the lower wall $U_x<0$ inside the recirculation (backflow)
+and $U_x>0$ once the flow has reattached, so $x_r$ is the first sign change.
+
+Sample $U$ along a horizontal line one or two cells above the lower wall. Copy the
+ready-made sampler into the case, point it at that line, and run it on the
+converged field:
+
+```bash
+cd 000_baseline
+foamGet singleGraph              # copies system/singleGraph you can edit
+```
+
+In `system/singleGraph`, set the line to run just above the lower wall from the
+step to the outlet, and sample `U` (read the exact wall $y$ off ParaView — the
+numbers below are illustrative for `pitzDaily`):
+
+```cpp
+start   (0        -0.0250  0);   // at the step, ~1 cell above the wall
+end     (0.29     -0.0250  0);   // to the outlet
+fields  (U);
+axis    x;                       // first column of the .xy file is x
+```
+
+```bash
+simpleFoam -postProcess -func singleGraph -latestTime
+```
+
+Then find the zero crossing in `900_postproc/010_reattachment.py`:
+
+```{python}
+#| eval: false
+import numpy as np, glob, sys
+
+case = sys.argv[1] if len(sys.argv) > 1 else "000_baseline"
+xy   = sorted(glob.glob(f"{case}/postProcessing/singleGraph/*/line_U.xy"))[-1]
+
+d      = np.loadtxt(xy)
+x, Ux  = d[:, 0], d[:, 1]         # axis x -> columns: x, Ux, Uy, Uz
+
+# reattachment: first place the near-wall Ux turns from backflow (-) to forward (+)
+s     = np.sign(Ux)
+cross = np.where((s[:-1] < 0) & (s[1:] >= 0))[0]
+i     = cross[0]
+x_r   = x[i] - Ux[i] * (x[i+1] - x[i]) / (Ux[i+1] - Ux[i])   # linear interpolation
+
+h = 0.0254                        # step height [m] — check against your blockMeshDict
+print(f"{case}:  x_r = {x_r*1e3:.1f} mm = {x_r/h:.2f} h")
+```
+
+::: {.callout-important}
+## Task 1 — deliverable
+Your `900_postproc/010_reattachment.py`, and the baseline $x_r$ (in mm and in step heights $h$).
+This is the measure you report for **every** case below.
+:::
+
+::: {.content-visible when-profile="solutions"}
+::: {.solution-box}
+For the coarse `pitzDaily` baseline expect $x_r$ of order a few step heights; the
+exact value is mesh- and scheme-dependent (which is the point of Studies A and B).
+Watch for a spurious early crossing right at the step corner (a tiny corner
+vortex); take the crossing that ends the *main* recirculation. Reading $\tau_w$
+from `wallShearStress` on the `lowerWall` patch is the exact method and earns
+bonus credit.
+:::
+:::
+
+## Study A — Mesh sensitivity
+
+Refine the mesh and check whether your answer has stopped changing (grid
+independence).
+
+- Copy the baseline to `010_mesh_fine`. In `system/blockMeshDict`, roughly **double**
+  the cell counts (the numbers in the `hex (...) (nx ny nz) ...` lines), then rerun
+  `blockMesh` + `simpleFoam` and `900_postproc/010_reattachment.py`.
+- Compare $x_r$ on coarse vs. fine. Does it converge?
+
+::: {.callout-important}
+## A — deliverable
+$x_r$ on both meshes, and one sentence: is the baseline mesh fine enough?
+:::
+
+## Study B — Discretization scheme (numerical diffusion)
+
+Change **only** the convection scheme for momentum in `system/fvSchemes`, in a
+fresh numbered case each time, and rerun:
+
+```cpp
+div(phi,U)   bounded Gauss upwind;                 // 1st order  -> 020_scheme_upwind
+div(phi,U)   bounded Gauss linearUpwind grad(U);   // 2nd order  -> 000_baseline (already have it)
+div(phi,U)   Gauss linear;                          // central    -> 030_scheme_linear
+```
+
+Compare the velocity field and $x_r$ across the three. Which smears the shear
+layer? Does the central scheme show any oscillations or convergence trouble?
+
+::: {.callout-important}
+## B — deliverable
+One comparison plot (field or profile) of the three schemes plus their $x_r$, and
+two–three sentences linking what you see to **numerical diffusion** vs.
+**boundedness** from the lectures.
+:::
+
+## What to submit {#what-to-submit}
+
+Upload to Crowdmark — **not** the cases themselves, but the evidence that you ran
+and organised them well:
+
+1. **A screenshot of your folder structure** showing the numbered cases, the
+   `README.md`, and the `900_postproc/` scripts. On the cluster, `tree -L 2
+   2b_backward_step` (or a file-browser screenshot) is perfect.
+2. **Your `README.md`** (as text or a screenshot), with the results table filled in.
+3. **Your script name(s)** — i.e. `010_reattachment.py` — visible in the tree above,
+   plus the script's contents pasted once.
+4. **Key plots (≤ 5).** Residual convergence for one run; a velocity-magnitude
+   field; and the comparison of $x_r$ across Studies A and B.
+5. **Short discussion (≤ ½ page).** Answer the deliverable questions above.
+
+::: {.callout-tip}
+Change **one thing at a time** and keep the baseline fixed — otherwise you cannot
+attribute a difference to any single cause. Note the wall-clock and iteration
+count for each run; refinement and higher-order schemes cost more.
+:::
+
+::: {.content-visible when-profile="solutions"}
+::: {.solution-box}
+**Expected trends (instructor notes).**
+
+- **A (mesh):** the coarse baseline is somewhat under-resolved; refining
+  lengthens/settles $x_r$ as numerical (mesh) diffusion drops. $x_r$ should change
+  less between fine and baseline than between baseline and a deliberately coarse
+  mesh — the signature of approaching grid independence.
+- **B (scheme):** first-order `upwind` adds strong numerical diffusion → the shear
+  layer is smeared and $x_r$ shortened/washed out. `linearUpwind` (2nd order) is
+  sharper. Pure `linear` (central) is least diffusive but may show wiggles or
+  slower/failed convergence on this mesh — the accuracy-vs-boundedness trade-off
+  from the lecture.
+
+Grading: reward a clean one-variable-at-a-time design, a correct and reused
+reattachment measure, disciplined RDM (numbered cases, a real README, scripted
+post-processing), and physical interpretation over "prettier" plots.
+:::
+:::
+
+## References
+
+::: {#refs}
+:::

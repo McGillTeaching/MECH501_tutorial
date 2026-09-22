@@ -39,7 +39,7 @@ the discussion board and we'll fix it quickly — thanks for your patience!
 - [Intro](intro.qmd) — how the cluster is organised (login vs. compute nodes, storage, modules).
 - [JupyterLab](jupyterlab.qmd) — the main way you will work: notebooks in the browser.
 - [VS Code](vscode.qmd) — an alternative editor (notebooks, Python, and LaTeX) in the browser.
-- [Terminal](terminal.qmd) — command-line access (added later in the course).
+- [Terminal and vim](terminal.qmd) — the JupyterLab terminal, basic commands, vim, and (later) SSH access.
 
 ## Acknowledgements
 

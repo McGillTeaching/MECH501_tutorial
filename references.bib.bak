@@ -42,15 +42,3 @@
   year      = {2007},
   doi       = {10.1145/1362622.1362654}
 }
-
-@article{wilkinson2016,
-  author  = {Wilkinson, Mark D. and Dumontier, Michel and Aalbersberg, IJsbrand Jan
-             and Appleton, Gabrielle and Axton, Myles and Baak, Arie and others},
-  title   = {The {FAIR} Guiding Principles for scientific data management and
-             stewardship},
-  journal = {Scientific Data},
-  volume  = {3},
-  pages   = {160018},
-  year    = {2016},
-  doi     = {10.1038/sdata.2016.18}
-}

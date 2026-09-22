@@ -9,11 +9,11 @@ Computational Turbulence**. Where the lectures build the theory, here you will
 and work through tutorials that combine turbulence theory, OpenFOAM simulations,
 and Python post-processing.
 
-## Quicklinks
+## Start here
 
 ::::: {.grid}
 
-:::: {.g-col-12 .g-col-md-3}
+:::: {.g-col-12 .g-col-md-4}
 ::: {.callout-note appearance="simple"}
 ### [Cluster](cluster/index.qmd)
 
@@ -23,7 +23,7 @@ account approval takes a day or two.
 :::
 ::::
 
-:::: {.g-col-12 .g-col-md-3}
+:::: {.g-col-12 .g-col-md-4}
 ::: {.callout-note appearance="simple"}
 ### [Python](python/index.qmd)
 
@@ -32,18 +32,9 @@ code — efficient plotting, good structure, and building your own package.
 :::
 ::::
 
-:::: {.g-col-12 .g-col-md-3}
+:::: {.g-col-12 .g-col-md-4}
 ::: {.callout-note appearance="simple"}
-### [OpenFOAM](openfoam/how-to.qmd)
-
-Run your first RANS simulation with OpenFOAM — set up a case, mesh it, solve it
-with `simpleFoam`, and post-process the results in ParaView and Python.
-:::
-::::
-
-:::: {.g-col-12 .g-col-md-3}
-::: {.callout-note appearance="simple"}
-### [Tutorials & Assignments](tutorials/tutorial-00.qmd)
+### [Tutorials](tutorials/tutorial-00.qmd)
 
 Guided exercises that tie theory to practice, with numbered **Tasks** you
 complete and hand in. Start with the prerequisites check.
@@ -65,11 +56,6 @@ If your Python or command-line skills feel rusty, work through the
 [Cluster](cluster/index.qmd) before the first tutorial that needs them — it will
 make everything afterwards much smoother.
 
-**OpenFOAM** is the open-source CFD toolbox we use for the simulation side of the
-course. It solves the RANS equations you meet in the lectures on real geometries.
-The [OpenFOAM how-to](openfoam/how-to.qmd) walks you through your first case from
-setup to post-processing — no prior CFD-software experience assumed.
-
 ## Working through a tutorial
 
 1. Read the background and **run the provided code yourself** — don't just read it.
@@ -84,20 +70,10 @@ setup to post-processing — no prior CFD-software experience assumed.
 
 : More tutorials will appear here as the term progresses. {.striped tbl-colwidths="[8,72,20]"}
 
-## Assignments
-
-| # | Topic | Crowdmark due |
-|---|-------|:-------------:|
-| 1 | [DNS turbulence \& the $k$-equation](tutorials/assignment-01-dns.qmd) | **22 September 2026** |
-| 2a | [Two-point correlations & length scales](tutorials/assignment-02-correlations.qmd) | **5 October 2026** |
-| 2b | [Do your own OpenFOAM simulation](tutorials/assignment-02b-openfoam.qmd) | **5 October 2026** |
-
-: {.striped tbl-colwidths="[8,62,30]"}
-
 ## What you'll need
 
 - **Python** ≥ 3.10 with `numpy`, `matplotlib`, `scipy` (and later `pyvista` / `fluidfoam`).
-- **OpenFOAM** — see the [OpenFOAM how-to](openfoam/how-to.qmd).
+- **OpenFOAM**, introduced from Tutorial 2 onward.
 - An account on the **course cluster** — see the [Cluster](cluster/index.qmd) page.
 
 Everything above is already installed in the cluster's JupyterLab environment, so
@@ -109,11 +85,3 @@ if you work there you can skip local setup entirely.
 Stuck? Post on the course discussion board or drop by office hours — and if
 something on these pages is wrong or unclear, let us know so we can fix it.
 :::
-
-## Acknowledgements
-
-An initial version of these tutorials — in particular the OpenFOAM and Python
-material — was created by a student team supervised by Hendrik Nicolai at
-TU Darmstadt: Alexander Dungs, Andreas Lindenthal, Antonia Bähr, Filip
-Formatschek, Jakob Grill, and Margarita Glushko. Thanks also to Leon Loni
-Berkel and Thijs Hazenberg for valuable discussions on the tutorial content.

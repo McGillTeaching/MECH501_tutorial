@@ -1,0 +1,184 @@
+---
+title: "Tutorial 2: Two-point correlations & length scales"
+subtitle: "Verifying isotropy relations on the JHTDB DNS cube"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+jupyter: python3
+---
+
+::: {.callout-note}
+## What this assignment is about
+
+In lecture we built the two-point velocity correlation and the length scales that
+follow from it. Here you will do two things: **(i)** prove two classical isotropy
+results by hand, and **(ii)** verify them on the *same* Johns Hopkins isotropic DNS
+cube you met in Tutorial 1 — reproducing the longitudinal and transverse velocity
+autocorrelations $f(r)$ and $g(r)$ (the classic grid-turbulence measurement) and
+the integral length scales.
+:::
+
+## Background
+
+For homogeneous isotropic turbulence the two-point correlation
+$$
+R_{ij}(\mathbf r)=\langle u_i'(\mathbf x+\mathbf r)\,u_j'(\mathbf x)\rangle
+$$
+is completely determined by two scalar functions of the separation distance — the
+**longitudinal** and **transverse** autocorrelations,
+$$
+f(r)=\frac{\langle u_1'(\mathbf x+r\mathbf e_1)\,u_1'(\mathbf x)\rangle}{\langle u_1'^2\rangle},
+\qquad
+g(r)=\frac{\langle u_2'(\mathbf x+r\mathbf e_1)\,u_2'(\mathbf x)\rangle}{\langle u_2'^2\rangle},
+$$
+with $f(0)=g(0)=1$. Continuity ($\partial R_{ij}/\partial r_j=0$) links the two:
+$$
+g(r)=f(r)+\tfrac12\,r\,\frac{\partial f}{\partial r}. \tag{$\star$}
+$$
+The integral length scales are the areas under the curves,
+$$
+L_{11}=\int_0^\infty f(r)\,dr,\qquad L_{22}=\int_0^\infty g(r)\,dr .
+$$
+
+# Part (a) — prove by hand
+
+::: {.callout-important}
+### Task (a): the transverse scale is half the longitudinal one
+
+Starting from $(\star)$, show that it can be rewritten as
+$$
+g(r)=\tfrac12\Big(f(r)+\frac{\partial}{\partial r}\big[r\,f(r)\big]\Big),
+$$
+and hence that
+$$
+\boxed{\,L_{22}=\int_0^\infty g(r)\,dr=\tfrac12\,L_{11}\,}.
+$$
+*Hint:* the $\partial_r[r f]$ term integrates exactly; assume $r\,f(r)\to0$ as
+$r\to\infty$.
+:::
+
+# Part (b) — prove by hand
+
+::: {.callout-important}
+### Task (b): the transverse correlation has zero first moment
+
+Show from $(\star)$ that
+$$
+\boxed{\,\int_0^\infty r\,g(r)\,dr = 0\,},
+$$
+assuming $f(r)$ decays faster than $r^{-2}$ at large $r$. Then interpret it: what
+must $g(r)$ do that $f(r)$ need not? (Think about the *sign* of $g$ at intermediate
+$r$.)
+:::
+
+# Part (c) — measure $f$, $g$ and the length scales on the DNS data
+
+Now verify (a) and (b) on the real cube. Because HIT has no mean flow, the
+fluctuations are the whole signal ($u_i'\approx u_i$).
+
+## c.1 Load the cube
+
+You already did this in Tutorial 1 — the same $200^3$ extract:
+
+```{python}
+#| eval: false
+import numpy as np, pandas as pd, matplotlib.pyplot as plt
+
+df  = pd.read_parquet('isotropic_cube.parquet')
+dim = 200
+dx  = 2*np.pi/1024                       # grid spacing of the parent 1024^3 DNS
+ii  = lambda c: (df[c]/dx).round().astype(int)
+
+u = np.zeros((dim,)*3, np.float32); u[ii('x'),ii('y'),ii('z')] = df['velocity_x'].values
+v = np.zeros((dim,)*3, np.float32); v[ii('x'),ii('y'),ii('z')] = df['velocity_y'].values
+w = np.zeros((dim,)*3, np.float32); w[ii('x'),ii('y'),ii('z')] = df['velocity_z'].values
+for a in (u, v, w):                      # subtract the (tiny) mean, just in case
+    a -= a.mean()
+
+r = np.arange(dim//2)*dx                 # separation axis
+```
+
+## c.2 An autocorrelation helper (FFT)
+
+The two-point correlation along one axis is an autocorrelation, so the FFT
+(Wiener–Khinchin theorem) computes it in one shot; average over the two
+perpendicular directions to reduce the noise:
+
+```{python}
+#| eval: false
+def corr_axis(field, axis):
+    """Normalized autocorrelation of `field` along `axis`, averaged over the plane."""
+    F = np.fft.fft(field, axis=axis)
+    R = np.fft.ifft((F*np.conj(F)).real, axis=axis).real        # Wiener–Khinchin
+    R = R.mean(axis=tuple(k for k in range(3) if k != axis))    # average other two axes
+    return R[:field.shape[axis]//2] / R[0]                      # nonneg lags, R(0)=1
+```
+
+## c.3 Build $f$ and $g$
+
+By isotropy you may average the three equivalent directions.
+
+- **Longitudinal** $f$: velocity component **parallel** to the separation
+  (along $x$ use $u$, along $y$ use $v$, along $z$ use $w$).
+- **Transverse** $g$: component **perpendicular** to the separation (two per axis).
+
+```{python}
+#| eval: false
+# Longitudinal (worked example — note the pattern):
+f = ( corr_axis(u, 0) + corr_axis(v, 1) + corr_axis(w, 2) ) / 3
+
+# TODO: transverse g — average the SIX perpendicular combinations
+#   axis x (0): components v and w ;  axis y (1): u and w ;  axis z (2): u and v
+# g = ( ... ) / 6
+```
+
+## c.4 The correlation figure and the integral scales
+
+```{python}
+#| eval: false
+trapz = getattr(np, "trapezoid", np.trapz)     # numpy>=2 renamed trapz -> trapezoid
+L11 = trapz(f, r);  L22 = trapz(g, r)
+print(f"L11 = {L11:.3f},  L22 = {L22:.3f},  ratio L22/L11 = {L22/L11:.2f}  (expect ~0.5)")
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.plot(r, f, 'o-', ms=4, label='longitudinal  f(r)')
+ax.plot(r, g, 's-', ms=4, label='transverse  g(r)')
+ax.axhline(0, color='0.7', lw=0.8)
+ax.set(xlabel='separation  r', ylabel='f(r),  g(r)')
+ax.legend(); ax.grid(alpha=0.3)
+```
+
+## c.5 Check your proofs against the data
+
+```{python}
+#| eval: false
+# (a)  L22/L11 should come out ~ 1/2
+# (b)  the first moment of g should vanish:
+print("∫ r g dr =", trapz(r*g, r), "   (expect ~ 0)")
+
+# (bonus) verify the isotropy relation (star) pointwise:
+g_from_f = f + 0.5*r*np.gradient(f, r)
+# ...compare g_from_f with your measured g
+```
+
+::: {.callout-tip}
+## What to hand in
+
+1. Your worked derivations for **(a)** and **(b)**.
+2. One figure of $f(r)$ and $g(r)$ versus $r$.
+3. The measured $L_{11}$, $L_{22}$ and the ratio $L_{22}/L_{11}$ — does it match part (a)?
+4. The value of $\int_0^\infty r\,g\,dr$ — does it match part (b)? Explain the sign of
+   $g$ that makes it vanish.
+5. **(Bonus)** the longitudinal Taylor microscale $\lambda_f$ from a parabola fit
+   $f(r)\approx 1-r^2/\lambda_f^2$ near $r=0$, and a check of the isotropy relation
+   $(\star)$.
+:::
+
+::: {.callout-note collapse="true"}
+## Expected shapes (sanity check)
+
+$f(r)$ starts at 1 and decays monotonically; $g(r)$ starts at 1, decays **faster**,
+and dips slightly **negative** before returning to zero — that negative lobe is
+exactly what makes $\int_0^\infty r\,g\,dr = 0$ (part b). The integral-scale ratio
+should land near $L_{22}/L_{11}\approx0.5$ (part a). Small deviations are finite-box
+and finite-sample effects.
+:::

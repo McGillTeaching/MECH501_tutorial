@@ -85,7 +85,7 @@ nu = 1.85e-4                       # kinematic viscosity of the JHTDB isotropic 
 dx = 2 * np.pi / 1024              # grid spacing of the parent 1024^3 simulation
 dim = 200                          # our sub-cube is 200^3
 
-df = pd.read_parquet("/project/60004/00_Assignment1/isotropic_t1.parquet")  # FULL 200^3 grid at one instant (isotropic.parquet is the time-series, wrong for spatial stats)
+df = pd.read_parquet("/project/60004/00_Assignment1/isotropic.parquet")
 
 def to_cube(component):
     """Scatter a flat velocity column onto the structured 200^3 grid."""

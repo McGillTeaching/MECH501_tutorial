@@ -1,0 +1,467 @@
+---
+title: "Assignment 2a: Two-point correlations & length scales"
+subtitle: "Verifying isotropy relations on the JHTDB DNS cube"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+jupyter: python3
+---
+
+::: {.callout-note}
+## What this assignment is about
+
+This assignment ties together the two ways we characterise a turbulent flow, both
+on the *same* Johns Hopkins isotropic DNS cube you met in Tutorial 1. **First** you
+measure the flow's integral quantities directly from the field — the turbulent
+kinetic energy $k$, the dissipation rate $\varepsilon$, and the characteristic
+scales built from them. **Then** you turn to the two-point correlation: you prove
+two classical isotropy results by hand and verify them on the cube, reproducing the
+longitudinal and transverse autocorrelations $f(r)$ and $g(r)$ (the classic
+grid-turbulence measurement) and the integral length scales.
+:::
+
+# The turbulent kinetic energy budget
+
+In the [Assignment 1 overview](assignment-01-dns.qmd) you learned to read the
+isotropic DNS field and manipulate it. Here you use it to evaluate the two central
+quantities of any turbulence calculation — the **turbulent kinetic energy** $k$ and
+its **dissipation rate** $\varepsilon$ — directly from the DNS, and then build the
+characteristic scales of the flow from them. This mirrors the $k$-equation analysis
+from lecture: instead of *modelling* these terms, you *measure* them.
+
+## The turbulent kinetic energy equation
+
+Applying the Reynolds decomposition $u_i = \langle u_i\rangle + u_i'$ to the
+Navier–Stokes equations and taking the mean gives the transport equation for
+the turbulent kinetic energy $k = \tfrac12\langle u_i' u_i'\rangle$:
+
+$$
+\underbrace{\frac{\partial k}{\partial t}}_{\text{unsteady}}
++ \underbrace{\langle u_j\rangle \frac{\partial k}{\partial x_j}}_{\text{advection}}
+= \underbrace{-\langle u_i' u_j'\rangle \frac{\partial \langle u_i\rangle}{\partial x_j}}_{\text{production } \mathcal{P}}
+- \underbrace{\varepsilon}_{\text{dissipation}}
++ \underbrace{\frac{\partial}{\partial x_j}\!\left(\cdots\right)}_{\text{transport } \mathcal{T}}
+$$ {#eq-tke}
+
+with the dissipation rate
+
+$$
+\varepsilon = 2\nu \langle s_{ij}' s_{ij}'\rangle,
+\qquad
+s_{ij}' = \tfrac12\!\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_j'}{\partial x_i}\right).
+$$ {#eq-eps}
+
+::: {.callout-tip}
+## Why the budget collapses for our flow
+
+Forced homogeneous isotropic turbulence is the cleanest possible case for
+@eq-tke, because almost every term drops out:
+
+- **No mean shear.** $\langle u_i\rangle \approx 0$ everywhere, so the mean
+  advection term *and* the production term $\mathcal{P} = -\langle u_i' u_j'\rangle\,\partial_j\langle u_i\rangle$ **both vanish** — there is no
+  mean gradient to extract energy from.
+- **Homogeneity.** Statistics do not depend on position, so every spatial
+  divergence — the transport term $\mathcal{T}$ — averages to **zero**.
+- **Stationarity.** The forcing injects energy at the large scales at a mean
+  rate $\mathcal{F}$ that, on average, holds $\partial k/\partial t = 0$.
+
+What remains is a single statement: **injection balances dissipation**,
+$\mathcal{F} = \varepsilon$. You cannot measure the artificial forcing
+$\mathcal{F}$ from a snapshot, but you *can* measure $k$ and $\varepsilon$
+directly — and from them every characteristic scale of the flow.
+:::
+
+## Loading the cube
+
+The tasks below assume the field has been reshaped from the flat table into a
+$200^3$ NumPy array per velocity component, exactly as in Tutorial 1. The grid
+spacing is that of the parent $1024^3$ simulation, $dx = 2\pi/1024$. This one load
+serves the whole assignment.
+
+```{python}
+#| eval: false
+import numpy as np, pandas as pd, matplotlib.pyplot as plt
+
+nu  = 1.85e-4                            # kinematic viscosity of the JHTDB isotropic DNS
+dim = 200                                # our sub-cube is 200^3
+dx  = 2*np.pi/1024                       # grid spacing of the parent 1024^3 DNS
+
+df  = pd.read_parquet('isotropic_t1.parquet')     # FULL 200^3 spatial grid at one instant (not the time-series isotropic.parquet)
+ii  = lambda c: (df[c]/dx).round().astype(int)
+
+u = np.zeros((dim,)*3, np.float64); u[ii('x'),ii('y'),ii('z')] = df['velocity_x'].values
+v = np.zeros((dim,)*3, np.float64); v[ii('x'),ii('y'),ii('z')] = df['velocity_y'].values
+w = np.zeros((dim,)*3, np.float64); w[ii('x'),ii('y'),ii('z')] = df['velocity_z'].values
+print(u.shape, u.dtype)
+```
+
+## Task 1 — Reynolds decomposition {#sec-task1}
+
+::: {.callout-important}
+### Task 1
+
+Because the flow is homogeneous, the ensemble average of lecture is, by
+ergodicity, the **spatial average over the cube**. Compute the mean of each
+velocity component, $\langle u_i\rangle$, and confirm it is small compared to
+the fluctuations. Then form the fluctuations $u_i' = u_i - \langle u_i\rangle$
+and compute the three component variances $\langle u_i'^2\rangle$.
+
+Report the three variances and comment (1–2 sentences): are they
+approximately equal, and what does that tell you about **isotropy**?
+:::
+
+::: {.content-visible when-profile="solutions"}
+::: {.solution-box}
+The three normal stresses are nearly equal — the signature of isotropy: no
+direction is preferred, so $\langle u_1'^2\rangle \approx \langle u_2'^2\rangle
+\approx \langle u_3'^2\rangle$. The means are $O(10^{-2})$ or smaller
+relative to the rms, confirming $\langle u_i\rangle \approx 0$.
+
+```{python}
+#| eval: false
+means = {c: a.mean() for c, a in zip("uvw", (u, v, w))}
+up, vp, wp = (a - a.mean() for a in (u, v, w))
+var = {c: (a ** 2).mean() for c, a in zip("uvw", (up, vp, wp))}
+print("means    :", means)
+print("variances:", var)
+```
+:::
+:::
+
+## Task 2 — Turbulent kinetic energy {#sec-task2}
+
+::: {.callout-important}
+### Task 2
+
+Compute the turbulent kinetic energy
+
+$$
+k = \tfrac12\langle u_i' u_i'\rangle
+  = \tfrac12\!\left(\langle u_1'^2\rangle + \langle u_2'^2\rangle + \langle u_3'^2\rangle\right).
+$$
+
+Report $k$ and the equivalent single-component rms velocity
+$u_{\mathrm{rms}} = \sqrt{2k/3}$.
+:::
+
+::: {.content-visible when-profile="solutions"}
+::: {.solution-box}
+```{python}
+#| eval: false
+k = 0.5 * (var["u"] + var["v"] + var["w"])
+u_rms = np.sqrt(2 * k / 3)
+print(f"k       = {k:.4e} m^2/s^2")
+print(f"u_rms   = {u_rms:.4e} m/s")
+```
+:::
+:::
+
+## Task 3 — Dissipation rate {#sec-task3}
+
+::: {.callout-important}
+### Task 3
+
+Evaluate the dissipation rate from its definition, @eq-eps. Use
+`numpy.gradient` with spacing `dx` to obtain the nine fluctuating velocity
+gradients $\partial u_i'/\partial x_j$, build the fluctuating strain-rate
+tensor $s_{ij}'$, and average:
+
+$$
+\varepsilon = 2\nu\,\langle s_{ij}' s_{ij}'\rangle .
+$$
+
+Then compute the **isotropic surrogate**
+$\varepsilon_{\mathrm{iso}} = 15\,\nu\,\big\langle (\partial u_1'/\partial x_1)^2\big\rangle$,
+which uses a single gradient, and compare the two. How close are they, and
+why should they agree for this flow?
+:::
+
+::: {.content-visible when-profile="solutions"}
+::: {.solution-box}
+For isotropic turbulence the full 12-gradient average and the single-gradient
+surrogate are equal in the mean, so the two estimates should differ only by a
+few percent (finite-sample and finite-difference error). Larger differences
+would flag anisotropy or under-resolution.
+
+```{python}
+#| eval: false
+# gradients: axis 0->x, 1->y, 2->z
+grad = {}
+for name, a in zip("uvw", (up, vp, wp)):
+    gx, gy, gz = np.gradient(a, dx, dx, dx)
+    grad[name] = (gx, gy, gz)
+
+# strain-rate tensor s_ij = 1/2 (du_i/dx_j + du_j/dx_i)
+comp = {"u": 0, "v": 1, "w": 2}
+S2 = np.zeros_like(up)
+for a in "uvw":
+    for b, j in comp.items():
+        i = comp[a]
+        s_ij = 0.5 * (grad[a][j] + grad[b][comp[a]])  # symmetric part
+        S2 += s_ij ** 2
+eps = 2 * nu * S2.mean()
+
+eps_iso = 15 * nu * (grad["u"][0] ** 2).mean()
+print(f"eps      = {eps:.4e} m^2/s^3")
+print(f"eps_iso  = {eps_iso:.4e} m^2/s^3   (ratio {eps/eps_iso:.3f})")
+```
+:::
+:::
+
+## Task 4 — Characteristic scales {#sec-task4}
+
+::: {.callout-important}
+### Task 4
+
+From $k$, $\varepsilon$ and $\nu$ alone, compute:
+
+- the **Kolmogorov scales** $\eta = (\nu^3/\varepsilon)^{1/4}$,
+  $\tau_\eta = (\nu/\varepsilon)^{1/2}$, $u_\eta = (\nu\varepsilon)^{1/4}$;
+- the **Taylor microscale** $\lambda = \sqrt{10\,\nu k/\varepsilon}$;
+- the **Taylor-microscale Reynolds number**
+  $\mathrm{Re}_\lambda = \dfrac{u_{\mathrm{rms}}\,\lambda}{\nu} = \sqrt{\dfrac{20\,k^2}{3\,\nu\,\varepsilon}}$.
+
+Compare your $\mathrm{Re}_\lambda$ to the published value for this dataset,
+$\mathrm{Re}_\lambda \approx 433$. Do they agree?
+:::
+
+::: {.content-visible when-profile="solutions"}
+::: {.solution-box}
+With the correct $k$ and $\varepsilon$, $\mathrm{Re}_\lambda$ should land near
+the published $\approx 433$. A large discrepancy usually means $\varepsilon$
+was under-estimated because the smallest scales are under-resolved by the
+finite differences.
+
+```{python}
+#| eval: false
+eta   = (nu ** 3 / eps) ** 0.25
+tau_e = (nu / eps) ** 0.5
+u_eta = (nu * eps) ** 0.25
+lam   = np.sqrt(10 * nu * k / eps)
+Re_lam = u_rms * lam / nu
+print(f"eta      = {eta:.4e} m")
+print(f"tau_eta  = {tau_e:.4e} s")
+print(f"lambda   = {lam:.4e} m")
+print(f"Re_lambda= {Re_lam:.1f}   (published ~ 433)")
+```
+:::
+:::
+
+## Background
+
+For homogeneous isotropic turbulence the two-point correlation
+$$
+R_{ij}(\mathbf r)=\langle u_i'(\mathbf x+\mathbf r)\,u_j'(\mathbf x)\rangle
+$$
+is completely determined by two scalar functions of the separation distance — the
+**longitudinal** and **transverse** autocorrelations,
+$$
+f(r)=\frac{\langle u_1'(\mathbf x+r\mathbf e_1)\,u_1'(\mathbf x)\rangle}{\langle u_1'^2\rangle},
+\qquad
+g(r)=\frac{\langle u_2'(\mathbf x+r\mathbf e_1)\,u_2'(\mathbf x)\rangle}{\langle u_2'^2\rangle},
+$$
+with $f(0)=g(0)=1$. Continuity ($\partial R_{ij}/\partial r_j=0$) links the two:
+$$
+g(r)=f(r)+\tfrac12\,r\,\frac{\partial f}{\partial r}. \tag{$\star$}
+$$
+The integral length scales are the areas under the curves,
+$$
+L_{11}=\int_0^\infty f(r)\,dr,\qquad L_{22}=\int_0^\infty g(r)\,dr .
+$$
+
+# Part (a) — prove by hand
+
+::: {.callout-important}
+### Task (a): the transverse scale is half the longitudinal one
+
+Starting from $(\star)$, show that it can be rewritten as
+$$
+g(r)=\tfrac12\Big(f(r)+\frac{\partial}{\partial r}\big[r\,f(r)\big]\Big),
+$$
+and hence that
+$$
+\boxed{\,L_{22}=\int_0^\infty g(r)\,dr=\tfrac12\,L_{11}\,}.
+$$
+*Hint:* the $\partial_r[r f]$ term integrates exactly; assume $r\,f(r)\to0$ as
+$r\to\infty$.
+:::
+
+# Part (b) — prove by hand
+
+::: {.callout-important}
+### Task (b): the transverse correlation has zero first moment
+
+Show from $(\star)$ that
+$$
+\boxed{\,\int_0^\infty r\,g(r)\,dr = 0\,},
+$$
+assuming $f(r)$ decays faster than $r^{-2}$ at large $r$. Then interpret it: what
+must $g(r)$ do that $f(r)$ need not? (Think about the *sign* of $g$ at intermediate
+$r$.)
+:::
+
+# Part (c) — measure $f$, $g$ and the length scales on the DNS data
+
+Now verify (a) and (b) on the real cube. Because HIT has no mean flow, the
+fluctuations are the whole signal ($u_i'\approx u_i$).
+
+## c.1 Prepare the fields
+
+The cube is already in memory from the budget part above. The correlations act on
+the velocity **fluctuations**, so subtract the (tiny) mean in place and set up the
+separation axis $r$:
+
+```{python}
+#| eval: false
+for a in (u, v, w):                      # u,v,w loaded above; make them fluctuations
+    a -= a.mean()
+
+r = np.arange(dim//2)*dx                 # separation axis
+```
+
+## c.2 An autocorrelation helper (FFT)
+
+The two-point correlation along one axis is an autocorrelation, so the FFT
+(Wiener–Khinchin theorem) computes it in one shot; average over the two
+perpendicular directions to reduce the noise:
+
+```{python}
+#| eval: false
+def corr_axis(field, axis):
+    """Normalized autocorrelation of `field` along `axis`, averaged over the plane."""
+    F = np.fft.fft(field, axis=axis)
+    R = np.fft.ifft((F*np.conj(F)).real, axis=axis).real        # Wiener–Khinchin
+    R = R.mean(axis=tuple(k for k in range(3) if k != axis))    # average other two axes
+    return R[:field.shape[axis]//2] / R[0]                      # nonneg lags, R(0)=1
+```
+
+## c.3 Your own correlation, then trust the FFT
+
+The FFT helper is a black box until you have reproduced it yourself. Implement the
+two-point correlation **directly from its definition** and check that the two agree.
+
+Along one axis, the normalized correlation at integer lag $m$ is
+
+$$
+R(m)=\frac{\big\langle\, u(\mathbf{x})\,u(\mathbf{x}+m\,\mathbf{e})\,\big\rangle_{\mathbf{x}}}
+{\big\langle\, u(\mathbf{x})^2\,\big\rangle_{\mathbf{x}}},
+$$
+
+the product of the field with a copy of itself shifted by $m$ cells, averaged over
+**all** starting points. The DNS box is periodic, so use a *circular* shift
+(`np.roll`) — that is exactly the correlation the FFT helper returns via
+Wiener–Khinchin, so the two must match to round-off.
+
+```{python}
+#| eval: false
+def corr_direct(field, axis):
+    """Same result as corr_axis, but computed straight from the definition (no FFT)."""
+    n = field.shape[axis]
+    f = np.moveaxis(field, axis, 0)          # put the working axis first
+    R = np.empty(n // 2)
+    for m in range(n // 2):
+        # TODO: circular lag-m product, averaged over EVERY point of the cube
+        #   R[m] = np.mean(f * np.roll(f, -m, axis=0))
+        R[m] = ...
+    return R / R[0]                          # normalize so R(0) = 1
+```
+
+Now check the two implementations against each other on one axis, and time them:
+
+```{python}
+#| eval: false
+import time
+
+R_fft    = corr_axis(u, 0)
+R_direct = corr_direct(u, 0)
+
+print("max |FFT - direct| =", np.max(np.abs(R_fft - R_direct)))   # expect ~1e-15
+
+t = time.perf_counter(); corr_axis(u, 0);   t_fft    = time.perf_counter() - t
+t = time.perf_counter(); corr_direct(u, 0); t_direct = time.perf_counter() - t
+print(f"FFT   : {t_fft:.4f} s")
+print(f"direct: {t_direct:.4f} s   ({t_direct/t_fft:.0f}x slower)")
+```
+
+Once you are convinced the two agree, use the fast `corr_axis` for everything
+below.
+
+## c.4 Build $f$ and $g$
+
+By isotropy you may average the three equivalent directions.
+
+- **Longitudinal** $f$: velocity component **parallel** to the separation
+  (along $x$ use $u$, along $y$ use $v$, along $z$ use $w$).
+- **Transverse** $g$: component **perpendicular** to the separation (two per axis).
+
+```{python}
+#| eval: false
+# Longitudinal (worked example — note the pattern):
+f = ( corr_axis(u, 0) + corr_axis(v, 1) + corr_axis(w, 2) ) / 3
+
+# TODO: transverse g — average the SIX perpendicular combinations
+#   axis x (0): components v and w ;  axis y (1): u and w ;  axis z (2): u and v
+# g = ( ... ) / 6
+```
+
+## c.5 The correlation figure and the integral scales
+
+```{python}
+#| eval: false
+trapz = getattr(np, "trapezoid", np.trapz)     # numpy>=2 renamed trapz -> trapezoid
+L11 = trapz(f, r);  L22 = trapz(g, r)
+print(f"L11 = {L11:.3f},  L22 = {L22:.3f},  ratio L22/L11 = {L22/L11:.2f}  (expect ~0.5)")
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.plot(r, f, 'o-', ms=4, label='longitudinal  f(r)')
+ax.plot(r, g, 's-', ms=4, label='transverse  g(r)')
+ax.axhline(0, color='0.7', lw=0.8)
+ax.set(xlabel='separation  r', ylabel='f(r),  g(r)')
+ax.legend(); ax.grid(alpha=0.3)
+```
+
+## c.6 Check your proofs against the data
+
+```{python}
+#| eval: false
+# (a)  L22/L11 should come out ~ 1/2
+# (b)  the first moment of g should vanish:
+print("∫ r g dr =", trapz(r*g, r), "   (expect ~ 0)")
+
+# (bonus) verify the isotropy relation (star) pointwise:
+g_from_f = f + 0.5*r*np.gradient(f, r)
+# ...compare g_from_f with your measured g
+```
+
+::: {.callout-tip}
+## What to hand in
+
+**From the budget part:** the three velocity variances and your isotropy comment
+(Task 1); $k$ and $u_{\mathrm{rms}}$ (Task 2); $\varepsilon$, the isotropic
+surrogate $\varepsilon_{\mathrm{iso}}$ and their ratio (Task 3); and the Kolmogorov
+scale $\eta$, Taylor microscale $\lambda$ and $\mathrm{Re}_\lambda$ compared to the
+published $\approx 433$ (Task 4).
+
+**From the correlation part:**
+
+1. Your worked derivations for **(a)** and **(b)**.
+2. Your `corr_direct` implementation, the maximum difference from the FFT helper
+   (it should be at round-off level), and the two timings — how much slower is the
+   direct version, and why?
+3. One figure of $f(r)$ and $g(r)$ versus $r$.
+4. The measured $L_{11}$, $L_{22}$ and the ratio $L_{22}/L_{11}$ — does it match part (a)?
+5. The value of $\int_0^\infty r\,g\,dr$ — does it match part (b)? Explain the sign of
+   $g$ that makes it vanish.
+6. **(Bonus)** the longitudinal Taylor microscale $\lambda_f$ from a parabola fit
+   $f(r)\approx 1-r^2/\lambda_f^2$ near $r=0$, and a check of the isotropy relation
+   $(\star)$.
+:::
+
+::: {.callout-note collapse="true"}
+## Expected shapes (sanity check)
+
+$f(r)$ starts at 1 and decays monotonically; $g(r)$ starts at 1, decays **faster**,
+and dips slightly **negative** before returning to zero — that negative lobe is
+exactly what makes $\int_0^\infty r\,g\,dr = 0$ (part b). The integral-scale ratio
+should land near $L_{22}/L_{11}\approx0.5$ (part a). Small deviations are finite-box
+and finite-sample effects.
+:::

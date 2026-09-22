@@ -1,0 +1,119 @@
+---
+title: "Assignment 2b: Do your own OpenFOAM simulation"
+subtitle: "A guided parameter study on the backward-facing step"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+---
+
+::: {.callout-note}
+## What you will do
+
+Starting from the converged `pitzDaily` case of the
+[OpenFOAM how-to](../openfoam/how-to.qmd), you will run a **controlled parameter
+study**: change *one* numerical ingredient at a time — the **mesh** and the
+**discretization scheme** — and measure how the solution responds. This is
+exactly how a practising CFD engineer builds trust in a result. You submit your
+**case archive plus a few key plots**.
+
+We keep the turbulence model fixed at $k$–$\varepsilon$ throughout; comparing
+turbulence models ($k$–$\omega$ SST and others) comes in a later assignment.
+:::
+
+## Baseline
+
+Copy your converged case to a fresh working folder and keep it as the reference:
+
+```bash
+module load openfoam/v2412
+cd /scratch/$USER
+cp -r pitzDaily baseline && cd baseline
+```
+
+Pick **one quantitative measure** to compare across all runs — e.g. the
+reattachment length behind the step, or the streamwise velocity profile on a
+vertical line a few step-heights downstream (`postProcess -func singleGraph`).
+Every study below is judged by how this measure changes.
+
+## Study A — Mesh sensitivity
+
+Refine the mesh and check whether your answer has stopped changing (grid
+independence).
+
+- Copy the baseline to `meshA_fine`. In `system/blockMeshDict`, roughly **double**
+  the cell counts (the numbers in the `hex (...) (nx ny nz) ...` lines), then rerun
+  `blockMesh` + `simpleFoam`.
+- Compare your measure on coarse vs. fine. Does it converge?
+
+::: {.callout-important}
+## A — deliverable
+Your measure on both meshes, and one sentence: is the baseline mesh fine enough?
+:::
+
+## Study B — Discretization scheme (numerical diffusion)
+
+Change **only** the convection scheme for momentum in `system/fvSchemes`, rerunning
+each time:
+
+```{.cpp}
+div(phi,U)   bounded Gauss upwind;                 // 1st order  — very diffusive
+div(phi,U)   bounded Gauss linearUpwind grad(U);   // 2nd order  — baseline
+div(phi,U)   Gauss linear;                          // central    — least diffusive
+```
+
+Compare the velocity field and your measure across the three. Which smears the
+shear layer? Does the central scheme show any oscillations or convergence
+trouble?
+
+::: {.callout-important}
+## B — deliverable
+One comparison plot (field or profile) of the three schemes, and two–three
+sentences linking what you see to **numerical diffusion** vs. **boundedness**
+from the lectures.
+:::
+
+## What to submit
+
+Upload to Crowdmark:
+
+1. **Case archive.** For each run, clean and tar the case (drop the mesh and old
+   time steps to keep it small):
+
+   ```bash
+   foamCleanTutorials                       # removes time dirs, keeps 0/ + dicts
+   cd .. && tar czf baseline.tgz baseline   # repeat per case
+   ```
+
+   Submit `baseline.tgz`, `meshA_fine.tgz`, and one archive per scheme in Study B.
+2. **Key plots (≤ 5).** Residual convergence for one run; a velocity-magnitude
+   field; and the comparison plot(s) of your chosen measure across Studies A and B.
+3. **Short discussion (≤ ½ page).** Answer the two deliverable questions above.
+
+::: {.callout-tip}
+Change **one thing at a time** and keep the baseline fixed — otherwise you cannot
+attribute a difference to any single cause. Note the wall-clock and iteration
+count for each run; refinement and higher-order schemes cost more.
+:::
+
+::: {.content-visible when-profile="solutions"}
+::: {.solution-box}
+**Expected trends (instructor notes).**
+
+- **A (mesh):** the coarse baseline is somewhat under-resolved; refining
+  lengthens/settles the reattachment as numerical (mesh) diffusion drops. The
+  measure should change less between fine and baseline than between baseline and
+  a deliberately coarse mesh — the signature of approaching grid independence.
+- **B (scheme):** first-order `upwind` adds strong numerical diffusion → the shear
+  layer is smeared and the recirculation shortened/washed out. `linearUpwind`
+  (2nd order) is sharper. Pure `linear` (central) is least diffusive but may show
+  wiggles or slower/failed convergence on this mesh — the accuracy-vs-boundedness
+  trade-off from the lecture.
+
+Grading: reward a clean one-variable-at-a-time design, a sensible quantitative
+measure, and physical interpretation over "prettier" plots.
+:::
+:::
+
+## References
+
+::: {#refs}
+:::

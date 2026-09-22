@@ -16,7 +16,7 @@ Confirm the registration flow for this instance and fill in below:
 
 - Is a **sign-up / registration code** required? If so, post it on myCourses.
 - Confirm the **Account** value shown on the Server Options page (e.g. `def-sponsor00`).
-- Confirm the **SSH login host** used on the [Terminal](terminal.qmd) page.
+- Confirm the **SSH login host** used on the [Terminal and vim](terminal.qmd) page.
 :::
 :::
 

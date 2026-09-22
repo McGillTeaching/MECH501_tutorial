@@ -1,5 +1,5 @@
 ---
-title: "Terminal and vim"
+title: "Terminal"
 subtitle: "Bash basics, a first look at vim, and --- later --- SSH"
 author: "MECH 501/600 — Computational Turbulence"
 date: last-modified
@@ -10,16 +10,16 @@ date: last-modified
 The **default** for this course is the terminal built into **JupyterLab** --- it is
 already a shell on the cluster, with nothing to install. Connecting from a terminal
 on **your own computer over SSH** is a more advanced option we introduce
-[at the end of this page](#ssh-advanced).
+[later on this page](#ssh-advanced).
 :::
 
-## The terminal
+## Open a terminal in JupyterLab
 
 In JupyterLab click the **+** (new Launcher) and choose **Terminal** (or
 **File ▸ New ▸ Terminal**). You now have a **bash** shell running on the cluster ---
 the same place your notebooks and files live.
 
-### Getting around and looking at files
+## Getting around and looking at files
 
 A handful of commands cover almost everything you need:
 
@@ -58,17 +58,41 @@ Press **Tab** to auto-complete file and folder names, and the **↑ / ↓** arro
 to scroll back through commands you already typed.
 :::
 
-### Make your shell nicer (optional)
+## A tiny bit of vim
 
-`~/.bashrc` runs every time you open a shell. The minimal setup below gives a
-readable two-line prompt, a longer timestamped history, and safer `rm`/`cp`/`mv`.
-Create it with `vim ~/.bashrc`, paste, save, then run `source ~/.bashrc` to apply
-it in the current shell.
+`vim` is a text editor that lives in the terminal. The one idea to grasp is that it
+has **modes**: you *move around* in **normal** mode and *type text* in **insert**
+mode.
+
+```bash
+vim system/controlDict     # open (or create) a file
+```
+
+| To… | do this |
+|---|---|
+| start typing | press **`i`** (enter insert mode) |
+| stop typing | press **`Esc`** (back to normal mode) |
+| save | type `:w` and Enter |
+| save and quit | type `:wq` and Enter |
+| quit without saving | type `:q!` and Enter |
+
+That is genuinely all you need to edit a case file; everything else in vim is a
+bonus.
+
+## Make the shell and vim nicer (optional)
+
+Two hidden files in your home directory configure your shell (`~/.bashrc`) and vim
+(`~/.vimrc`). They are optional, but the minimal setup below gives you a readable
+two-line prompt, a longer timestamped history, safer `rm`/`cp`/`mv`, and sensible
+vim defaults. Create each file once with `vim ~/.bashrc` / `vim ~/.vimrc`, paste,
+and save.
 
 ::: {.callout-tip collapse="true"}
 ## `~/.bashrc` --- click to expand
+Paste this into `~/.bashrc`, then run `source ~/.bashrc` to apply it in the current
+shell.
 
-```{.bash filename="~/.bashrc"}
+```bash filename="~/.bashrc"
 # ── Prompt ────────────────────────────────────────────────────────────────────
 git_branch() {
     git branch 2>/dev/null | grep '^\*' | sed 's/\* //'
@@ -125,37 +149,12 @@ export EDITOR=vim
 ```
 :::
 
-## vim
-
-`vim` is a text editor that lives in the terminal. The one idea to grasp is that it
-has **modes**: you *move around* in **normal** mode and *type text* in **insert**
-mode.
-
-```bash
-vim system/controlDict     # open (or create) a file
-```
-
-| To… | do this |
-|---|---|
-| start typing | press **`i`** (enter insert mode) |
-| stop typing | press **`Esc`** (back to normal mode) |
-| save | type `:w` and Enter |
-| save and quit | type `:wq` and Enter |
-| quit without saving | type `:q!` and Enter |
-
-That is genuinely all you need to edit a case file; everything else in vim is a
-bonus.
-
-### Make vim nicer (optional)
-
-`~/.vimrc` configures vim: line numbers, sensible indentation, search highlighting
-and a few handy shortcuts. Create it with `vim ~/.vimrc` and paste. The
-persistent-undo option needs its folder, so run `mkdir -p ~/.vim/undodir` once.
-
 ::: {.callout-tip collapse="true"}
 ## `~/.vimrc` --- click to expand
+Paste this into `~/.vimrc`. The persistent-undo option needs its folder to exist,
+so run `mkdir -p ~/.vim/undodir` once.
 
-```{.vim filename="~/.vimrc"}
+```vim filename="~/.vimrc"
 " ── General ───────────────────────────────────────────────────────────────────
 set nocompatible
 set encoding=utf-8
@@ -229,60 +228,22 @@ let g:netrw_winsize   = 25
 ```
 :::
 
-## Connecting over SSH (advanced) {#ssh-advanced}
+## SSH from your own computer {#ssh-advanced}
 
 ::: {.callout-note}
-## For later
+## More advanced --- for later
 You do **not** need this for the course: the JupyterLab terminal above is enough.
 Once command-line access is introduced, you can connect from a terminal on your own
 machine (macOS/Linux `Terminal`, or Windows PowerShell / WSL).
 :::
 
-### With a password
-
-The simplest way is to log in with the username and password you created during
-[Registration](registration.qmd) (replace `<username>` with your cluster username):
-
 ```bash
-ssh <username>@mech501.calculquebec.cloud   # asks for your password each time
+ssh <your-username>@<login-host>   # login host will be posted with this task
 ```
 
-### With an SSH key
-
-An **SSH key** is a pair of files: a *private* key that never leaves your computer
-and a matching *public* key you place on the cluster. The server checks that the two
-match instead of asking for a password --- so you log in without typing one, and it
-is more secure. Create a key once and copy the public half to the cluster:
-
-```bash
-ssh-keygen -t ed25519                              # creates ~/.ssh/id_ed25519 (+ .pub)
-ssh-copy-id <username>@mech501.calculquebec.cloud  # installs the public key there
-```
-
-From then on the same command logs you straight in, with no password:
-
-```bash
-ssh <username>@mech501.calculquebec.cloud
-```
-
-### A shortcut: `~/.ssh/config`
-
-Save the connection details under a short name in `~/.ssh/config`, so you can just
-type `ssh turb`:
-
-```{.bash filename="~/.ssh/config"}
-Host turb
-    HostName mech501.calculquebec.cloud
-    User <username>
-    IdentityFile ~/.ssh/id_ed25519
-```
-
-```bash
-ssh turb        # uses the HostName, User and key from the block above
-```
-
-Everything above --- navigation, viewing files, vim, and the `~/.bashrc` /
-`~/.vimrc` setup --- works exactly the same over SSH.
+using the same username and password you created during
+[Registration](registration.qmd). Everything above --- navigation, viewing files,
+vim, and the `~/.bashrc` / `~/.vimrc` setup --- works exactly the same over SSH.
 
 ::: {.content-visible when-profile="solutions"}
 ::: {.callout-warning}

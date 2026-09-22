@@ -50,5 +50,5 @@ CI then renders without re-running your post-processing.
 
 ## Adding a tutorial
 
-1. Copy `tutorials/tutorial-01.qmd` to `tutorials/tutorial-02.qmd`.
+1. Copy `tutorials/tutorial-00.qmd` to `tutorials/tutorial-01.qmd`.
 2. Add it to the `sidebar` section in `_quarto.yml` and to the table in `index.qmd`.
