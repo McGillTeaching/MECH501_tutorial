@@ -9,7 +9,7 @@
 <meta name="author" content="MECH 501/600 — Computational Turbulence">
 <meta name="dcterms.date" content="2026-09-22">
 
-<title>Assignment 1 · Part B: The turbulent kinetic energy budget – MECH 501/600 — Computational Turbulence</title>
+<title>Assignment 2a: Two-point correlations &amp; length scales – MECH 501/600 — Computational Turbulence</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -371,7 +371,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Assignment 1 · Part B: The turbulent kinetic energy budget</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../tutorials/tutorial-00.html">Tutorials and Assignments</a></li><li class="breadcrumb-item"><a href="../tutorials/assignment-02-correlations.html">Assignment 2a: Two-point correlations &amp; length scales</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -534,13 +534,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Tutorials and Assignments</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../tutorials/tutorial-00.html" class="sidebar-item-text sidebar-link">
@@ -561,7 +561,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tutorials/assignment-02-correlations.html" class="sidebar-item-text sidebar-link">
+  <a href="../tutorials/assignment-02-correlations.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Assignment 2a: Two-point correlations &amp; length scales</span></a>
   </div>
 </li>
@@ -583,14 +583,25 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-you-will-do" id="toc-what-you-will-do" class="nav-link active" data-scroll-target="#what-you-will-do"><span class="header-section-number">1</span> What you will do</a></li>
-  <li><a href="#the-turbulent-kinetic-energy-equation" id="toc-the-turbulent-kinetic-energy-equation" class="nav-link" data-scroll-target="#the-turbulent-kinetic-energy-equation"><span class="header-section-number">2</span> The turbulent kinetic energy equation</a></li>
-  <li><a href="#reading-the-field-as-a-structured-cube" id="toc-reading-the-field-as-a-structured-cube" class="nav-link" data-scroll-target="#reading-the-field-as-a-structured-cube"><span class="header-section-number">3</span> Reading the field as a structured cube</a></li>
-  <li><a href="#sec-task1" id="toc-sec-task1" class="nav-link" data-scroll-target="#sec-task1"><span class="header-section-number">4</span> Task 1 — Reynolds decomposition</a></li>
-  <li><a href="#sec-task2" id="toc-sec-task2" class="nav-link" data-scroll-target="#sec-task2"><span class="header-section-number">5</span> Task 2 — Turbulent kinetic energy</a></li>
-  <li><a href="#sec-task3" id="toc-sec-task3" class="nav-link" data-scroll-target="#sec-task3"><span class="header-section-number">6</span> Task 3 — Dissipation rate</a></li>
-  <li><a href="#sec-task4" id="toc-sec-task4" class="nav-link" data-scroll-target="#sec-task4"><span class="header-section-number">7</span> Task 4 — Characteristic scales</a></li>
-  <li><a href="#sec-task5" id="toc-sec-task5" class="nav-link" data-scroll-target="#sec-task5"><span class="header-section-number">8</span> Task 5 — Resolution and the budget</a></li>
+  <li><a href="#the-turbulent-kinetic-energy-budget" id="toc-the-turbulent-kinetic-energy-budget" class="nav-link active" data-scroll-target="#the-turbulent-kinetic-energy-budget">The turbulent kinetic energy budget</a>
+  <ul class="collapse">
+  <li><a href="#the-turbulent-kinetic-energy-equation" id="toc-the-turbulent-kinetic-energy-equation" class="nav-link" data-scroll-target="#the-turbulent-kinetic-energy-equation">The turbulent kinetic energy equation</a></li>
+  <li><a href="#loading-the-cube" id="toc-loading-the-cube" class="nav-link" data-scroll-target="#loading-the-cube">Loading the cube</a></li>
+  <li><a href="#sec-task1" id="toc-sec-task1" class="nav-link" data-scroll-target="#sec-task1">Task 1 — Reynolds decomposition</a></li>
+  <li><a href="#sec-task2" id="toc-sec-task2" class="nav-link" data-scroll-target="#sec-task2">Task 2 — Turbulent kinetic energy</a></li>
+  <li><a href="#sec-task3" id="toc-sec-task3" class="nav-link" data-scroll-target="#sec-task3">Task 3 — Dissipation rate</a></li>
+  <li><a href="#sec-task4" id="toc-sec-task4" class="nav-link" data-scroll-target="#sec-task4">Task 4 — Characteristic scales</a></li>
+  </ul></li>
+  <li><a href="#two-point-correlations-and-length-scales" id="toc-two-point-correlations-and-length-scales" class="nav-link" data-scroll-target="#two-point-correlations-and-length-scales">Two-point correlations and length scales</a>
+  <ul class="collapse">
+  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
+  <li><a href="#c.1-load-the-box-and-prepare-the-fields" id="toc-c.1-load-the-box-and-prepare-the-fields" class="nav-link" data-scroll-target="#c.1-load-the-box-and-prepare-the-fields">c.1 Load the box and prepare the fields</a></li>
+  <li><a href="#c.2-an-autocorrelation-helper-fft" id="toc-c.2-an-autocorrelation-helper-fft" class="nav-link" data-scroll-target="#c.2-an-autocorrelation-helper-fft">c.2 An autocorrelation helper (FFT)</a></li>
+  <li><a href="#c.3-your-own-correlation-then-trust-the-fft" id="toc-c.3-your-own-correlation-then-trust-the-fft" class="nav-link" data-scroll-target="#c.3-your-own-correlation-then-trust-the-fft">c.3 Your own correlation, then trust the FFT</a></li>
+  <li><a href="#c.4-build-f-and-g" id="toc-c.4-build-f-and-g" class="nav-link" data-scroll-target="#c.4-build-f-and-g">c.4 Build <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span></a></li>
+  <li><a href="#c.5-the-correlation-figure-and-the-integral-scales" id="toc-c.5-the-correlation-figure-and-the-integral-scales" class="nav-link" data-scroll-target="#c.5-the-correlation-figure-and-the-integral-scales">c.5 The correlation figure and the integral scales</a></li>
+  <li><a href="#c.6-check-the-isotropy-relations-against-the-data" id="toc-c.6-check-the-isotropy-relations-against-the-data" class="nav-link" data-scroll-target="#c.6-check-the-isotropy-relations-against-the-data">c.6 Check the isotropy relations against the data</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -598,10 +609,10 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../tutorials/tutorial-00.html">Tutorials and Assignments</a></li><li class="breadcrumb-item"><a href="../tutorials/assignment-02-correlations.html">Assignment 2a: Two-point correlations &amp; length scales</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Assignment 1 · Part B: The turbulent kinetic energy budget</h1>
-<p class="subtitle lead">Reynolds decomposition, TKE and dissipation from isotropic DNS</p>
+<h1 class="title">Assignment 2a: Two-point correlations &amp; length scales</h1>
+<p class="subtitle lead">Verifying isotropy relations on the JHTDB DNS cube</p>
 </div>
 
 
@@ -636,19 +647,18 @@ window.Quarto = {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Deliverables
+<span class="screen-reader-only">Note</span>What this assignment is about
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Complete <strong>Tasks 1–5</strong> and upload a single PDF (code, figures and short written answers) to <strong>Crowdmark</strong> by the posted deadline. This part is graded. You work from the isotropic DNS field introduced in the <a href="../tutorials/assignment-01-dns.html">Assignment 1 overview</a>; make sure you have read it first.</p>
+<p>This assignment ties together the two ways we characterise a turbulent flow, both on Johns Hopkins isotropic DNS data. <strong>First</strong> you measure the flow’s integral quantities directly from the field — the turbulent kinetic energy <span class="math inline">\(k\)</span>, the dissipation rate <span class="math inline">\(\varepsilon\)</span>, and the characteristic scales built from them — on the full-resolution <span class="math inline">\(200^3\)</span> sub-cube from Tutorial 1 (the small scales must be resolved for <span class="math inline">\(\varepsilon\)</span>). <strong>Then</strong> you turn to the two-point correlation: you verify two classical isotropy results on a larger <span class="math inline">\(512^3\)</span> periodic box (a fresh download that samples the large-scale correlations far better), reproducing the longitudinal and transverse autocorrelations <span class="math inline">\(f(r)\)</span> and <span class="math inline">\(g(r)\)</span> (the classic grid-turbulence measurement) and the integral length scales.</p>
 </div>
 </div>
-<section id="what-you-will-do" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="what-you-will-do"><span class="header-section-number">1</span> What you will do</h2>
-<p>In the <a href="../tutorials/assignment-01-dns.html">data-processing tutorial</a> you learned to read the field and manipulate it. Here you use it to evaluate the two central quantities of any turbulence calculation — the <strong>turbulent kinetic energy</strong> <span class="math inline">\(k\)</span> and its <strong>dissipation rate</strong> <span class="math inline">\(\varepsilon\)</span> — directly from the DNS, and then build the characteristic scales of the flow from them. This mirrors the <span class="math inline">\(k\)</span>-equation analysis from lecture: instead of <em>modelling</em> these terms, you <em>measure</em> them.</p>
-</section>
-<section id="the-turbulent-kinetic-energy-equation" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="the-turbulent-kinetic-energy-equation"><span class="header-section-number">2</span> The turbulent kinetic energy equation</h2>
+<section id="the-turbulent-kinetic-energy-budget" class="level1">
+<h1>The turbulent kinetic energy budget</h1>
+<p>In the <a href="../tutorials/assignment-01-dns.html">Assignment 1 overview</a> you learned to read the isotropic DNS field and manipulate it. Here you use it to evaluate the two central quantities of any turbulence calculation — the <strong>turbulent kinetic energy</strong> <span class="math inline">\(k\)</span> and its <strong>dissipation rate</strong> <span class="math inline">\(\varepsilon\)</span> — directly from the DNS, and then build the characteristic scales of the flow from them. This mirrors the <span class="math inline">\(k\)</span>-equation analysis from lecture: instead of <em>modelling</em> these terms, you <em>measure</em> them.</p>
+<section id="the-turbulent-kinetic-energy-equation" class="level2">
+<h2 class="anchored" data-anchor-id="the-turbulent-kinetic-energy-equation">The turbulent kinetic energy equation</h2>
 <p>Applying the Reynolds decomposition <span class="math inline">\(u_i = \langle u_i\rangle + u_i'\)</span> to the Navier–Stokes equations and taking the mean gives the transport equation for the turbulent kinetic energy <span class="math inline">\(k = \tfrac12\langle u_i' u_i'\rangle\)</span>:</p>
 <p><span id="eq-tke"><span class="math display">\[
 \underbrace{\frac{\partial k}{\partial t}}_{\text{unsteady}}
@@ -679,41 +689,40 @@ s_{ij}' = \tfrac12\!\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_
 <li><strong>Homogeneity.</strong> Statistics do not depend on position, so every spatial divergence — the transport term <span class="math inline">\(\mathcal{T}\)</span> — averages to <strong>zero</strong>.</li>
 <li><strong>Stationarity.</strong> The forcing injects energy at the large scales at a mean rate <span class="math inline">\(\mathcal{F}\)</span> that, on average, holds <span class="math inline">\(\partial k/\partial t = 0\)</span>.</li>
 </ul>
-<p>What remains is a single statement: <strong>injection balances dissipation</strong>, <span class="math inline">\(\mathcal{F} = \varepsilon\)</span>. You cannot measure the artificial forcing <span class="math inline">\(\mathcal{F}\)</span> from a snapshot, but you <em>can</em> measure <span class="math inline">\(k\)</span> and <span class="math inline">\(\varepsilon\)</span> directly — and from them every characteristic scale of the flow. That is the task.</p>
+<p>What remains is a single statement: <strong>injection balances dissipation</strong>, <span class="math inline">\(\mathcal{F} = \varepsilon\)</span>. You cannot measure the artificial forcing <span class="math inline">\(\mathcal{F}\)</span> from a snapshot, but you <em>can</em> measure <span class="math inline">\(k\)</span> and <span class="math inline">\(\varepsilon\)</span> directly — and from them every characteristic scale of the flow.</p>
 </div>
 </div>
 </section>
-<section id="reading-the-field-as-a-structured-cube" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="reading-the-field-as-a-structured-cube"><span class="header-section-number">3</span> Reading the field as a structured cube</h2>
-<p>The tasks below assume the field has been reshaped from the flat table into a <span class="math inline">\(200^3\)</span> NumPy array per velocity component. The grid spacing is that of the parent <span class="math inline">\(1024^3\)</span> simulation, <span class="math inline">\(dx = 2\pi/1024\)</span>, so the sub-cube has side <span class="math inline">\(L = 200\,dx = 2\pi\,(200/1024)\)</span>.</p>
-<div id="c59c494b" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>nu <span class="op">=</span> <span class="fl">1.85e-4</span>                       <span class="co"># kinematic viscosity of the JHTDB isotropic DNS</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>dx <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">/</span> <span class="dv">1024</span>              <span class="co"># grid spacing of the parent 1024^3 simulation</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>dim <span class="op">=</span> <span class="dv">200</span>                          <span class="co"># our sub-cube is 200^3</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"/project/60004/00_Assignment1/isotropic_t1.parquet"</span>)  <span class="co"># FULL 200^3 grid at one instant (isotropic.parquet is the time-series, wrong for spatial stats)</span></span>
+<section id="loading-the-cube" class="level2">
+<h2 class="anchored" data-anchor-id="loading-the-cube">Loading the cube</h2>
+<p>The tasks below assume the field has been reshaped from the flat table into a <span class="math inline">\(200^3\)</span> NumPy array per velocity component, exactly as in Tutorial 1. The grid spacing is that of the parent <span class="math inline">\(1024^3\)</span> simulation, <span class="math inline">\(dx = 2\pi/1024\)</span>. This load serves the <strong>budget part</strong> (Tasks 1–4); Part (c) loads a separate, larger cube. These files store the velocity components relative to the coordinate axes, so the loader also <strong>aligns</strong> them (a component’s longitudinal gradient is the smallest of its three) — this matters for both the dissipation surrogate <span class="math inline">\(\varepsilon_{\mathrm{iso}}\)</span> and the longitudinal/transverse correlations below.</p>
+<div id="14a4b6d3" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd, matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>nu  <span class="op">=</span> <span class="fl">1.85e-4</span>                            <span class="co"># kinematic viscosity of the JHTDB isotropic DNS</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>dim <span class="op">=</span> <span class="dv">200</span>                                <span class="co"># our sub-cube is 200^3</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>dx  <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">/</span><span class="dv">1024</span>                       <span class="co"># grid spacing of the parent 1024^3 DNS</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df  <span class="op">=</span> pd.read_parquet(<span class="st">'/project/60004/00_Assignment1/isotropic_t1.parquet'</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>ii  <span class="op">=</span> <span class="kw">lambda</span> c: (df[c]<span class="op">/</span>dx).<span class="bu">round</span>().astype(<span class="bu">int</span>)</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> to_cube(component):</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Scatter a flat velocity column onto the structured 200^3 grid."""</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    cube <span class="op">=</span> np.zeros((dim, dim, dim), dtype<span class="op">=</span>np.float64)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    ix <span class="op">=</span> (df[<span class="st">"x"</span>] <span class="op">/</span> dx).<span class="bu">round</span>().astype(<span class="bu">int</span>)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    iy <span class="op">=</span> (df[<span class="st">"y"</span>] <span class="op">/</span> dx).<span class="bu">round</span>().astype(<span class="bu">int</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    iz <span class="op">=</span> (df[<span class="st">"z"</span>] <span class="op">/</span> dx).<span class="bu">round</span>().astype(<span class="bu">int</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    cube[ix, iy, iz] <span class="op">=</span> df[component].values</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cube</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> to_cube(<span class="st">"velocity_x"</span>)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> to_cube(<span class="st">"velocity_y"</span>)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> to_cube(<span class="st">"velocity_z"</span>)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(u.shape, u.dtype)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> []</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> (<span class="st">'velocity_x'</span>, <span class="st">'velocity_y'</span>, <span class="st">'velocity_z'</span>):</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> np.zeros((dim,)<span class="op">*</span><span class="dv">3</span>, np.float64)<span class="op">;</span> a[ii(<span class="st">'x'</span>),ii(<span class="st">'y'</span>),ii(<span class="st">'z'</span>)] <span class="op">=</span> df[col].values</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    raw.append(a)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># align components with the axes: a component's longitudinal (parallel) gradient</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># is the smallest, so each component's own axis = argmin of its mean-square gradients</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> [np.gradient(a <span class="op">-</span> a.mean(), dx, dx, dx) <span class="cf">for</span> a <span class="kw">in</span> raw]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> np.array([[(g[i][j]<span class="op">**</span><span class="dv">2</span>).mean() <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)])</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>long_axis <span class="op">=</span> [<span class="bu">int</span>(np.argmin(G[i])) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)]</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">sorted</span>(long_axis) <span class="op">==</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>], <span class="st">"component-axis alignment ambiguous"</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>u, v, w <span class="op">=</span> (raw[long_axis.index(k)] <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>))</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"aligned (x,y,z) = components"</span>, [long_axis.index(k) <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)], u.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<hr>
 </section>
-<section id="sec-task1" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="sec-task1"><span class="header-section-number">4</span> Task 1 — Reynolds decomposition</h2>
+<section id="sec-task1" class="level2">
+<h2 class="anchored" data-anchor-id="sec-task1">Task 1 — Reynolds decomposition</h2>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -729,8 +738,8 @@ s_{ij}' = \tfrac12\!\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_
 </div>
 </div>
 </section>
-<section id="sec-task2" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="sec-task2"><span class="header-section-number">5</span> Task 2 — Turbulent kinetic energy</h2>
+<section id="sec-task2" class="level2">
+<h2 class="anchored" data-anchor-id="sec-task2">Task 2 — Turbulent kinetic energy</h2>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -750,8 +759,8 @@ k = \tfrac12\langle u_i' u_i'\rangle
 </div>
 </div>
 </section>
-<section id="sec-task3" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="sec-task3"><span class="header-section-number">6</span> Task 3 — Dissipation rate</h2>
+<section id="sec-task3" class="level2">
+<h2 class="anchored" data-anchor-id="sec-task3">Task 3 — Dissipation rate</h2>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -770,8 +779,8 @@ k = \tfrac12\langle u_i' u_i'\rangle
 </div>
 </div>
 </section>
-<section id="sec-task4" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="sec-task4"><span class="header-section-number">7</span> Task 4 — Characteristic scales</h2>
+<section id="sec-task4" class="level2">
+<h2 class="anchored" data-anchor-id="sec-task4">Task 4 — Characteristic scales</h2>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -788,47 +797,191 @@ k = \tfrac12\langle u_i' u_i'\rangle
 <li>the <strong>Taylor microscale</strong> <span class="math inline">\(\lambda = \sqrt{10\,\nu k/\varepsilon}\)</span>;</li>
 <li>the <strong>Taylor-microscale Reynolds number</strong> <span class="math inline">\(\mathrm{Re}_\lambda = \dfrac{u_{\mathrm{rms}}\,\lambda}{\nu} = \sqrt{\dfrac{20\,k^2}{3\,\nu\,\varepsilon}}\)</span>.</li>
 </ul>
-<p>Compare your <span class="math inline">\(\mathrm{Re}_\lambda\)</span> to the published value for this dataset, <span class="math inline">\(\mathrm{Re}_\lambda \approx 433\)</span>. Do they agree?</p>
+<p>Report your measured <span class="math inline">\(\mathrm{Re}_\lambda\)</span>. (For these files it comes out of order <span class="math inline">\(280\)</span> — averaging the four snapshots <span class="math inline">\(t_1\)</span>–<span class="math inline">\(t_4\)</span> tightens it — and it is the <span class="math inline">\(433\)</span> of the standard dataset.)</p>
 </div>
 </div>
 </section>
-<section id="sec-task5" class="level2" data-number="8">
-<h2 data-number="8" class="anchored" data-anchor-id="sec-task5"><span class="header-section-number">8</span> Task 5 — Resolution and the budget</h2>
-<div class="callout callout-style-default callout-important callout-titled">
+</section>
+<section id="two-point-correlations-and-length-scales" class="level1">
+<h1>Two-point correlations and length scales</h1>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">Background</h2>
+<p>For homogeneous isotropic turbulence the two-point correlation <span class="math display">\[
+R_{ij}(\mathbf r)=\langle u_i'(\mathbf x+\mathbf r)\,u_j'(\mathbf x)\rangle
+\]</span> is completely determined by two scalar functions of the separation distance — the <strong>longitudinal</strong> and <strong>transverse</strong> autocorrelations, <span class="math display">\[
+f(r)=\frac{\langle u_1'(\mathbf x+r\mathbf e_1)\,u_1'(\mathbf x)\rangle}{\langle u_1'^2\rangle},
+\qquad
+g(r)=\frac{\langle u_2'(\mathbf x+r\mathbf e_1)\,u_2'(\mathbf x)\rangle}{\langle u_2'^2\rangle},
+\]</span> with <span class="math inline">\(f(0)=g(0)=1\)</span>. Continuity (<span class="math inline">\(\partial R_{ij}/\partial r_j=0\)</span>) links the two: <span class="math display">\[
+g(r)=f(r)+\tfrac12\,r\,\frac{\partial f}{\partial r}. \tag{$\star$}
+\]</span> The integral length scales are the areas under the curves, <span class="math display">\[
+L_{11}=\int_0^\infty f(r)\,dr,\qquad L_{22}=\int_0^\infty g(r)\,dr .
+\]</span></p>
+<p>Two classical consequences of <span class="math inline">\((\star)\)</span>, which you will <strong>verify on the data below</strong>, are that the transverse integral scale is half the longitudinal one, <span class="math inline">\(L_{22}=\tfrac12 L_{11}\)</span>, and that the transverse correlation has zero first moment, <span class="math inline">\(\int_0^\infty r\,g\,dr=0\)</span> — so <span class="math inline">\(g\)</span> must dip <strong>negative</strong> at intermediate <span class="math inline">\(r\)</span>.</p>
+<p>Now measure <span class="math inline">\(f\)</span>, <span class="math inline">\(g\)</span> and the length scales on the real cube and check both. Because HIT has no mean flow, the fluctuations are the whole signal (<span class="math inline">\(u_i'\approx u_i\)</span>).</p>
+</section>
+<section id="c.1-load-the-box-and-prepare-the-fields" class="level2">
+<h2 class="anchored" data-anchor-id="c.1-load-the-box-and-prepare-the-fields">c.1 Load the box and prepare the fields</h2>
+<p>The correlations use the <strong>512³ periodic ensemble</strong> (<code>isotropic_512_ens*.npy</code> — the full <span class="math inline">\(2\pi\)</span> box sampled at stride 2), a much larger box than the budget sub-cube, so the large-scale correlations are far better resolved. Load one snapshot, split it into fluctuation components (HIT has no mean flow, so <span class="math inline">\(u_i'\approx u_i\)</span>), and set up the separation axis <span class="math inline">\(r\)</span>:</p>
+<div id="ae2e7ff4" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> glob</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dim <span class="op">=</span> <span class="dv">512</span>                                <span class="co"># 512^3 full periodic box</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>dx  <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">/</span>dim                         <span class="co"># stride-2 grid spacing</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>FILES <span class="op">=</span> <span class="bu">sorted</span>(glob.glob(<span class="st">'/project/60004/00_Assignment1/isotropic_512_ens*.npy'</span>))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.load(FILES[<span class="dv">0</span>]).astype(np.float32)   <span class="co"># (512, 512, 512, 3): components on the last axis</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> arr[..., <span class="dv">0</span>] <span class="op">-</span> arr[..., <span class="dv">0</span>].mean()         <span class="co"># fluctuations (raw JHTDB is already x,y,z aligned)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> arr[..., <span class="dv">1</span>] <span class="op">-</span> arr[..., <span class="dv">1</span>].mean()</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> arr[..., <span class="dv">2</span>] <span class="op">-</span> arr[..., <span class="dv">2</span>].mean()</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> arr                                       <span class="co"># free ~1.6 GB</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> np.arange(dim<span class="op">//</span><span class="dv">2</span>)<span class="op">*</span>dx                       <span class="co"># separation axis</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Task 5
+Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Two short written answers, backed by a number each:</p>
-<ol type="1">
-<li><strong>Resolution.</strong> The largest resolved wavenumber is <span class="math inline">\(\kappa_{\max} = \pi/dx\)</span>. Compute <span class="math inline">\(\kappa_{\max}\eta\)</span>. A well-resolved DNS has <span class="math inline">\(\kappa_{\max}\eta \gtrsim 1\)</span>. Is this field well resolved at the dissipative scale?</li>
-<li><strong>The budget.</strong> Using <a href="#eq-tke" class="quarto-xref">Eq.&nbsp;1</a> and the argument in the callout above, explain in 2–3 sentences why, for this flow, your measured <span class="math inline">\(\varepsilon\)</span> is also (in the mean) the rate at which the forcing injects energy — even though you never computed the forcing.</li>
-</ol>
+<p>Averaging <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> over all six <code>isotropic_512_ens*.npy</code> snapshots (loop over <code>FILES</code>, loading one at a time) tightens the statistics — do this for the final figure if you have time.</p>
 </div>
+</div>
+</section>
+<section id="c.2-an-autocorrelation-helper-fft" class="level2">
+<h2 class="anchored" data-anchor-id="c.2-an-autocorrelation-helper-fft">c.2 An autocorrelation helper (FFT)</h2>
+<p>The two-point correlation along one axis is an autocorrelation, so the FFT (Wiener–Khinchin theorem) computes it in one shot; average over the two perpendicular directions to reduce the noise:</p>
+<div id="66178209" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> corr_axis(field, axis):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Normalized autocorrelation of `field` along `axis`, averaged over the plane."""</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> np.fft.fft(field, axis<span class="op">=</span>axis)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    R <span class="op">=</span> np.fft.ifft((F<span class="op">*</span>np.conj(F)).real, axis<span class="op">=</span>axis).real        <span class="co"># Wiener–Khinchin</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    R <span class="op">=</span> R.mean(axis<span class="op">=</span><span class="bu">tuple</span>(k <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>) <span class="cf">if</span> k <span class="op">!=</span> axis))    <span class="co"># average other two axes</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> R[:field.shape[axis]<span class="op">//</span><span class="dv">2</span>] <span class="op">/</span> R[<span class="dv">0</span>]                      <span class="co"># nonneg lags, R(0)=1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="c.3-your-own-correlation-then-trust-the-fft" class="level2">
+<h2 class="anchored" data-anchor-id="c.3-your-own-correlation-then-trust-the-fft">c.3 Your own correlation, then trust the FFT</h2>
+<p>The FFT helper is a black box until you have reproduced it yourself. Implement the two-point correlation <strong>directly from its definition</strong> and check that the two agree.</p>
+<p>Along one axis, the normalized correlation at integer lag <span class="math inline">\(m\)</span> is</p>
+<p><span class="math display">\[
+R(m)=\frac{\big\langle\, u(\mathbf{x})\,u(\mathbf{x}+m\,\mathbf{e})\,\big\rangle_{\mathbf{x}}}
+{\big\langle\, u(\mathbf{x})^2\,\big\rangle_{\mathbf{x}}},
+\]</span></p>
+<p>the product of the field with a copy of itself shifted by <span class="math inline">\(m\)</span> cells, averaged over <strong>all</strong> starting points. The DNS box is periodic, so use a <em>circular</em> shift (<code>np.roll</code>) — that is exactly the correlation the FFT helper returns via Wiener–Khinchin, so the two must match to round-off.</p>
+<div id="cdf15f5b" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> corr_direct(field, axis):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Same result as corr_axis, but computed straight from the definition (no FFT)."""</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> field.shape[axis]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> np.moveaxis(field, axis, <span class="dv">0</span>)          <span class="co"># put the working axis first</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    R <span class="op">=</span> np.empty(n <span class="op">//</span> <span class="dv">2</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> m <span class="kw">in</span> <span class="bu">range</span>(n <span class="op">//</span> <span class="dv">2</span>):</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># </span><span class="al">TODO</span><span class="co">: circular lag-m product, averaged over EVERY point of the cube</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="co">#   R[m] = np.mean(f * np.roll(f, -m, axis=0))</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        R[m] <span class="op">=</span> ...</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> R <span class="op">/</span> R[<span class="dv">0</span>]                          <span class="co"># normalize so R(0) = 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now check the two implementations against each other on one axis, and time them:</p>
+<div id="d9635b73" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>R_fft    <span class="op">=</span> corr_axis(u, <span class="dv">0</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>R_direct <span class="op">=</span> corr_direct(u, <span class="dv">0</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"max |FFT - direct| ="</span>, np.<span class="bu">max</span>(np.<span class="bu">abs</span>(R_fft <span class="op">-</span> R_direct)))   <span class="co"># expect ~1e-15</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> time.perf_counter()<span class="op">;</span> corr_axis(u, <span class="dv">0</span>)<span class="op">;</span>   t_fft    <span class="op">=</span> time.perf_counter() <span class="op">-</span> t</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> time.perf_counter()<span class="op">;</span> corr_direct(u, <span class="dv">0</span>)<span class="op">;</span> t_direct <span class="op">=</span> time.perf_counter() <span class="op">-</span> t</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"FFT   : </span><span class="sc">{</span>t_fft<span class="sc">:.4f}</span><span class="ss"> s"</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"direct: </span><span class="sc">{</span>t_direct<span class="sc">:.4f}</span><span class="ss"> s   (</span><span class="sc">{</span>t_direct<span class="op">/</span>t_fft<span class="sc">:.0f}</span><span class="ss">x slower)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Once you are convinced the two agree, use the fast <code>corr_axis</code> for everything below.</p>
+</section>
+<section id="c.4-build-f-and-g" class="level2">
+<h2 class="anchored" data-anchor-id="c.4-build-f-and-g">c.4 Build <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span></h2>
+<p>By isotropy you may average the three equivalent directions.</p>
+<ul>
+<li><strong>Longitudinal</strong> <span class="math inline">\(f\)</span>: velocity component <strong>parallel</strong> to the separation (along <span class="math inline">\(x\)</span> use <span class="math inline">\(u\)</span>, along <span class="math inline">\(y\)</span> use <span class="math inline">\(v\)</span>, along <span class="math inline">\(z\)</span> use <span class="math inline">\(w\)</span>).</li>
+<li><strong>Transverse</strong> <span class="math inline">\(g\)</span>: component <strong>perpendicular</strong> to the separation (two per axis).</li>
+</ul>
+<div id="2f77d47e" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Longitudinal (worked example — note the pattern):</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> ( corr_axis(u, <span class="dv">0</span>) <span class="op">+</span> corr_axis(v, <span class="dv">1</span>) <span class="op">+</span> corr_axis(w, <span class="dv">2</span>) ) <span class="op">/</span> <span class="dv">3</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: transverse g — average the SIX perpendicular combinations</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   axis x (0): components v and w ;  axis y (1): u and w ;  axis z (2): u and v</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># g = ( ... ) / 6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="c.5-the-correlation-figure-and-the-integral-scales" class="level2">
+<h2 class="anchored" data-anchor-id="c.5-the-correlation-figure-and-the-integral-scales">c.5 The correlation figure and the integral scales</h2>
+<div id="f6ad4bfb" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>trapz <span class="op">=</span> <span class="bu">getattr</span>(np, <span class="st">"trapezoid"</span>, np.trapz)     <span class="co"># numpy&gt;=2 renamed trapz -&gt; trapezoid</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>L11 <span class="op">=</span> trapz(f, r)<span class="op">;</span>  L22 <span class="op">=</span> trapz(g, r)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"L11 = </span><span class="sc">{</span>L11<span class="sc">:.3f}</span><span class="ss">,  L22 = </span><span class="sc">{</span>L22<span class="sc">:.3f}</span><span class="ss">,  ratio L22/L11 = </span><span class="sc">{</span>L22<span class="op">/</span>L11<span class="sc">:.2f}</span><span class="ss">  (expect ~0.5)"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>ax.plot(r, f, <span class="st">'o-'</span>, ms<span class="op">=</span><span class="dv">4</span>, label<span class="op">=</span><span class="st">'longitudinal  f(r)'</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>ax.plot(r, g, <span class="st">'s-'</span>, ms<span class="op">=</span><span class="dv">4</span>, label<span class="op">=</span><span class="st">'transverse  g(r)'</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'0.7'</span>, lw<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">'separation  r'</span>, ylabel<span class="op">=</span><span class="st">'f(r),  g(r)'</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>ax.legend()<span class="op">;</span> ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="c.6-check-the-isotropy-relations-against-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="c.6-check-the-isotropy-relations-against-the-data">c.6 Check the isotropy relations against the data</h2>
+<div id="d6844f60" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># L22/L11 should come out ~ 1/2</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the first moment of g should vanish:</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"∫ r g dr ="</span>, trapz(r<span class="op">*</span>g, r), <span class="st">"   (expect ~ 0)"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (bonus) verify the isotropy relation (star) pointwise:</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>g_from_f <span class="op">=</span> f <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>r<span class="op">*</span>np.gradient(f, r)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ...compare g_from_f with your measured g</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Looking ahead
+<span class="screen-reader-only">Tip</span>What to hand in
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>From the budget part:</strong> the three velocity variances and your isotropy comment (Task 1); <span class="math inline">\(k\)</span> and <span class="math inline">\(u_{\mathrm{rms}}\)</span> (Task 2); <span class="math inline">\(\varepsilon\)</span>, the isotropic surrogate <span class="math inline">\(\varepsilon_{\mathrm{iso}}\)</span> and their ratio (Task 3); and the Kolmogorov scale <span class="math inline">\(\eta\)</span>, Taylor microscale <span class="math inline">\(\lambda\)</span> and your measured <span class="math inline">\(\mathrm{Re}_\lambda\)</span> (Task 4).</p>
+<p><strong>From the correlation part:</strong></p>
+<ol type="1">
+<li>Your <code>corr_direct</code> implementation, the maximum difference from the FFT helper (it should be at round-off level), and the two timings — how much slower is the direct version, and why?</li>
+<li>One figure of <span class="math inline">\(f(r)\)</span> and <span class="math inline">\(g(r)\)</span> versus <span class="math inline">\(r\)</span>.</li>
+<li>The measured <span class="math inline">\(L_{11}\)</span>, <span class="math inline">\(L_{22}\)</span> and the ratio — does <span class="math inline">\(L_{22}/L_{11}\approx\tfrac12\)</span>?</li>
+<li>The value of <span class="math inline">\(\int_0^\infty r\,g\,dr\)</span> — does it vanish? Explain the sign of <span class="math inline">\(g\)</span> that makes it so.</li>
+<li><strong>(Bonus)</strong> the longitudinal Taylor microscale <span class="math inline">\(\lambda_f\)</span> from a parabola fit <span class="math inline">\(f(r)\approx 1-r^2/\lambda_f^2\)</span> near <span class="math inline">\(r=0\)</span>, and a check of the isotropy relation <span class="math inline">\((\star)\)</span>.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Expected shapes (sanity check)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The two-point correlation, the integral length scale and the full energy spectrum — the <em>scale-by-scale</em> picture of the same cube — are the subject of a later tutorial. Here you characterised the flow by its integral quantities (<span class="math inline">\(k\)</span>, <span class="math inline">\(\varepsilon\)</span>) and the scales built from them; next you will resolve how energy is distributed across wavenumbers.</p>
+<p><span class="math inline">\(f(r)\)</span> starts at 1 and decays monotonically; <span class="math inline">\(g(r)\)</span> starts at 1, decays <strong>faster</strong>, and dips slightly <strong>negative</strong> before returning to zero — that negative lobe is exactly what makes <span class="math inline">\(\int_0^\infty r\,g\,dr = 0\)</span>. The integral-scale ratio should land near <span class="math inline">\(L_{22}/L_{11}\approx0.5\)</span>. Small deviations are finite-box and finite-sample effects.</p>
 </div>
 </div>
 </div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

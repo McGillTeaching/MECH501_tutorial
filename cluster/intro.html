@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="MECH 501/600 — Computational Turbulence">
-<meta name="dcterms.date" content="2026-09-09">
+<meta name="dcterms.date" content="2026-09-22">
 
 <title>Intro – MECH 501/600 — Computational Turbulence</title>
 <style>
@@ -316,13 +316,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Python</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../openfoam/how-to.html"> 
+<span class="menu-text">OpenFOAM</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../tutorials/tutorial-00.html"> 
-<span class="menu-text">Tutorials</span></a>
+<span class="menu-text">Tutorials &amp; Assignments</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/YOUR_USERNAME/MECH501_Tutorial"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/mcgillteaching/MECH501_tutorial"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -412,7 +416,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../cluster/terminal.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Terminal (later)</span></a>
+ <span class="menu-text">Terminal and vim</span></a>
   </div>
 </li>
       </ul>
@@ -479,12 +483,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
- <span class="menu-text">Tutorials</span></a>
+ <span class="menu-text">OpenFOAM</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/how-to.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">OpenFOAM How-To: your first RANS case</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/paraview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ParaView: visualising your OpenFOAM results</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Tutorials and Assignments</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../tutorials/tutorial-00.html" class="sidebar-item-text sidebar-link">
@@ -505,8 +532,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tutorials/assignment-01-kequation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 1 · Part B: The turbulent kinetic energy budget</span></a>
+  <a href="../tutorials/assignment-02-correlations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2a: Two-point correlations &amp; length scales</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/assignment-02b-openfoam.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2b: Do your own OpenFOAM simulation</span></a>
   </div>
 </li>
       </ul>
@@ -551,7 +584,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 9, 2026</p>
+      <p class="date">September 22, 2026</p>
     </div>
   </div>
   
@@ -739,7 +772,7 @@ window.addEventListener('load', function () {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/McGillTeaching\.github\.io\/MECH501_tutorial\/");
+        var filterRegex = new RegExp("https:\/\/mcgillteaching\.github\.io\/MECH501_tutorial\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

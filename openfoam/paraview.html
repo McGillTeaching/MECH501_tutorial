@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="MECH 501 — Computational Turbulence">
-<meta name="dcterms.date" content="2026-09-09">
+<meta name="author" content="MECH 501/600 — Computational Turbulence">
+<meta name="dcterms.date" content="2026-09-22">
 
-<title>Tutorial 1: The law of the wall – MECH 501/600 — Computational Turbulence</title>
+<title>ParaView: visualising your OpenFOAM results – MECH 501/600 — Computational Turbulence</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -27,41 +27,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -116,35 +81,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -345,13 +281,17 @@ window.Quarto = {
 <span class="menu-text">Python</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../openfoam/how-to.html"> 
+<span class="menu-text">OpenFOAM</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../tutorials/tutorial-00.html"> 
-<span class="menu-text">Tutorials</span></a>
+<span class="menu-text">Tutorials &amp; Assignments</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/YOUR_USERNAME/MECH501_Tutorial"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/mcgillteaching/MECH501_tutorial"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -367,7 +307,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Tutorial 1: The law of the wall</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../openfoam/how-to.html">OpenFOAM</a></li><li class="breadcrumb-item"><a href="../openfoam/paraview.html">ParaView: visualising your OpenFOAM results</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -441,7 +381,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../cluster/terminal.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Terminal (later)</span></a>
+ <span class="menu-text">Terminal and vim</span></a>
   </div>
 </li>
       </ul>
@@ -507,13 +447,36 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
- <span class="menu-text">Tutorials</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">OpenFOAM</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/how-to.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">OpenFOAM How-To: your first RANS case</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/paraview.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">ParaView: visualising your OpenFOAM results</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Tutorials and Assignments</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../tutorials/tutorial-00.html" class="sidebar-item-text sidebar-link">
@@ -534,8 +497,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tutorials/assignment-01-kequation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 1 · Part B: The turbulent kinetic energy budget</span></a>
+  <a href="../tutorials/assignment-02-correlations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2a: Two-point correlations &amp; length scales</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/assignment-02b-openfoam.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2b: Do your own OpenFOAM simulation</span></a>
   </div>
 </li>
       </ul>
@@ -550,10 +519,31 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background"><span class="header-section-number">1</span> Background</a></li>
-  <li><a href="#python-post-processing-example" id="toc-python-post-processing-example" class="nav-link" data-scroll-target="#python-post-processing-example"><span class="header-section-number">2</span> Python post-processing example</a></li>
-  <li><a href="#a-first-look-at-openfoam" id="toc-a-first-look-at-openfoam" class="nav-link" data-scroll-target="#a-first-look-at-openfoam"><span class="header-section-number">3</span> A first look at OpenFOAM</a></li>
-  <li><a href="#working-on-the-cluster" id="toc-working-on-the-cluster" class="nav-link" data-scroll-target="#working-on-the-cluster"><span class="header-section-number">4</span> Working on the cluster</a></li>
+  <li><a href="#open-the-case" id="toc-open-the-case" class="nav-link active" data-scroll-target="#open-the-case"><span class="header-section-number">1</span> Open the case</a></li>
+  <li><a href="#select-a-field-to-display" id="toc-select-a-field-to-display" class="nav-link" data-scroll-target="#select-a-field-to-display"><span class="header-section-number">2</span> Select a field to display</a>
+  <ul class="collapse">
+  <li><a href="#rescale-the-colour-map" id="toc-rescale-the-colour-map" class="nav-link" data-scroll-target="#rescale-the-colour-map"><span class="header-section-number">2.1</span> Rescale the colour map</a></li>
+  </ul></li>
+  <li><a href="#explore-the-geometry-with-clip-and-slice" id="toc-explore-the-geometry-with-clip-and-slice" class="nav-link" data-scroll-target="#explore-the-geometry-with-clip-and-slice"><span class="header-section-number">3</span> Explore the geometry with Clip and Slice</a>
+  <ul class="collapse">
+  <li><a href="#slice-view-a-2-d-cross-section" id="toc-slice-view-a-2-d-cross-section" class="nav-link" data-scroll-target="#slice-view-a-2-d-cross-section"><span class="header-section-number">3.1</span> Slice — view a 2-D cross-section</a></li>
+  <li><a href="#clip-remove-half-the-domain" id="toc-clip-remove-half-the-domain" class="nav-link" data-scroll-target="#clip-remove-half-the-domain"><span class="header-section-number">3.2</span> Clip — remove half the domain</a></li>
+  </ul></li>
+  <li><a href="#velocity-vectors" id="toc-velocity-vectors" class="nav-link" data-scroll-target="#velocity-vectors"><span class="header-section-number">4</span> Velocity vectors</a></li>
+  <li><a href="#streamlines" id="toc-streamlines" class="nav-link" data-scroll-target="#streamlines"><span class="header-section-number">5</span> Streamlines</a></li>
+  <li><a href="#plot-a-velocity-profile-over-a-line" id="toc-plot-a-velocity-profile-over-a-line" class="nav-link" data-scroll-target="#plot-a-velocity-profile-over-a-line"><span class="header-section-number">6</span> Plot a velocity profile over a line</a>
+  <ul class="collapse">
+  <li><a href="#export-the-data" id="toc-export-the-data" class="nav-link" data-scroll-target="#export-the-data"><span class="header-section-number">6.1</span> Export the data</a></li>
+  </ul></li>
+  <li><a href="#pressure-field" id="toc-pressure-field" class="nav-link" data-scroll-target="#pressure-field"><span class="header-section-number">7</span> Pressure field</a></li>
+  <li><a href="#annotate-and-adjust-the-view-for-export" id="toc-annotate-and-adjust-the-view-for-export" class="nav-link" data-scroll-target="#annotate-and-adjust-the-view-for-export"><span class="header-section-number">8</span> Annotate and adjust the view for export</a>
+  <ul class="collapse">
+  <li><a href="#camera-controls" id="toc-camera-controls" class="nav-link" data-scroll-target="#camera-controls"><span class="header-section-number">8.1</span> Camera controls</a></li>
+  <li><a href="#add-a-colour-bar-and-title" id="toc-add-a-colour-bar-and-title" class="nav-link" data-scroll-target="#add-a-colour-bar-and-title"><span class="header-section-number">8.2</span> Add a colour bar and title</a></li>
+  <li><a href="#save-a-screenshot" id="toc-save-a-screenshot" class="nav-link" data-scroll-target="#save-a-screenshot"><span class="header-section-number">8.3</span> Save a screenshot</a></li>
+  </ul></li>
+  <li><a href="#quick-reference-most-used-filters-for-cfd" id="toc-quick-reference-most-used-filters-for-cfd" class="nav-link" data-scroll-target="#quick-reference-most-used-filters-for-cfd"><span class="header-section-number">9</span> Quick reference — most-used filters for CFD</a></li>
+  <li><a href="#expected-result-what-you-should-see" id="toc-expected-result-what-you-should-see" class="nav-link" data-scroll-target="#expected-result-what-you-should-see"><span class="header-section-number">10</span> Expected result — what you should see</a></li>
   </ul>
 </nav>
     </div>
@@ -561,10 +551,10 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../openfoam/how-to.html">OpenFOAM</a></li><li class="breadcrumb-item"><a href="../openfoam/paraview.html">ParaView: visualising your OpenFOAM results</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Tutorial 1: The law of the wall</h1>
-<p class="subtitle lead">Wall-bounded turbulence &amp; Python post-processing</p>
+<h1 class="title">ParaView: visualising your OpenFOAM results</h1>
+<p class="subtitle lead">A guided tour on the pitzDaily backward-facing step</p>
 </div>
 
 
@@ -574,14 +564,14 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>MECH 501 — Computational Turbulence </p>
+             <p>MECH 501/600 — Computational Turbulence </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 9, 2026</p>
+      <p class="date">September 22, 2026</p>
     </div>
   </div>
   
@@ -593,213 +583,275 @@ window.Quarto = {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Deliverables
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Answer <strong>Tasks 1–3</strong> below and upload a single PDF to <strong>Crowdmark</strong> by the posted deadline. Include all requested plots and short written answers.</p>
-</div>
-</div>
-<section id="background" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="background"><span class="header-section-number">1</span> Background</h2>
-<p>In wall-bounded turbulent flows, the mean streamwise velocity near the wall follows universal scaling laws when expressed in <em>viscous (wall) units</em>:</p>
-<p><span class="math display">\[
-u^+ = \frac{\bar{u}}{u_\tau}, \qquad
-y^+ = \frac{y \, u_\tau}{\nu}, \qquad
-u_\tau = \sqrt{\frac{\tau_w}{\rho}}
-\]</span></p>
-<p>Two regions are of particular interest:</p>
-<ul>
-<li><strong>Viscous sublayer</strong> (<span class="math inline">\(y^+ \lesssim 5\)</span>): <span class="math inline">\(\; u^+ = y^+\)</span></li>
-<li><strong>Log-law region</strong> (<span class="math inline">\(y^+ \gtrsim 30\)</span>): <span class="math inline">\(\; u^+ = \frac{1}{\kappa} \ln y^+ + B\)</span></li>
-</ul>
-<p>with <span class="math inline">\(\kappa \approx 0.41\)</span> and <span class="math inline">\(B \approx 5.2\)</span>.</p>
+<p>ParaView is an open-source, cross-platform visualisation application designed for large-scale scientific datasets. It can handle the full range of OpenFOAM output — structured and unstructured meshes, time series, and multi-processor reconstructed fields — and provides an interactive 3-D render view alongside quantitative analysis tools such as line plots, surface integrals, and data export. For HPC workflows it can also render server-side: on the course cluster you open it inside a <strong>remote desktop served through JupyterLab</strong>, so the heavy rendering happens on the compute node and you interact with it in your browser.</p>
+<p>This tutorial walks through the most important ParaView features using the pitzDaily backward-facing step case as a concrete example. By the end you will be able to visualise velocity and pressure fields, extract profiles, add streamlines, and export publication-ready images.</p>
+<p>All steps assume you are working on the course cluster through JupyterLab (<a href="https://mech501.calculquebec.cloud/" class="uri">https://mech501.calculquebec.cloud/</a>). If you have not set that up yet, see the <a href="../cluster/index.html">Cluster</a> and <a href="../cluster/jupyterlab.html">JupyterLab</a> pages.</p>
+<hr>
+<section id="open-the-case" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="open-the-case"><span class="header-section-number">1</span> Open the case</h2>
+<ol type="1">
+<li><p>In the JupyterLab <strong>Launcher</strong>, open the <strong>Desktop</strong> (VNC) tile, then double-click the <strong>Paraview</strong> icon to start ParaView.</p></li>
+<li><p>In ParaView, go to <strong>File → Open</strong>.</p></li>
+<li><p>Navigate to your case directory under scratch, e.g.</p>
+<pre><code>/scratch/$USER/pitzDaily/</code></pre></li>
+<li><p>Select the trigger file <code>pitzDaily.foam</code> (create it first from a terminal if it does not exist: <code>touch pitzDaily.foam</code>). The name doesn’t matter as long as it ends with <code>.foam</code>.</p></li>
+<li><p>Click <strong>OK</strong>, then click <strong>Apply</strong> in the Properties panel on the left.</p></li>
+</ol>
+<p>ParaView reads all time directories at once. You should see the geometry appear in the render view — a long rectangular channel with a small step on the left.</p>
+<blockquote class="blockquote">
+<p><strong>Nothing visible?</strong> Make sure <strong>Wireframe</strong> or <strong>Surface</strong> is selected in the toolbar representation dropdown (not <strong>Points</strong>), and press <strong>R</strong> to reset the camera to fit the geometry.</p>
+</blockquote>
+<hr>
 </section>
-<section id="python-post-processing-example" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="python-post-processing-example"><span class="header-section-number">2</span> Python post-processing example</h2>
-<p>The cell below builds a composite mean-velocity profile (Spalding’s law) and compares it to the two limiting behaviours. Run it yourself — you will adapt this code in the tasks.</p>
-<div id="cell-fig-law-of-the-wall" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>kappa, B <span class="op">=</span> <span class="fl">0.41</span>, <span class="fl">5.2</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Spalding's law gives y+ as a function of u+ (implicit profile)</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>u_plus <span class="op">=</span> np.linspace(<span class="fl">0.01</span>, <span class="dv">25</span>, <span class="dv">400</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>y_plus <span class="op">=</span> u_plus <span class="op">+</span> np.exp(<span class="op">-</span>kappa <span class="op">*</span> B) <span class="op">*</span> (</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    np.exp(kappa <span class="op">*</span> u_plus) <span class="op">-</span> <span class="dv">1</span> <span class="op">-</span> kappa <span class="op">*</span> u_plus</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> (kappa <span class="op">*</span> u_plus) <span class="op">**</span> <span class="dv">2</span> <span class="op">/</span> <span class="dv">2</span> <span class="op">-</span> (kappa <span class="op">*</span> u_plus) <span class="op">**</span> <span class="dv">3</span> <span class="op">/</span> <span class="dv">6</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="fl">4.5</span>))</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>ax.semilogx(y_plus, u_plus, <span class="st">"k-"</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"Spalding (composite)"</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>yp <span class="op">=</span> np.logspace(<span class="op">-</span><span class="dv">1</span>, <span class="fl">1.2</span>, <span class="dv">50</span>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>ax.semilogx(yp, yp, <span class="st">"b--"</span>, label<span class="op">=</span><span class="vs">r"</span><span class="dv">$</span><span class="vs">u</span><span class="dv">^</span><span class="op">+</span><span class="vs"> = y</span><span class="dv">^</span><span class="op">+</span><span class="dv">$</span><span class="vs"> </span><span class="kw">(</span><span class="vs">viscous sublayer</span><span class="kw">)</span><span class="vs">"</span>)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>yp <span class="op">=</span> np.logspace(<span class="dv">1</span>, <span class="fl">3.5</span>, <span class="dv">50</span>)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>ax.semilogx(yp, np.log(yp) <span class="op">/</span> kappa <span class="op">+</span> B, <span class="st">"r--"</span>,</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            label<span class="op">=</span><span class="vs">r"</span><span class="dv">$</span><span class="vs">u</span><span class="dv">^</span><span class="op">+</span><span class="vs"> = </span><span class="ch">\f</span><span class="vs">rac</span><span class="op">{1}</span><span class="vs">{</span><span class="er">\</span><span class="vs">kappa}</span><span class="er">\</span><span class="vs">ln y</span><span class="dv">^</span><span class="op">+</span><span class="vs"> </span><span class="op">+</span><span class="vs"> B</span><span class="dv">$</span><span class="vs"> </span><span class="kw">(</span><span class="vs">log law</span><span class="kw">)</span><span class="vs">"</span>)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="vs">r"</span><span class="dv">$</span><span class="vs">y</span><span class="dv">^</span><span class="op">+</span><span class="dv">$</span><span class="vs">"</span>)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="vs">r"</span><span class="dv">$</span><span class="vs">u</span><span class="dv">^</span><span class="op">+</span><span class="dv">$</span><span class="vs">"</span>)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="fl">0.1</span>, <span class="dv">3000</span>)</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="dv">27</span>)</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>, which<span class="op">=</span><span class="st">"both"</span>)</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div id="fig-law-of-the-wall" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-law-of-the-wall-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="tutorial-01_files/figure-html/fig-law-of-the-wall-output-1.png" width="660" height="418" class="figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-law-of-the-wall-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Law of the wall: Spalding’s composite profile vs.&nbsp;the viscous sublayer and log law.
-</figcaption>
+<section id="select-a-field-to-display" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="select-a-field-to-display"><span class="header-section-number">2</span> Select a field to display</h2>
+<p>At the top of the render window there are two dropdowns side by side:</p>
+<pre><code>[ U ▾ ]   [ Magnitude ▾ ]</code></pre>
+<ul>
+<li>The <strong>left dropdown</strong> selects the field: <code>U</code> (velocity), <code>p</code> (pressure), <code>k</code> (turbulent kinetic energy), <code>epsilon</code>, etc.</li>
+<li>The <strong>right dropdown</strong> selects the component: <code>Magnitude</code>, <code>X</code>, <code>Y</code>, or <code>Z</code>.</li>
+</ul>
+<p>For a first look, set it to <strong>U → Magnitude</strong>. The channel will be coloured by flow speed, with blue at rest and red at peak velocity.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Figures/Magnitude.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>PitzDaily Velocity Magnitude</figcaption>
 </figure>
 </div>
+<section id="rescale-the-colour-map" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="rescale-the-colour-map"><span class="header-section-number">2.1</span> Rescale the colour map</h3>
+<p>The automatic range may include boundary artefacts. Click the <strong>Rescale to Data Range</strong> button (the double-arrow icon in the colour bar, or <strong>View → Color Map Editor → Rescale</strong>) to fit the colour range to the actual field values.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Figures/Magnitude_rescale.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>PitzDaily Velocity Magnitude</figcaption>
+</figure>
 </div>
+<p>To change the colour map go to <strong>View → Color Map Editor</strong>, click <strong>Choose Preset</strong> (the grid icon), and select a map. <strong>Cool to Warm</strong> and <strong>Viridis</strong> are good choices for velocity; avoid rainbow maps for published work.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Figures/Colorchoice.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>PitzDaily ColorMaps</figcaption>
+</figure>
 </div>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Task 1 — Sublayer/log-law crossover
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Using the code above as a starting point, find (numerically) the value of <span class="math inline">\(y^+\)</span> where the viscous-sublayer law and the log law intersect. Plot both laws, mark the intersection point, and briefly comment (2–3 sentences) on why neither law is accurate in the <em>buffer layer</em>.</p>
-</div>
-</div>
+<hr>
 </section>
-<section id="a-first-look-at-openfoam" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="a-first-look-at-openfoam"><span class="header-section-number">3</span> A first look at OpenFOAM</h2>
-<p>From Tutorial 2 you will run turbulent channel-flow simulations in OpenFOAM. As a preview, turbulence modelling is configured in <code>constant/turbulenceProperties</code>:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>constant/turbulenceProperties</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-2" data-filename="constant/turbulenceProperties"><pre class="sourceCode cpp code-annotation-code code-with-copy code-annotated"><code class="sourceCode cpp"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*--------------------------------*- C++ -*----------------------------------*\</span></span>
-<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a><span class="co">| =========                 |                                                 |</span></span>
-<span id="annotated-cell-2-3"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a><span class="co">| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |</span></span>
-<span id="annotated-cell-2-4"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a><span class="co">\*---------------------------------------------------------------------------*/</span></span>
-<span id="annotated-cell-2-5"><a href="#annotated-cell-2-5" aria-hidden="true" tabindex="-1"></a>FoamFile</span>
-<span id="annotated-cell-2-6"><a href="#annotated-cell-2-6" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="annotated-cell-2-7"><a href="#annotated-cell-2-7" aria-hidden="true" tabindex="-1"></a>    version     <span class="fl">2.0</span><span class="op">;</span></span>
-<span id="annotated-cell-2-8"><a href="#annotated-cell-2-8" aria-hidden="true" tabindex="-1"></a>    format      ascii<span class="op">;</span></span>
-<span id="annotated-cell-2-9"><a href="#annotated-cell-2-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span>       dictionary<span class="op">;</span></span>
-<span id="annotated-cell-2-10"><a href="#annotated-cell-2-10" aria-hidden="true" tabindex="-1"></a>    object      turbulenceProperties<span class="op">;</span></span>
-<span id="annotated-cell-2-11"><a href="#annotated-cell-2-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="annotated-cell-2-12"><a href="#annotated-cell-2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-2-13"><a href="#annotated-cell-2-13" aria-hidden="true" tabindex="-1"></a>simulationType  RAS<span class="op">;</span></span>
-<span id="annotated-cell-2-14"><a href="#annotated-cell-2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-2-15"><a href="#annotated-cell-2-15" aria-hidden="true" tabindex="-1"></a>RAS</span>
-<span id="annotated-cell-2-16"><a href="#annotated-cell-2-16" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-2-17" class="code-annotation-target"><a href="#annotated-cell-2-17" aria-hidden="true" tabindex="-1"></a>    RASModel        kOmegaSST<span class="op">;</span></span>
-<span id="annotated-cell-2-18"><a href="#annotated-cell-2-18" aria-hidden="true" tabindex="-1"></a>    turbulence      on<span class="op">;</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-2-19" class="code-annotation-target"><a href="#annotated-cell-2-19" aria-hidden="true" tabindex="-1"></a>    printCoeffs     on<span class="op">;</span></span>
-<span id="annotated-cell-2-20"><a href="#annotated-cell-2-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="17" data-code-annotation="1">The turbulence model — we will compare <code>kOmegaSST</code> and <code>kEpsilon</code> later in the course.</span>
-</dd>
-<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
-<dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="19" data-code-annotation="2">Prints the model coefficients to the log at startup, useful for reproducibility.</span>
-</dd>
-</dl>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Task 2 — Wall treatment
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>In one short paragraph: what near-wall mesh resolution (in terms of the first-cell <span class="math inline">\(y^+\)</span>) does a <em>wall-resolved</em> RANS computation require, and how does this differ when <em>wall functions</em> are used? Relate your answer to the regions identified in Task 1.</p>
-</div>
-</div>
 </section>
-<section id="working-on-the-cluster" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="working-on-the-cluster"><span class="header-section-number">4</span> Working on the cluster</h2>
-<p>You can run the Python examples locally or on the course cluster.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Local machine</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Cluster (SLURM)</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create an environment once</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv mech501</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> mech501/bin/activate</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install numpy matplotlib scipy</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># run a script</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> task1.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># log in (use your course account)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> username@cluster.example.ca      <span class="co"># </span><span class="al">TODO</span><span class="co">: actual hostname</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># load modules</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load python/3.11 scipy-stack</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># submit a job</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> job.sh</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span>          <span class="co"># check status</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Example <code>job.sh</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=mech501-t1</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=00:10:00</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=1</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=2G</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load python/3.11 scipy-stack</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> task1.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Task 3 — First contact with the cluster
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Log in to the cluster, run <code>hostname</code> and <code>module list</code>, and include a screenshot (or copied terminal output) in your Crowdmark submission.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Hint: SSH keys
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Set up an SSH key pair (<code>ssh-keygen</code>, then <code>ssh-copy-id</code>) so you don’t have to type your password every time.</p>
-</div>
-</div>
-</div>
+<section id="explore-the-geometry-with-clip-and-slice" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="explore-the-geometry-with-clip-and-slice"><span class="header-section-number">3</span> Explore the geometry with Clip and Slice</h2>
+<section id="slice-view-a-2-d-cross-section" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="slice-view-a-2-d-cross-section"><span class="header-section-number">3.1</span> Slice — view a 2-D cross-section</h3>
+<ol type="1">
+<li>With the <code>.foam</code> reader selected in the Pipeline Browser, go to <strong>Filters → Search</strong> (or press <code>/</code>) and type <code>Slice</code>.</li>
+<li>In the Properties panel set the <strong>Normal</strong> to <code>(0, 0, 1)</code> (the z-axis) and <strong>Origin</strong> to <code>(0, 0, 0)</code> — the midplane of the 2-D domain.</li>
+<li>Click <strong>Apply</strong>.</li>
+</ol>
+<p>You now have a flat 2-D view of the velocity field across the channel — this is the canonical way to inspect pitzDaily results. Note, that the simulation was already 2-D. Therefore, you should see essentially the same picture.</p>
+</section>
+<section id="clip-remove-half-the-domain" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="clip-remove-half-the-domain"><span class="header-section-number">3.2</span> Clip — remove half the domain</h3>
+<ol type="1">
+<li>Apply <strong>Filters → Clip</strong> to the reader.</li>
+<li>Set the plane normal to <code>(0, 1, 0)</code> (y-axis) and adjust the origin to cut through the step height.</li>
+<li>Click <strong>Apply</strong>.</li>
+</ol>
+<p>Use Clip to reveal interior structure in 3-D cases. For pitzDaily (which is essentially 2-D), you remove basically half the domain.</p>
+<hr>
+</section>
+</section>
+<section id="velocity-vectors" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="velocity-vectors"><span class="header-section-number">4</span> Velocity vectors</h2>
+<p>Vectors help you see flow direction, not just magnitude.</p>
+<ol type="1">
+<li>Select the <code>.foam</code> reader (or the Slice filter) in the Pipeline Browser.</li>
+<li>Go to <strong>Filters → Alphabetical → Glyph</strong> (or search for <code>Glyph</code>).</li>
+<li>In Properties:
+<ul>
+<li><strong>Glyph Type</strong>: Arrow</li>
+<li><strong>Orientation Array</strong>: U</li>
+<li><strong>Scale Array</strong>: U, <strong>Scale Factor</strong>: adjust until arrows are legible (start with <code>0.005</code>)</li>
+<li><strong>Glyph Mode</strong>: Every Nth Point — set N to something like <code>5</code> to avoid overcrowding</li>
+</ul></li>
+<li>Click <strong>Apply</strong>.</li>
+</ol>
+<p>The recirculation zone behind the step should now be clearly visible as arrows pointing upstream near the bottom wall. (hide the <code>.foam</code> to see this better)</p>
+<hr>
+</section>
+<section id="streamlines" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="streamlines"><span class="header-section-number">5</span> Streamlines</h2>
+<p>Streamlines trace the path a massless particle would follow in the velocity field.</p>
+<ol type="1">
+<li>Select the <code>.foam</code> reader in the Pipeline Browser.</li>
+<li><strong>Filters → Search → Stream Tracer</strong>.</li>
+<li>In Properties:
+<ul>
+<li><strong>Vectors</strong>: U</li>
+<li><strong>Integrator Type</strong>: Runge-Kutta 4-5</li>
+<li><strong>Seed Type</strong>: High Resolution Line Source
+<ul>
+<li>Set the line from <code>(0, 0, 0.0005)</code> to <code>(0, 0.025, 0.005)</code> — a vertical seed line just downstream of the step</li>
+</ul></li>
+<li><strong>Max Streamline Length</strong>: 3 (metres — adjust to your domain size)</li>
+</ul></li>
+<li>Click <strong>Apply</strong>.</li>
+</ol>
+<p>Colour the streamlines by <strong>U Magnitude</strong> to show speed along the path. You should see streamlines curling around the recirculation bubble behind the step.</p>
+<hr>
+</section>
+<section id="plot-a-velocity-profile-over-a-line" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="plot-a-velocity-profile-over-a-line"><span class="header-section-number">6</span> Plot a velocity profile over a line</h2>
+<p>This extracts quantitative data — e.g.&nbsp;the U-velocity profile at a given x-station — which you can compare against reference data or analytical solutions.</p>
+<ol type="1">
+<li>Select the <code>.foam</code> reader.</li>
+<li><strong>Filters → Search → Plot Over Line</strong>.</li>
+<li>Set the line endpoints to sample a vertical profile at, say, x = 0.1 m:
+<ul>
+<li><strong>Point 1</strong>: <code>(0.1, -0.02, 0.05)</code></li>
+<li><strong>Point 2</strong>: <code>(0.1,  0.05, 0.05)</code></li>
+</ul></li>
+<li>Click <strong>Apply</strong>.</li>
+</ol>
+<p>A new <strong>Line Chart View</strong> opens automatically. To show only U_X:</p>
+<ul>
+<li>In the Properties panel under <strong>Series Parameters</strong>, uncheck everything except <code>U_X</code>.</li>
+</ul>
+<section id="export-the-data" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="export-the-data"><span class="header-section-number">6.1</span> Export the data</h3>
+<p>Right-click anywhere in the chart and choose <strong>Export Scene</strong> (or go to <strong>File → Export Scene</strong>) to save the profile as a CSV for further analysis in Python or MATLAB.</p>
+<hr>
+</section>
+</section>
+<section id="pressure-field" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="pressure-field"><span class="header-section-number">7</span> Pressure field</h2>
+<p>Switch the display field to <strong>p</strong> to inspect the pressure distribution.</p>
+<p>Key things to look for in pitzDaily:</p>
+<ul>
+<li>A high-pressure stagnation region on the front face of the step.</li>
+<li>A low-pressure core in the recirculation zone immediately behind the step.</li>
+<li>Pressure recovering toward the outlet as the flow reattaches.</li>
+</ul>
+<p>Pressure is stored as <em>kinematic</em> pressure (p/ρ, units m² s⁻²) in incompressible OpenFOAM cases — multiply by the fluid density if you need Pascals.</p>
+<hr>
+</section>
+<section id="annotate-and-adjust-the-view-for-export" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="annotate-and-adjust-the-view-for-export"><span class="header-section-number">8</span> Annotate and adjust the view for export</h2>
+<section id="camera-controls" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="camera-controls"><span class="header-section-number">8.1</span> Camera controls</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Action</th>
+<th>Mouse / Keyboard</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rotate</td>
+<td>Left-click drag</td>
+</tr>
+<tr class="even">
+<td>Pan</td>
+<td>Middle-click drag (or Shift + left drag)</td>
+</tr>
+<tr class="odd">
+<td>Zoom</td>
+<td>Scroll wheel</td>
+</tr>
+<tr class="even">
+<td>Reset camera</td>
+<td><strong>R</strong></td>
+</tr>
+<tr class="odd">
+<td>Set to +X / +Y / +Z view</td>
+<td><strong>Numpad 1 / 2 / 3</strong> (if available)</td>
+</tr>
+</tbody>
+</table>
+<p>For the pitzDaily 2-D case, lock to the XY plane with <strong>View → Standard Views → +Z</strong>.</p>
+</section>
+<section id="add-a-colour-bar-and-title" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="add-a-colour-bar-and-title"><span class="header-section-number">8.2</span> Add a colour bar and title</h3>
+<ul>
+<li><strong>View → Show Color Bar</strong> (if not already visible).</li>
+<li>Double-click the colour bar label to edit the title (e.g.&nbsp;change <code>U_Magnitude</code> to <code>Velocity magnitude (m/s)</code>).</li>
+<li><strong>View → Annotation</strong> → Add a <strong>Text</strong> annotation for figure titles or labels.</li>
+</ul>
+</section>
+<section id="save-a-screenshot" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="save-a-screenshot"><span class="header-section-number">8.3</span> Save a screenshot</h3>
+<p><strong>File → Save Screenshot</strong>: - Set resolution to at least <strong>1920 × 1080</strong> for reports (or 300 dpi equivalent for journal figures). - Format: PNG for lossless, JPEG for smaller file size.</p>
+<hr>
+</section>
+</section>
+<section id="quick-reference-most-used-filters-for-cfd" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="quick-reference-most-used-filters-for-cfd"><span class="header-section-number">9</span> Quick reference — most-used filters for CFD</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Filter</th>
+<th>What it does</th>
+<th>Where to find it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Slice</strong></td>
+<td>2-D cross-section through the domain</td>
+<td>Filters → Slice</td>
+</tr>
+<tr class="even">
+<td><strong>Clip</strong></td>
+<td>Removes part of the domain</td>
+<td>Filters → Clip</td>
+</tr>
+<tr class="odd">
+<td><strong>Glyph</strong></td>
+<td>Draws arrows / cones for vector fields</td>
+<td>Filters → Alphabetical → Glyph</td>
+</tr>
+<tr class="even">
+<td><strong>Stream Tracer</strong></td>
+<td>Computes streamlines</td>
+<td>Filters → Stream Tracer</td>
+</tr>
+<tr class="odd">
+<td><strong>Plot Over Line</strong></td>
+<td>Extracts a 1-D profile and plots it</td>
+<td>Filters → Data Analysis → Plot Over Line</td>
+</tr>
+<tr class="even">
+<td><strong>Integrate Variables</strong></td>
+<td>Computes area/volume integrals (e.g.&nbsp;mass flow)</td>
+<td>Filters → Data Analysis</td>
+</tr>
+<tr class="odd">
+<td><strong>Calculator</strong></td>
+<td>Derives new fields (e.g.&nbsp;vorticity, Cp)</td>
+<td>Filters → Alphabetical → Calculator</td>
+</tr>
+<tr class="even">
+<td><strong>Warp By Vector</strong></td>
+<td>Deforms mesh by a vector field</td>
+<td>Filters → Alphabetical → Warp By Vector</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="expected-result-what-you-should-see" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="expected-result-what-you-should-see"><span class="header-section-number">10</span> Expected result — what you should see</h2>
+<p>For a converged pitzDaily run at Re ≈ 5 000:</p>
+<ul>
+<li><strong>Velocity</strong>: a thin high-speed jet separates at the step corner, a recirculation zone forms immediately downstream (reattachment length ≈ 7–8 step heights), and the flow gradually refills the channel.</li>
+<li><strong>Pressure</strong>: pressure minimum in the core of the recirculation bubble, smooth recovery toward the outlet.</li>
+<li><strong>Streamlines</strong>: a clear clockwise vortex in the recirculation zone when viewed from the +Z direction.</li>
+</ul>
+<hr>
 
 
 </section>
@@ -910,7 +962,7 @@ window.addEventListener('load', function () {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/McGillTeaching\.github\.io\/MECH501_tutorial\/");
+        var filterRegex = new RegExp("https:\/\/mcgillteaching\.github\.io\/MECH501_tutorial\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

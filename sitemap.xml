@@ -1,83 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/python/03-oop.html</loc>
-    <lastmod>2026-09-09T14:27:41.102Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/python/03-oop.html</loc>
+    <lastmod>2026-09-22T01:48:01.606Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/python/02-foundations.html</loc>
-    <lastmod>2026-09-09T14:27:41.102Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/python/02-foundations.html</loc>
+    <lastmod>2026-09-22T01:48:01.606Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/python/01-plotting.html</loc>
-    <lastmod>2026-09-09T14:27:41.102Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/python/01-plotting.html</loc>
+    <lastmod>2026-09-22T01:48:01.606Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/python/index.html</loc>
-    <lastmod>2026-09-09T14:27:41.102Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/python/index.html</loc>
+    <lastmod>2026-09-22T01:48:01.606Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/cluster/vscode.html</loc>
-    <lastmod>2026-09-09T14:27:41.099Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/cluster/vscode.html</loc>
+    <lastmod>2026-09-22T01:48:01.591Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/cluster/jupyterlab.html</loc>
-    <lastmod>2026-09-09T14:27:41.099Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/cluster/jupyterlab.html</loc>
+    <lastmod>2026-09-22T01:48:01.590Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/cluster/intro.html</loc>
-    <lastmod>2026-09-09T14:27:41.099Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/cluster/intro.html</loc>
+    <lastmod>2026-09-22T01:48:01.590Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/tutorials/assignment-01-kequation.html</loc>
-    <lastmod>2026-09-09T14:27:41.104Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/tutorials/assignment-01-kequation.html</loc>
+    <lastmod>2026-09-22T01:48:01.608Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/tutorials/tutorial-01.html</loc>
-    <lastmod>2026-09-09T14:27:41.104Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/tutorials/assignment-02-correlations.html</loc>
+    <lastmod>2026-09-22T01:48:01.608Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/tutorials/tutorial-00.html</loc>
-    <lastmod>2026-09-09T14:27:41.104Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/tutorials/assignment-01-dns.html</loc>
+    <lastmod>2026-09-22T01:48:01.608Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/index.html</loc>
-    <lastmod>2026-09-09T14:27:41.100Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/openfoam/how-to.html</loc>
+    <lastmod>2026-09-22T01:48:01.603Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/tutorials/assignment-01-dns.html</loc>
-    <lastmod>2026-09-09T14:27:41.104Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/index.html</loc>
+    <lastmod>2026-09-22T01:48:01.591Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/tutorials/assignment-01-processing.html</loc>
-    <lastmod>2026-09-09T14:27:41.104Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/openfoam/paraview.html</loc>
+    <lastmod>2026-09-22T01:48:01.604Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/cluster/index.html</loc>
-    <lastmod>2026-09-09T14:27:41.099Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/tutorials/tutorial-00.html</loc>
+    <lastmod>2026-09-22T01:48:01.608Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/cluster/registration.html</loc>
-    <lastmod>2026-09-09T14:27:41.099Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/tutorials/assignment-02b-openfoam.html</loc>
+    <lastmod>2026-09-22T01:48:01.608Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/cluster/terminal.html</loc>
-    <lastmod>2026-09-09T14:27:41.099Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/tutorials/assignment-01-processing.html</loc>
+    <lastmod>2026-09-22T01:48:01.608Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/python/04-functional.html</loc>
-    <lastmod>2026-09-09T14:27:41.102Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/cluster/index.html</loc>
+    <lastmod>2026-09-22T01:48:01.590Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/python/05-internals.html</loc>
-    <lastmod>2026-09-09T14:27:41.102Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/cluster/registration.html</loc>
+    <lastmod>2026-09-22T01:48:01.590Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/python/07-packaging.html</loc>
-    <lastmod>2026-09-09T14:27:41.102Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/cluster/terminal.html</loc>
+    <lastmod>2026-09-22T01:48:01.591Z</lastmod>
   </url>
   <url>
-    <loc>https://McGillTeaching.github.io/MECH501_tutorial/python/06-engineering.html</loc>
-    <lastmod>2026-09-09T14:27:41.102Z</lastmod>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/python/04-functional.html</loc>
+    <lastmod>2026-09-22T01:48:01.606Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/python/05-internals.html</loc>
+    <lastmod>2026-09-22T01:48:01.606Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/python/07-packaging.html</loc>
+    <lastmod>2026-09-22T01:48:01.606Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mcgillteaching.github.io/MECH501_tutorial/python/06-engineering.html</loc>
+    <lastmod>2026-09-22T01:48:01.606Z</lastmod>
   </url>
 </urlset>

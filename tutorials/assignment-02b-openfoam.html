@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="MECH 501/600 — Computational Turbulence">
+<meta name="dcterms.date" content="2026-09-22">
 
-<title>MECH 501/600 — Computational Turbulence</title>
+<title>Assignment 2b: Do your own OpenFOAM simulation – MECH 501/600 — Computational Turbulence</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,31 +28,86 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./assets/logo.svg" rel="icon" type="image/svg+xml">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-d5e46415c29d9d8c13eb6bbdb046d278.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-de796b6c22395099d9080256ea69e99e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-d5e46415c29d9d8c13eb6bbdb046d278.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-789ffd21cf41be4c2c01b4b03a5fd8df.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-489a8b5e2aa4355ee7db231f82495c65.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-789ffd21cf41be4c2c01b4b03a5fd8df.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/logo.svg" rel="icon" type="image/svg+xml">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-d5e46415c29d9d8c13eb6bbdb046d278.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-de796b6c22395099d9080256ea69e99e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-d5e46415c29d9d8c13eb6bbdb046d278.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-789ffd21cf41be4c2c01b4b03a5fd8df.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-489a8b5e2aa4355ee7db231f82495c65.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-789ffd21cf41be4c2c01b4b03a5fd8df.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -109,7 +166,7 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -281,11 +338,11 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./assets/logo.svg" alt="MECH 501/600 vortex logo" class="navbar-logo light-content">
-    <img src="./assets/logo.svg" alt="MECH 501/600 vortex logo" class="navbar-logo dark-content">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../assets/logo.svg" alt="MECH 501/600 vortex logo" class="navbar-logo light-content">
+    <img src="../assets/logo.svg" alt="MECH 501/600 vortex logo" class="navbar-logo dark-content">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">MECH 501/600 — Computational Turbulence</span>
     </a>
   </div>
@@ -296,23 +353,23 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./cluster/index.html"> 
+    <a class="nav-link" href="../cluster/index.html"> 
 <span class="menu-text">Cluster</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./python/index.html"> 
+    <a class="nav-link" href="../python/index.html"> 
 <span class="menu-text">Python</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./openfoam/how-to.html"> 
+    <a class="nav-link" href="../openfoam/how-to.html"> 
 <span class="menu-text">OpenFOAM</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./tutorials/tutorial-00.html"> 
+    <a class="nav-link" href="../tutorials/tutorial-00.html"> 
 <span class="menu-text">Tutorials &amp; Assignments</span></a>
   </li>  
 </ul>
@@ -334,7 +391,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">MECH 501/600 — Computational Turbulence</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../tutorials/tutorial-00.html">Tutorials and Assignments</a></li><li class="breadcrumb-item"><a href="../tutorials/assignment-02b-openfoam.html">Assignment 2b: Do your own OpenFOAM simulation</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -348,9 +405,9 @@ window.Quarto = {
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
-      <a href="./index.html" class="sidebar-logo-link">
-      <img src="./assets/logo-full.svg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="./assets/logo-full.svg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../assets/logo-full.svg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../assets/logo-full.svg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -362,7 +419,7 @@ window.Quarto = {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">MECH 501/600 — Computational Turbulence</span></a>
   </div>
 </li>
@@ -377,37 +434,37 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cluster/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../cluster/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Using the Cluster</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cluster/registration.html" class="sidebar-item-text sidebar-link">
+  <a href="../cluster/registration.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Registration</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cluster/intro.html" class="sidebar-item-text sidebar-link">
+  <a href="../cluster/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Intro</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cluster/jupyterlab.html" class="sidebar-item-text sidebar-link">
+  <a href="../cluster/jupyterlab.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">JupyterLab</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cluster/vscode.html" class="sidebar-item-text sidebar-link">
+  <a href="../cluster/vscode.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">VS Code</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cluster/terminal.html" class="sidebar-item-text sidebar-link">
+  <a href="../cluster/terminal.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Terminal and vim</span></a>
   </div>
 </li>
@@ -424,49 +481,49 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./python/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../python/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Intermediate &amp; advanced Python</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./python/01-plotting.html" class="sidebar-item-text sidebar-link">
+  <a href="../python/01-plotting.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Efficient scientific plotting</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./python/02-foundations.html" class="sidebar-item-text sidebar-link">
+  <a href="../python/02-foundations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Python foundations</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./python/03-oop.html" class="sidebar-item-text sidebar-link">
+  <a href="../python/03-oop.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Object-oriented programming</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./python/04-functional.html" class="sidebar-item-text sidebar-link">
+  <a href="../python/04-functional.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Functional programming</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./python/05-internals.html" class="sidebar-item-text sidebar-link">
+  <a href="../python/05-internals.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Advanced Python internals</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./python/06-engineering.html" class="sidebar-item-text sidebar-link">
+  <a href="../python/06-engineering.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Software engineering practices</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./python/07-packaging.html" class="sidebar-item-text sidebar-link">
+  <a href="../python/07-packaging.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Packaging &amp; distribution</span></a>
   </div>
 </li>
@@ -483,13 +540,13 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./openfoam/how-to.html" class="sidebar-item-text sidebar-link">
+  <a href="../openfoam/how-to.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">OpenFOAM How-To: your first RANS case</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./openfoam/paraview.html" class="sidebar-item-text sidebar-link">
+  <a href="../openfoam/paraview.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ParaView: visualising your OpenFOAM results</span></a>
   </div>
 </li>
@@ -497,40 +554,40 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Tutorials and Assignments</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tutorials/tutorial-00.html" class="sidebar-item-text sidebar-link">
+  <a href="../tutorials/tutorial-00.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tutorial 0: Prerequisites</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tutorials/assignment-01-dns.html" class="sidebar-item-text sidebar-link">
+  <a href="../tutorials/assignment-01-dns.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tutorial 1: Isotropic DNS turbulence</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tutorials/assignment-01-processing.html" class="sidebar-item-text sidebar-link">
+  <a href="../tutorials/assignment-01-processing.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Assignment 1 · Part A: Processing data in Python</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tutorials/assignment-02-correlations.html" class="sidebar-item-text sidebar-link">
+  <a href="../tutorials/assignment-02-correlations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Assignment 2a: Two-point correlations &amp; length scales</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tutorials/assignment-02b-openfoam.html" class="sidebar-item-text sidebar-link">
+  <a href="../tutorials/assignment-02b-openfoam.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Assignment 2b: Do your own OpenFOAM simulation</span></a>
   </div>
 </li>
@@ -546,13 +603,13 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#quicklinks" id="toc-quicklinks" class="nav-link active" data-scroll-target="#quicklinks"><span class="header-section-number">1</span> Quicklinks</a></li>
-  <li><a href="#how-it-all-fits-together" id="toc-how-it-all-fits-together" class="nav-link" data-scroll-target="#how-it-all-fits-together"><span class="header-section-number">2</span> How it all fits together</a></li>
-  <li><a href="#working-through-a-tutorial" id="toc-working-through-a-tutorial" class="nav-link" data-scroll-target="#working-through-a-tutorial"><span class="header-section-number">3</span> Working through a tutorial</a></li>
-  <li><a href="#tutorials" id="toc-tutorials" class="nav-link" data-scroll-target="#tutorials"><span class="header-section-number">4</span> Tutorials</a></li>
-  <li><a href="#assignments" id="toc-assignments" class="nav-link" data-scroll-target="#assignments"><span class="header-section-number">5</span> Assignments</a></li>
-  <li><a href="#what-youll-need" id="toc-what-youll-need" class="nav-link" data-scroll-target="#what-youll-need"><span class="header-section-number">6</span> What you’ll need</a></li>
-  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements"><span class="header-section-number">7</span> Acknowledgements</a></li>
+  <li><a href="#sec-rdm" id="toc-sec-rdm" class="nav-link active" data-scroll-target="#sec-rdm"><span class="header-section-number">1</span> Research data management</a></li>
+  <li><a href="#baseline" id="toc-baseline" class="nav-link" data-scroll-target="#baseline"><span class="header-section-number">2</span> Baseline</a></li>
+  <li><a href="#task-1-find-the-reattachment-point" id="toc-task-1-find-the-reattachment-point" class="nav-link" data-scroll-target="#task-1-find-the-reattachment-point"><span class="header-section-number">3</span> Task 1 — Find the reattachment point</a></li>
+  <li><a href="#study-a-mesh-sensitivity" id="toc-study-a-mesh-sensitivity" class="nav-link" data-scroll-target="#study-a-mesh-sensitivity"><span class="header-section-number">4</span> Study A — Mesh sensitivity</a></li>
+  <li><a href="#study-b-discretization-scheme-numerical-diffusion" id="toc-study-b-discretization-scheme-numerical-diffusion" class="nav-link" data-scroll-target="#study-b-discretization-scheme-numerical-diffusion"><span class="header-section-number">5</span> Study B — Discretization scheme (numerical diffusion)</a></li>
+  <li><a href="#what-to-submit" id="toc-what-to-submit" class="nav-link" data-scroll-target="#what-to-submit"><span class="header-section-number">6</span> What to submit</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">7</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -560,17 +617,29 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../tutorials/tutorial-00.html">Tutorials and Assignments</a></li><li class="breadcrumb-item"><a href="../tutorials/assignment-02b-openfoam.html">Assignment 2b: Do your own OpenFOAM simulation</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">MECH 501/600 — Computational Turbulence</h1>
-<p class="subtitle lead">Hands-on companion to the course: Python, simulation, and HPC</p>
+<h1 class="title">Assignment 2b: Do your own OpenFOAM simulation</h1>
+<p class="subtitle lead">A guided parameter study on the backward-facing step</p>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>MECH 501/600 — Computational Turbulence </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 22, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -580,170 +649,232 @@ window.Quarto = {
 </header>
 
 
-<p>Welcome! These pages are the practical, hands-on side of <strong>MECH 501/600 — Computational Turbulence</strong>. Where the lectures build the theory, here you will <em>use</em> it: refresh your scientific Python, get onto the course computing cluster, and work through tutorials that combine turbulence theory, OpenFOAM simulations, and Python post-processing.</p>
-<section id="quicklinks" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="quicklinks"><span class="header-section-number">1</span> Quicklinks</h2>
-<div class="grid">
-<div class="g-col-12 g-col-md-3">
-<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span><a href="./cluster/index.html">Cluster</a>
+<span class="screen-reader-only">Note</span>What you will do
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Create your account on the course computing cluster and run notebooks or VS Code right in your browser — no local install required. <strong>Do this first</strong>, since account approval takes a day or two.</p>
-</div>
-</div>
-</div>
-<div class="g-col-12 g-col-md-3">
-<div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span><a href="./python/index.html">Python</a>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Level up from “a 300-line script and a prayer” to clean, reusable scientific code — efficient plotting, good structure, and building your own package.</p>
-</div>
-</div>
-</div>
-<div class="g-col-12 g-col-md-3">
-<div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span><a href="./openfoam/how-to.html">OpenFOAM</a>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Run your first RANS simulation with OpenFOAM — set up a case, mesh it, solve it with <code>simpleFoam</code>, and post-process the results in ParaView and Python.</p>
-</div>
-</div>
-</div>
-<div class="g-col-12 g-col-md-3">
-<div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span><a href="./tutorials/tutorial-00.html">Tutorials &amp; Assignments</a>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Guided exercises that tie theory to practice, with numbered <strong>Tasks</strong> you complete and hand in. Start with the prerequisites check.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="how-it-all-fits-together" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="how-it-all-fits-together"><span class="header-section-number">2</span> How it all fits together</h2>
-<p>The <strong>lectures</strong> develop the equations and models. These <strong>tutorials</strong> put them to work: you will run simulations, post-process the results in <strong>Python</strong>, and often do so on the <strong>cluster</strong>. Each tutorial contains numbered <strong>Tasks</strong> — derivations, plots, and short discussions — which you collect into a single PDF and upload to <strong>Crowdmark</strong> by the posted deadline.</p>
-<p>If your Python or command-line skills feel rusty, work through the <a href="./python/index.html">Python</a> section and get comfortable with the <a href="./cluster/index.html">Cluster</a> before the first tutorial that needs them — it will make everything afterwards much smoother.</p>
-<p><strong>OpenFOAM</strong> is the open-source CFD toolbox we use for the simulation side of the course. It solves the RANS equations you meet in the lectures on real geometries. The <a href="./openfoam/how-to.html">OpenFOAM how-to</a> walks you through your first case from setup to post-processing — no prior CFD-software experience assumed.</p>
-</section>
-<section id="working-through-a-tutorial" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="working-through-a-tutorial"><span class="header-section-number">3</span> Working through a tutorial</h2>
+<p>Starting from the converged <code>pitzDaily</code> case of the <a href="../openfoam/how-to.html">OpenFOAM how-to</a>, you will run a <strong>controlled parameter study</strong>: change <em>one</em> numerical ingredient at a time — the <strong>mesh</strong> and the <strong>discretization scheme</strong> — and measure how the solution responds. This is exactly how a practising CFD engineer builds trust in a result.</p>
+<p>Two skills run through the whole assignment:</p>
 <ol type="1">
-<li>Read the background and <strong>run the provided code yourself</strong> — don’t just read it.</li>
-<li>Answer every <strong>Task</strong> box (derivations, plots, short written answers).</li>
-<li>Export your answers as a <strong>single PDF</strong> and upload it to Crowdmark before the deadline.</li>
+<li>a reusable <strong>Python measure</strong> — the <strong>reattachment length</strong> behind the step — that turns each run into a single number you can compare (Task 1);</li>
+<li><strong>research data management (RDM)</strong>: organising your cases so that <em>you in six months</em>, or a collaborator, can tell at a glance what each run was and reproduce it.</li>
 </ol>
-</section>
-<section id="tutorials" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="tutorials"><span class="header-section-number">4</span> Tutorials</h2>
-<table class="table-striped caption-top table">
-<caption>More tutorials will appear here as the term progresses.</caption>
-<colgroup>
-<col style="width: 8%">
-<col style="width: 72%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>#</th>
-<th>Topic</th>
-<th style="text-align: center;">Crowdmark due</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>0</td>
-<td><a href="./tutorials/tutorial-00.html">Prerequisites — what you should already know</a></td>
-<td style="text-align: center;">—</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="assignments" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="assignments"><span class="header-section-number">5</span> Assignments</h2>
-<table class="table-striped caption-top table">
-<colgroup>
-<col style="width: 8%">
-<col style="width: 62%">
-<col style="width: 30%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>#</th>
-<th>Topic</th>
-<th style="text-align: center;">Crowdmark due</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td><a href="./tutorials/assignment-01-dns.html">DNS turbulence &amp; the <span class="math inline">\(k\)</span>-equation</a></td>
-<td style="text-align: center;"><strong>22 September 2026</strong></td>
-</tr>
-<tr class="even">
-<td>2a</td>
-<td><a href="./tutorials/assignment-02-correlations.html">Two-point correlations &amp; length scales</a></td>
-<td style="text-align: center;"><strong>5 October 2026</strong></td>
-</tr>
-<tr class="odd">
-<td>2b</td>
-<td><a href="./tutorials/assignment-02b-openfoam.html">Do your own OpenFOAM simulation</a></td>
-<td style="text-align: center;"><strong>5 October 2026</strong></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="what-youll-need" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="what-youll-need"><span class="header-section-number">6</span> What you’ll need</h2>
+<p>We keep the turbulence model fixed at <span class="math inline">\(k\)</span>–<span class="math inline">\(\varepsilon\)</span> throughout; comparing turbulence models (<span class="math inline">\(k\)</span>–<span class="math inline">\(\omega\)</span> SST and others) comes in a later assignment.</p>
+<p><strong>You do <em>not</em> submit the cases themselves.</strong> Instead you submit a <strong>screenshot of your folder structure</strong>, your <strong>README</strong>, your <strong>script names</strong>, and a few key plots — see <a href="#what-to-submit">What to submit</a>.</p>
+</div>
+</div>
+<section id="sec-rdm" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="sec-rdm"><span class="header-section-number">1</span> Research data management</h2>
+<p>A simulation you cannot find, explain, or rerun in a year is worth very little — and “a year” often turns out to be “next week”. Good data management makes your work <strong>findable, accessible, interoperable and reusable</strong> (the <em>FAIR</em> principles <span class="citation" data-cites="wilkinson2016">[<a href="#ref-wilkinson2016" role="doc-biblioref">1</a>]</span>): it is what separates a result you can defend in your thesis from a folder of <code>test</code>, <code>test2</code>, <code>test_final</code> nobody can decode. Get into the habit now, on a five-case study, so it is automatic when you have five hundred.</p>
+<p>For this assignment, follow three rules:</p>
 <ul>
-<li><strong>Python</strong> ≥ 3.10 with <code>numpy</code>, <code>matplotlib</code>, <code>scipy</code> (and later <code>pyvista</code> / <code>fluidfoam</code>).</li>
-<li><strong>OpenFOAM</strong> — see the <a href="./openfoam/how-to.html">OpenFOAM how-to</a>.</li>
-<li>An account on the <strong>course cluster</strong> — see the <a href="./cluster/index.html">Cluster</a> page.</li>
+<li><strong>Number every folder and standalone script</strong> with a three-digit, zero-padded prefix, in steps of ten (<code>000_</code>, <code>010_</code>, <code>020_</code>, …) so they sort in run order and you can slot a new one in between later. Name each after the <em>one thing</em> it is — the case’s single change, or what the script does. The one exception: files that live <em>inside</em> an importable Python package are <strong>not</strong> prefixed, because a leading digit is not a valid module name — the package name carries the ordering instead.</li>
+<li><strong>Write a README</strong> at the top of the study that says who/what/when, the software and version, what each case varies, how to reproduce it, and the headline result.</li>
+<li><strong>Keep post-processing in numbered scripts</strong>, not in your shell history — a committed script <em>is</em> the reproducibility.</li>
 </ul>
-<p>Everything above is already installed in the cluster’s JupyterLab environment, so if you work there you can skip local setup entirely.</p>
+<p>A structure that satisfies all three:</p>
+<pre class="text"><code>2b_backward_step/
+├── README.md                   # the map to everything below
+├── 000_baseline/               # reference: baseline mesh, linearUpwind
+├── 010_mesh_fine/              # Study A: refined mesh, everything else identical
+├── 020_scheme_upwind/          # Study B: 1st-order upwind
+├── 030_scheme_linear/          # Study B: central (linear)
+└── 900_postproc/               # analysis, kept apart from the run data
+    └── 010_reattachment.py     # Task 1 — one script, run on every case</code></pre>
+<p>A minimal <code>README.md</code> (Markdown, so it renders anywhere):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Assignment 2b — backward-facing step parameter study</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Author: <span class="dt">&lt;</span><span class="kw">name</span><span class="dt">&gt;</span> · Date: 2026-10 · Solver: simpleFoam (OpenFOAM v2412)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>Quantity of interest: reattachment length x_r behind the step (see 900_postproc/).</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> case               <span class="pp">|</span> changed vs. baseline        <span class="pp">|</span> x_r / h <span class="pp">|</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="pp">|--------------------|-----------------------------|:-------:|</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 000_baseline       <span class="pp">|</span> —                           <span class="pp">|</span>         <span class="pp">|</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 010_mesh_fine      <span class="pp">|</span> ~2x cells in blockMeshDict  <span class="pp">|</span>         <span class="pp">|</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 020_scheme_upwind  <span class="pp">|</span> div(phi,U) = upwind         <span class="pp">|</span>         <span class="pp">|</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 030_scheme_linear  <span class="pp">|</span> div(phi,U) = linear         <span class="pp">|</span>         <span class="pp">|</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>Reproduce: in each case run <span class="in">`blockMesh &amp;&amp; simpleFoam`</span>, then</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="in">`python 900_postproc/010_reattachment.py &lt;case&gt;`</span>.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="baseline" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="baseline"><span class="header-section-number">2</span> Baseline</h2>
+<p>Create the study folder following the structure above, copy a <strong>fresh</strong> <code>pitzDaily</code> from the OpenFOAM tutorials in as <code>000_baseline</code>, and run it once — this converged baseline is the reference every other run is compared against:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load openfoam/v2412</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> 2b_backward_step/900_postproc <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> 2b_backward_step</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-r</span> <span class="va">$FOAM_TUTORIALS</span>/incompressible/simpleFoam/pitzDaily 000_baseline</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> 000_baseline <span class="kw">&amp;&amp;</span> <span class="ex">blockMesh</span> <span class="kw">&amp;&amp;</span> <span class="ex">simpleFoam</span> <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ..</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The fresh <code>pitzDaily</code> writes <strong>streamlines</strong> but no residuals. For the residual-convergence plot (submission item 4), add the <code>solverInfo</code> function object to <code>000_baseline/system/controlDict</code> <strong>before</strong> running — see <em>Function objects</em> in the <a href="../openfoam/how-to.html">OpenFOAM how-to</a> — then <code>simpleFoam</code> again.</p>
+</div>
+</div>
+<p>Start the <code>README.md</code> now and fill the results table as you go — not the night before the deadline.</p>
+</section>
+<section id="task-1-find-the-reattachment-point" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="task-1-find-the-reattachment-point"><span class="header-section-number">3</span> Task 1 — Find the reattachment point</h2>
+<p>Behind the step the flow separates and rolls up into a recirculation bubble, then <strong>reattaches</strong> to the lower wall further downstream. The distance from the step to that point, the <strong>reattachment length</strong> <span class="math inline">\(x_r\)</span>, is <em>the</em> classic scalar for this flow — one number that summarises the whole recirculation and reacts sharply to mesh and scheme. You will compute it in Python and reuse it for every case.</p>
+<p>Formally, reattachment is where the <strong>wall shear stress changes sign</strong> (<span class="math inline">\(\tau_w=0\)</span>). A robust, mesh-friendly surrogate is the <strong>near-wall streamwise velocity</strong>: just above the lower wall <span class="math inline">\(U_x&lt;0\)</span> inside the recirculation (backflow) and <span class="math inline">\(U_x&gt;0\)</span> once the flow has reattached, so <span class="math inline">\(x_r\)</span> is the first sign change.</p>
+<p>Sample <span class="math inline">\(U\)</span> along a horizontal line one or two cells above the lower wall. Create a sampling function object <code>system/singleGraph</code> (read the exact wall <span class="math inline">\(y\)</span> off ParaView — the numbers here are illustrative for <code>pitzDaily</code>):</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>system/singleGraph</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="system/singleGraph"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>type                sets<span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>libs                <span class="op">(</span>sampling<span class="op">);</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>setFormat           raw<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>interpolationScheme cellPoint<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>fields              <span class="op">(</span>U<span class="op">);</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>sets</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    line</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        type    uniform<span class="op">;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        axis    x<span class="op">;</span>                     <span class="co">// first column of the .xy file is x</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        start   <span class="op">(</span><span class="dv">0</span>      <span class="op">-</span><span class="fl">0.0250</span> <span class="dv">0</span><span class="op">);</span>    <span class="co">// at the step, ~1 cell above the wall</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        end     <span class="op">(</span><span class="fl">0.29</span>   <span class="op">-</span><span class="fl">0.0250</span> <span class="dv">0</span><span class="op">);</span>    <span class="co">// to the outlet</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        nPoints <span class="dv">200</span><span class="op">;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Then sample the converged field — this writes <code>postProcessing/singleGraph/&lt;time&gt;/line_U.xy</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> 000_baseline</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">postProcess</span> <span class="at">-func</span> singleGraph <span class="at">-latestTime</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then find the zero crossing in <code>900_postproc/010_reattachment.py</code>:</p>
+<div id="c4434108" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, glob, os, sys</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>case <span class="op">=</span> sys.argv[<span class="dv">1</span>] <span class="cf">if</span> <span class="bu">len</span>(sys.argv) <span class="op">&gt;</span> <span class="dv">1</span> <span class="cf">else</span> <span class="st">"000_baseline"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># find the sampled line, whatever the exact time-dir / file name is</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>hits <span class="op">=</span> <span class="bu">sorted</span>(glob.glob(<span class="ss">f"</span><span class="sc">{</span>case<span class="sc">}</span><span class="ss">/postProcessing/**/*.xy"</span>, recursive<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> hits:</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">SystemExit</span>(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"No sampled .xy under </span><span class="sc">{</span>case<span class="sc">}</span><span class="ss">/postProcessing/ (cwd = </span><span class="sc">{</span>os<span class="sc">.</span>getcwd()<span class="sc">}</span><span class="ss">).</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"Run  `postProcess -func singleGraph -latestTime`  inside </span><span class="sc">{</span>case<span class="sc">}</span><span class="ss"> first, and</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"launch this from the folder that *contains* </span><span class="sc">{</span>case<span class="sc">}</span><span class="ss">.</span><span class="ch">\n</span><span class="ss">"</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"See what was written with:  ls -R </span><span class="sc">{</span>case<span class="sc">}</span><span class="ss">/postProcessing"</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>xy <span class="op">=</span> hits[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"reading:"</span>, xy)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>d      <span class="op">=</span> np.loadtxt(xy)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>x, Ux  <span class="op">=</span> d[:, <span class="dv">0</span>], d[:, <span class="dv">1</span>]         <span class="co"># axis x -&gt; columns: x, Ux, Uy, Uz</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># reattachment: first place the near-wall Ux turns from backflow (-) to forward (+)</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>s     <span class="op">=</span> np.sign(Ux)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>cross <span class="op">=</span> np.where((s[:<span class="op">-</span><span class="dv">1</span>] <span class="op">&lt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (s[<span class="dv">1</span>:] <span class="op">&gt;=</span> <span class="dv">0</span>))[<span class="dv">0</span>]</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(cross) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">SystemExit</span>(<span class="st">"No backflow-&gt;forward sign change on this line --- check the "</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"sampling height (it may sit above the recirculation)."</span>)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>i     <span class="op">=</span> cross[<span class="dv">0</span>]</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>x_r   <span class="op">=</span> x[i] <span class="op">-</span> Ux[i] <span class="op">*</span> (x[i<span class="op">+</span><span class="dv">1</span>] <span class="op">-</span> x[i]) <span class="op">/</span> (Ux[i<span class="op">+</span><span class="dv">1</span>] <span class="op">-</span> Ux[i])   <span class="co"># linear interpolation</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="fl">0.0254</span>                        <span class="co"># step height [m] — check against your blockMeshDict</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>case<span class="sc">}</span><span class="ss">:  x_r = </span><span class="sc">{</span>x_r<span class="op">*</span><span class="fl">1e3</span><span class="sc">:.1f}</span><span class="ss"> mm = </span><span class="sc">{</span>x_r<span class="op">/</span>h<span class="sc">:.2f}</span><span class="ss"> h"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Task 1 — deliverable
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Your <code>900_postproc/010_reattachment.py</code>, and the baseline <span class="math inline">\(x_r\)</span> (in mm and in step heights <span class="math inline">\(h\)</span>). This is the measure you report for <strong>every</strong> case below.</p>
+</div>
+</div>
+</section>
+<section id="study-a-mesh-sensitivity" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="study-a-mesh-sensitivity"><span class="header-section-number">4</span> Study A — Mesh sensitivity</h2>
+<p>Refine the mesh and check whether your answer has stopped changing (grid independence).</p>
+<ul>
+<li>Copy the baseline to <code>010_mesh_fine</code>. In <code>system/blockMeshDict</code>, roughly <strong>double</strong> the cell counts (the numbers in the <code>hex (...) (nx ny nz) ...</code> lines), then rerun <code>blockMesh</code> + <code>simpleFoam</code> and <code>900_postproc/010_reattachment.py</code>.</li>
+<li>Compare <span class="math inline">\(x_r\)</span> on coarse vs.&nbsp;fine. Does it converge?</li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>A — deliverable
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(x_r\)</span> on both meshes, and one sentence: is the baseline mesh fine enough?</p>
+</div>
+</div>
+</section>
+<section id="study-b-discretization-scheme-numerical-diffusion" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="study-b-discretization-scheme-numerical-diffusion"><span class="header-section-number">5</span> Study B — Discretization scheme (numerical diffusion)</h2>
+<p>Change <strong>only</strong> the convection scheme for momentum in <code>system/fvSchemes</code>, in a fresh numbered case each time, and rerun:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>div<span class="op">(</span>phi<span class="op">,</span>U<span class="op">)</span>   bounded Gauss upwind<span class="op">;</span>                 <span class="co">// 1st order  -&gt; 020_scheme_upwind</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>div<span class="op">(</span>phi<span class="op">,</span>U<span class="op">)</span>   bounded Gauss linearUpwind grad<span class="op">(</span>U<span class="op">);</span>   <span class="co">// 2nd order  -&gt; 000_baseline (already have it)</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>div<span class="op">(</span>phi<span class="op">,</span>U<span class="op">)</span>   Gauss linear<span class="op">;</span>                          <span class="co">// central    -&gt; 030_scheme_linear</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Compare the velocity field and <span class="math inline">\(x_r\)</span> across the three. Which smears the shear layer? Does the central scheme show any oscillations or convergence trouble?</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>B — deliverable
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>One comparison plot (field or profile) of the three schemes plus their <span class="math inline">\(x_r\)</span>, and two–three sentences linking what you see to <strong>numerical diffusion</strong> vs. <strong>boundedness</strong> from the lectures.</p>
+</div>
+</div>
+</section>
+<section id="what-to-submit" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="what-to-submit"><span class="header-section-number">6</span> What to submit</h2>
+<p>Upload to Crowdmark — <strong>not</strong> the cases themselves, but the evidence that you ran and organised them well:</p>
+<ol type="1">
+<li><strong>A screenshot of your folder structure</strong> showing the numbered cases, the <code>README.md</code>, and the <code>900_postproc/</code> scripts. On the cluster, <code>tree -L 2 2b_backward_step</code> (or a file-browser screenshot) is perfect.</li>
+<li><strong>Your <code>README.md</code></strong> (as text or a screenshot), with the results table filled in.</li>
+<li><strong>Your script name(s)</strong> — i.e.&nbsp;<code>010_reattachment.py</code> — visible in the tree above, plus the script’s contents pasted once.</li>
+<li><strong>Key plots (≤ 5).</strong> Residual convergence for one run; a velocity-magnitude field; and the comparison of <span class="math inline">\(x_r\)</span> across Studies A and B.</li>
+<li><strong>Short discussion (≤ ½ page).</strong> Answer the deliverable questions above.</li>
+</ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Getting help
+Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Stuck? Post on the course discussion board or drop by office hours — and if something on these pages is wrong or unclear, let us know so we can fix it.</p>
+<p>Change <strong>one thing at a time</strong> and keep the baseline fixed — otherwise you cannot attribute a difference to any single cause. Note the wall-clock and iteration count for each run; refinement and higher-order schemes cost more.</p>
 </div>
 </div>
 </section>
-<section id="acknowledgements" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="acknowledgements"><span class="header-section-number">7</span> Acknowledgements</h2>
-<p>An initial version of these tutorials — in particular the OpenFOAM and Python material — was created by a student team supervised by Hendrik Nicolai at TU Darmstadt: Alexander Dungs, Andreas Lindenthal, Antonia Bähr, Filip Formatschek, Jakob Grill, and Margarita Glushko. Thanks also to Leon Loni Berkel and Thijs Hazenberg for valuable discussions on the tutorial content.</p>
+<section id="references" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="references"><span class="header-section-number">7</span> References</h2>
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-wilkinson2016" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline"><span class="nocase">M. D. Wilkinson, M. Dumontier, Ij. J. Aalbersberg, G. Appleton, M. Axton, A. Baak, and others</span>, <em><a href="https://doi.org/10.1038/sdata.2016.18">The <span>FAIR</span> guiding principles for scientific data management and stewardship</a></em>, 2016.</div>
+</div>
+</div>
 
 
 </section>

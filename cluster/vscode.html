@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="MECH 501/600 — Computational Turbulence">
-<meta name="dcterms.date" content="2026-09-09">
+<meta name="dcterms.date" content="2026-09-22">
 
 <title>VS Code – MECH 501/600 — Computational Turbulence</title>
 <style>
@@ -27,6 +27,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -281,13 +316,17 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Python</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../openfoam/how-to.html"> 
+<span class="menu-text">OpenFOAM</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../tutorials/tutorial-00.html"> 
-<span class="menu-text">Tutorials</span></a>
+<span class="menu-text">Tutorials &amp; Assignments</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/YOUR_USERNAME/MECH501_Tutorial"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/mcgillteaching/MECH501_tutorial"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -377,7 +416,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../cluster/terminal.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Terminal (later)</span></a>
+ <span class="menu-text">Terminal and vim</span></a>
   </div>
 </li>
       </ul>
@@ -444,12 +483,35 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
- <span class="menu-text">Tutorials</span></a>
+ <span class="menu-text">OpenFOAM</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/how-to.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">OpenFOAM How-To: your first RANS case</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/paraview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ParaView: visualising your OpenFOAM results</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Tutorials and Assignments</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../tutorials/tutorial-00.html" class="sidebar-item-text sidebar-link">
@@ -470,8 +532,14 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tutorials/assignment-01-kequation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 1 · Part B: The turbulent kinetic energy budget</span></a>
+  <a href="../tutorials/assignment-02-correlations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2a: Two-point correlations &amp; length scales</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/assignment-02b-openfoam.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2b: Do your own OpenFOAM simulation</span></a>
   </div>
 </li>
       </ul>
@@ -487,8 +555,10 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#open-vs-code" id="toc-open-vs-code" class="nav-link active" data-scroll-target="#open-vs-code"><span class="header-section-number">1</span> Open VS Code</a></li>
-  <li><a href="#notebooks-and-python" id="toc-notebooks-and-python" class="nav-link" data-scroll-target="#notebooks-and-python"><span class="header-section-number">2</span> Notebooks and Python</a></li>
-  <li><a href="#latex" id="toc-latex" class="nav-link" data-scroll-target="#latex"><span class="header-section-number">3</span> LaTeX</a></li>
+  <li><a href="#one-time-setup-make-your-settings-writable" id="toc-one-time-setup-make-your-settings-writable" class="nav-link" data-scroll-target="#one-time-setup-make-your-settings-writable"><span class="header-section-number">2</span> One-time setup: make your settings writable</a></li>
+  <li><a href="#notebooks-and-python" id="toc-notebooks-and-python" class="nav-link" data-scroll-target="#notebooks-and-python"><span class="header-section-number">3</span> Notebooks and Python</a></li>
+  <li><a href="#latex" id="toc-latex" class="nav-link" data-scroll-target="#latex"><span class="header-section-number">4</span> LaTeX</a></li>
+  <li><a href="#advanced-connect-from-your-own-vs-code-over-ssh" id="toc-advanced-connect-from-your-own-vs-code-over-ssh" class="nav-link" data-scroll-target="#advanced-connect-from-your-own-vs-code-over-ssh"><span class="header-section-number">5</span> Advanced: connect from your own VS Code over SSH</a></li>
   </ul>
 </nav>
     </div>
@@ -516,7 +586,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 9, 2026</p>
+      <p class="date">September 22, 2026</p>
     </div>
   </div>
   
@@ -537,8 +607,13 @@ ul.task-list li input[type="checkbox"] {
 <li>In VS Code, open your working folder with <strong>File ▸ Open Folder…</strong> and select <strong><code>scratch</code></strong>, so the Explorer is rooted there. Keep all your work in <code>scratch</code> (see <a href="../cluster/intro.html">Intro</a>).</li>
 </ol>
 </section>
-<section id="notebooks-and-python" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="notebooks-and-python"><span class="header-section-number">2</span> Notebooks and Python</h2>
+<section id="one-time-setup-make-your-settings-writable" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="one-time-setup-make-your-settings-writable"><span class="header-section-number">2</span> One-time setup: make your settings writable</h2>
+<p>On this shared image VS Code’s <code>settings.json</code> is a <strong>symlink to a read-only file</strong>, so VS Code cannot save your preferences and shows a <em>read-only</em> warning. Run this <strong>once</strong> in a terminal (JupyterLab <strong>File ▸ New ▸ Terminal</strong>) to replace the link with a writable copy — after that VS Code configures normally:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="at">--remove-destination</span> <span class="va">$(</span><span class="fu">readlink</span> <span class="va">$HOME</span>/.local/share/code-server/User/settings.json<span class="va">)</span> <span class="va">$HOME</span>/.local/share/code-server/User/settings.json</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="notebooks-and-python" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="notebooks-and-python"><span class="header-section-number">3</span> Notebooks and Python</h2>
 <p>Open a <code>.ipynb</code> notebook (or a <code>.py</code> file) from the Explorer. The first time you run a cell, click <strong>Select Kernel</strong> (top-right) and choose <strong>Python 3.11</strong>. Then run cells as usual — output and plots appear inline, just as in JupyterLab.</p>
 <div id="fig-vscode-python" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -551,8 +626,8 @@ Figure&nbsp;1: A Jupyter notebook open in VS Code on the cluster: the Explorer i
 </figure>
 </div>
 </section>
-<section id="latex" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="latex"><span class="header-section-number">3</span> LaTeX</h2>
+<section id="latex" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="latex"><span class="header-section-number">4</span> LaTeX</h2>
 <p>You can also edit LaTeX in the same VS Code window — handy for writing up your Crowdmark submission next to your code.</p>
 <div id="fig-vscode-tex" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -574,9 +649,33 @@ Figure&nbsp;2: Editing a LaTeX file in VS Code on the cluster.
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You may see pop-ups such as a read-only <code>settings.json</code> message, or a prompt to install a language extension (e.g.&nbsp;Julia). These are expected on the shared image — dismiss them; they don’t affect your Python or LaTeX work.</p>
+<p>You may see a prompt to install a language extension (e.g.&nbsp;Julia) — dismiss it; it does not affect your Python or LaTeX work. (The read-only <code>settings.json</code> pop-up is resolved by the one-time step above.)</p>
 </div>
 </div>
+</section>
+<section id="advanced-connect-from-your-own-vs-code-over-ssh" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="advanced-connect-from-your-own-vs-code-over-ssh"><span class="header-section-number">5</span> Advanced: connect from your own VS Code over SSH</h2>
+<p>The browser VS Code above needs nothing installed. If you would rather use a <strong>VS Code installed on your own computer</strong>, its <strong>Remote - SSH</strong> extension opens a window that runs <em>on the cluster</em> — your local editor, but the cluster’s files, terminals and Python.</p>
+<ol type="1">
+<li>In your local VS Code, install the <strong>Remote - SSH</strong> extension (from Microsoft).</li>
+<li>Make sure you can already <code>ssh</code> to the cluster first — set that up in the SSH section of the <a href="../cluster/terminal.html#ssh-advanced">Terminal and vim</a> page (an <code>~/.ssh/config</code> entry such as <code>turb</code> makes this a one-click connection).</li>
+<li>Open the Command Palette (<strong>Ctrl/Cmd + Shift + P</strong>), run <strong>Remote-SSH: Connect to Host…</strong>, and pick your host (e.g.&nbsp;<code>turb</code>) or type <code>&lt;username&gt;@mech501.calculquebec.cloud</code>.</li>
+<li>A new window opens connected to the cluster. Use <strong>File ▸ Open Folder…</strong> to open your <code>scratch</code> directory and work exactly as in the browser version.</li>
+</ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Extensions in Remote - SSH are installed <strong>per host</strong>. The first time you connect, you must install the <strong>Python</strong> and <strong>Jupyter</strong> extensions <em>again</em> in the remote window (VS Code prompts you, or use the Extensions panel and click <strong>Install in SSH: …</strong>) — only then do notebooks and kernels work on the cluster.</p>
+</div>
+</div>
+<p>Full walkthrough and troubleshooting: Microsoft’s <a href="https://code.visualstudio.com/docs/remote/ssh">Remote Development using SSH</a> guide.</p>
 
 
 </section>
@@ -687,7 +786,7 @@ window.addEventListener('load', function () {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/McGillTeaching\.github\.io\/MECH501_tutorial\/");
+        var filterRegex = new RegExp("https:\/\/mcgillteaching\.github\.io\/MECH501_tutorial\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

@@ -9,7 +9,7 @@
 <meta name="author" content="MECH 501/600 — Computational Turbulence">
 <meta name="dcterms.date" content="2026-09-22">
 
-<title>Assignment 1 · Part B: The turbulent kinetic energy budget – MECH 501/600 — Computational Turbulence</title>
+<title>OpenFOAM How-To: your first RANS case – MECH 501/600 — Computational Turbulence</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -63,7 +63,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -371,7 +390,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Assignment 1 · Part B: The turbulent kinetic energy budget</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../openfoam/how-to.html">OpenFOAM</a></li><li class="breadcrumb-item"><a href="../openfoam/how-to.html">OpenFOAM How-To: your first RANS case</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -511,16 +530,16 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">OpenFOAM</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../openfoam/how-to.html" class="sidebar-item-text sidebar-link">
+  <a href="../openfoam/how-to.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">OpenFOAM How-To: your first RANS case</span></a>
   </div>
 </li>
@@ -583,14 +602,24 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-you-will-do" id="toc-what-you-will-do" class="nav-link active" data-scroll-target="#what-you-will-do"><span class="header-section-number">1</span> What you will do</a></li>
-  <li><a href="#the-turbulent-kinetic-energy-equation" id="toc-the-turbulent-kinetic-energy-equation" class="nav-link" data-scroll-target="#the-turbulent-kinetic-energy-equation"><span class="header-section-number">2</span> The turbulent kinetic energy equation</a></li>
-  <li><a href="#reading-the-field-as-a-structured-cube" id="toc-reading-the-field-as-a-structured-cube" class="nav-link" data-scroll-target="#reading-the-field-as-a-structured-cube"><span class="header-section-number">3</span> Reading the field as a structured cube</a></li>
-  <li><a href="#sec-task1" id="toc-sec-task1" class="nav-link" data-scroll-target="#sec-task1"><span class="header-section-number">4</span> Task 1 — Reynolds decomposition</a></li>
-  <li><a href="#sec-task2" id="toc-sec-task2" class="nav-link" data-scroll-target="#sec-task2"><span class="header-section-number">5</span> Task 2 — Turbulent kinetic energy</a></li>
-  <li><a href="#sec-task3" id="toc-sec-task3" class="nav-link" data-scroll-target="#sec-task3"><span class="header-section-number">6</span> Task 3 — Dissipation rate</a></li>
-  <li><a href="#sec-task4" id="toc-sec-task4" class="nav-link" data-scroll-target="#sec-task4"><span class="header-section-number">7</span> Task 4 — Characteristic scales</a></li>
-  <li><a href="#sec-task5" id="toc-sec-task5" class="nav-link" data-scroll-target="#sec-task5"><span class="header-section-number">8</span> Task 5 — Resolution and the budget</a></li>
+  <li><a href="#the-finite-volume-recipe-as-files" id="toc-the-finite-volume-recipe-as-files" class="nav-link active" data-scroll-target="#the-finite-volume-recipe-as-files"><span class="header-section-number">1</span> The finite-volume recipe, as files</a></li>
+  <li><a href="#get-the-case-on-the-cluster" id="toc-get-the-case-on-the-cluster" class="nav-link" data-scroll-target="#get-the-case-on-the-cluster"><span class="header-section-number">2</span> Get the case on the cluster</a></li>
+  <li><a href="#the-case-files" id="toc-the-case-files" class="nav-link" data-scroll-target="#the-case-files"><span class="header-section-number">3</span> The case files</a>
+  <ul class="collapse">
+  <li><a href="#systemfvschemes-where-the-face-flux-is-chosen" id="toc-systemfvschemes-where-the-face-flux-is-chosen" class="nav-link" data-scroll-target="#systemfvschemes-where-the-face-flux-is-chosen"><span class="header-section-number">3.1</span> <code>system/fvSchemes</code> — where the face flux is chosen</a></li>
+  <li><a href="#systemfvsolution-the-simple-loop" id="toc-systemfvsolution-the-simple-loop" class="nav-link" data-scroll-target="#systemfvsolution-the-simple-loop"><span class="header-section-number">3.2</span> <code>system/fvSolution</code> — the SIMPLE loop</a></li>
+  <li><a href="#systemcontroldict-iteration-control-and-outputs" id="toc-systemcontroldict-iteration-control-and-outputs" class="nav-link" data-scroll-target="#systemcontroldict-iteration-control-and-outputs"><span class="header-section-number">3.3</span> <code>system/controlDict</code> — iteration control and outputs</a></li>
+  </ul></li>
+  <li><a href="#mesh-and-boundary-conditions" id="toc-mesh-and-boundary-conditions" class="nav-link" data-scroll-target="#mesh-and-boundary-conditions"><span class="header-section-number">4</span> Mesh and boundary conditions</a>
+  <ul class="collapse">
+  <li><a href="#build-the-mesh" id="toc-build-the-mesh" class="nav-link" data-scroll-target="#build-the-mesh"><span class="header-section-number">4.1</span> Build the mesh</a></li>
+  <li><a href="#boundary-conditions" id="toc-boundary-conditions" class="nav-link" data-scroll-target="#boundary-conditions"><span class="header-section-number">4.2</span> Boundary conditions</a></li>
+  </ul></li>
+  <li><a href="#run-the-solver" id="toc-run-the-solver" class="nav-link" data-scroll-target="#run-the-solver"><span class="header-section-number">5</span> Run the solver</a></li>
+  <li><a href="#post-processing" id="toc-post-processing" class="nav-link" data-scroll-target="#post-processing"><span class="header-section-number">6</span> Post-processing</a></li>
+  <li><a href="#self-tests" id="toc-self-tests" class="nav-link" data-scroll-target="#self-tests"><span class="header-section-number">7</span> Self-tests</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">8</span> Further reading</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -598,10 +627,10 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../openfoam/how-to.html">OpenFOAM</a></li><li class="breadcrumb-item"><a href="../openfoam/how-to.html">OpenFOAM How-To: your first RANS case</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Assignment 1 · Part B: The turbulent kinetic energy budget</h1>
-<p class="subtitle lead">Reynolds decomposition, TKE and dissipation from isotropic DNS</p>
+<h1 class="title">OpenFOAM How-To: your first RANS case</h1>
+<p class="subtitle lead">Flow over a backward-facing step with simpleFoam (pitzDaily)</p>
 </div>
 
 
@@ -636,196 +665,441 @@ window.Quarto = {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Deliverables
+<span class="screen-reader-only">Note</span>What this how-to is about
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Complete <strong>Tasks 1–5</strong> and upload a single PDF (code, figures and short written answers) to <strong>Crowdmark</strong> by the posted deadline. This part is graded. You work from the isotropic DNS field introduced in the <a href="../tutorials/assignment-01-dns.html">Assignment 1 overview</a>; make sure you have read it first.</p>
+<p>Time to run a real CFD code. You will set up and run a <strong>steady, turbulent RANS simulation</strong> of flow over a backward-facing step (the classic <code>pitzDaily</code> case) with OpenFOAM’s <code>simpleFoam</code> solver, and look at the result in ParaView. The goal is to see how the <strong>finite-volume method from the lectures becomes a set of text files</strong> you control: the mesh, the boundary conditions, the schemes, the pressure–velocity coupling and the turbulence model. This is a <strong>self-guided</strong> walk-through — the <em>self-tests</em> along the way let you check your understanding; nothing here is handed in.</p>
 </div>
 </div>
-<section id="what-you-will-do" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="what-you-will-do"><span class="header-section-number">1</span> What you will do</h2>
-<p>In the <a href="../tutorials/assignment-01-dns.html">data-processing tutorial</a> you learned to read the field and manipulate it. Here you use it to evaluate the two central quantities of any turbulence calculation — the <strong>turbulent kinetic energy</strong> <span class="math inline">\(k\)</span> and its <strong>dissipation rate</strong> <span class="math inline">\(\varepsilon\)</span> — directly from the DNS, and then build the characteristic scales of the flow from them. This mirrors the <span class="math inline">\(k\)</span>-equation analysis from lecture: instead of <em>modelling</em> these terms, you <em>measure</em> them.</p>
-</section>
-<section id="the-turbulent-kinetic-energy-equation" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="the-turbulent-kinetic-energy-equation"><span class="header-section-number">2</span> The turbulent kinetic energy equation</h2>
-<p>Applying the Reynolds decomposition <span class="math inline">\(u_i = \langle u_i\rangle + u_i'\)</span> to the Navier–Stokes equations and taking the mean gives the transport equation for the turbulent kinetic energy <span class="math inline">\(k = \tfrac12\langle u_i' u_i'\rangle\)</span>:</p>
-<p><span id="eq-tke"><span class="math display">\[
-\underbrace{\frac{\partial k}{\partial t}}_{\text{unsteady}}
-+ \underbrace{\langle u_j\rangle \frac{\partial k}{\partial x_j}}_{\text{advection}}
-= \underbrace{-\langle u_i' u_j'\rangle \frac{\partial \langle u_i\rangle}{\partial x_j}}_{\text{production } \mathcal{P}}
-- \underbrace{\varepsilon}_{\text{dissipation}}
-+ \underbrace{\frac{\partial}{\partial x_j}\!\left(\cdots\right)}_{\text{transport } \mathcal{T}}
-\tag{1}\]</span></span></p>
-<p>with the dissipation rate</p>
-<p><span id="eq-eps"><span class="math display">\[
-\varepsilon = 2\nu \langle s_{ij}' s_{ij}'\rangle,
-\qquad
-s_{ij}' = \tfrac12\!\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_j'}{\partial x_i}\right).
-\tag{2}\]</span></span></p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Why the budget collapses for our flow
+<span class="screen-reader-only">Tip</span>Before you start
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Forced homogeneous isotropic turbulence is the cleanest possible case for <a href="#eq-tke" class="quarto-xref">Eq.&nbsp;1</a>, because almost every term drops out:</p>
-<ul>
-<li><strong>No mean shear.</strong> <span class="math inline">\(\langle u_i\rangle \approx 0\)</span> everywhere, so the mean advection term <em>and</em> the production term <span class="math inline">\(\mathcal{P} = -\langle u_i' u_j'\rangle\,\partial_j\langle u_i\rangle\)</span> <strong>both vanish</strong> — there is no mean gradient to extract energy from.</li>
-<li><strong>Homogeneity.</strong> Statistics do not depend on position, so every spatial divergence — the transport term <span class="math inline">\(\mathcal{T}\)</span> — averages to <strong>zero</strong>.</li>
-<li><strong>Stationarity.</strong> The forcing injects energy at the large scales at a mean rate <span class="math inline">\(\mathcal{F}\)</span> that, on average, holds <span class="math inline">\(\partial k/\partial t = 0\)</span>.</li>
-</ul>
-<p>What remains is a single statement: <strong>injection balances dissipation</strong>, <span class="math inline">\(\mathcal{F} = \varepsilon\)</span>. You cannot measure the artificial forcing <span class="math inline">\(\mathcal{F}\)</span> from a snapshot, but you <em>can</em> measure <span class="math inline">\(k\)</span> and <span class="math inline">\(\varepsilon\)</span> directly — and from them every characteristic scale of the flow. That is the task.</p>
+<p>This how-to is all about reading and editing plain-text files from a shell. If the command line is new to you, skim the <a href="../cluster/terminal.html">Terminal and vim</a> page first — it covers opening a terminal, moving around, viewing files, and the few vim commands you use throughout this how-to.</p>
 </div>
 </div>
+<section id="the-finite-volume-recipe-as-files" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="the-finite-volume-recipe-as-files"><span class="header-section-number">1</span> The finite-volume recipe, as files</h2>
+<p>Recall the finite-volume idea: integrate the conservation laws over each cell, turn volume integrals of fluxes into face fluxes with Gauss’s theorem, choose a rule to reconstruct the face values, and couple pressure and velocity so the flow stays divergence-free. In OpenFOAM every one of those choices is a line in a dictionary file:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Lecture concept</th>
+<th>OpenFOAM file</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>the mesh (control volumes)</td>
+<td><code>system/blockMeshDict</code> → <code>constant/polyMesh</code></td>
+</tr>
+<tr class="even">
+<td>boundary &amp; initial conditions</td>
+<td>the <code>0/</code> directory (<code>U</code>, <code>p</code>, <code>k</code>, <code>epsilon</code>, <code>nut</code>)</td>
+</tr>
+<tr class="odd">
+<td>face-flux interpolation (upwind / central)</td>
+<td><code>system/fvSchemes</code> (<code>divSchemes</code>)</td>
+</tr>
+<tr class="even">
+<td>pressure–velocity coupling (SIMPLE)</td>
+<td><code>system/fvSolution</code> (<code>SIMPLE</code>, <code>solvers</code>)</td>
+</tr>
+<tr class="odd">
+<td>iteration control &amp; outputs</td>
+<td><code>system/controlDict</code></td>
+</tr>
+<tr class="even">
+<td>turbulence model (<span class="math inline">\(k\)</span>–<span class="math inline">\(\varepsilon\)</span>)</td>
+<td><code>constant/turbulenceProperties</code></td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="reading-the-field-as-a-structured-cube" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="reading-the-field-as-a-structured-cube"><span class="header-section-number">3</span> Reading the field as a structured cube</h2>
-<p>The tasks below assume the field has been reshaped from the flat table into a <span class="math inline">\(200^3\)</span> NumPy array per velocity component. The grid spacing is that of the parent <span class="math inline">\(1024^3\)</span> simulation, <span class="math inline">\(dx = 2\pi/1024\)</span>, so the sub-cube has side <span class="math inline">\(L = 200\,dx = 2\pi\,(200/1024)\)</span>.</p>
-<div id="c59c494b" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>nu <span class="op">=</span> <span class="fl">1.85e-4</span>                       <span class="co"># kinematic viscosity of the JHTDB isotropic DNS</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>dx <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">/</span> <span class="dv">1024</span>              <span class="co"># grid spacing of the parent 1024^3 simulation</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>dim <span class="op">=</span> <span class="dv">200</span>                          <span class="co"># our sub-cube is 200^3</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"/project/60004/00_Assignment1/isotropic_t1.parquet"</span>)  <span class="co"># FULL 200^3 grid at one instant (isotropic.parquet is the time-series, wrong for spatial stats)</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> to_cube(component):</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Scatter a flat velocity column onto the structured 200^3 grid."""</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    cube <span class="op">=</span> np.zeros((dim, dim, dim), dtype<span class="op">=</span>np.float64)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    ix <span class="op">=</span> (df[<span class="st">"x"</span>] <span class="op">/</span> dx).<span class="bu">round</span>().astype(<span class="bu">int</span>)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    iy <span class="op">=</span> (df[<span class="st">"y"</span>] <span class="op">/</span> dx).<span class="bu">round</span>().astype(<span class="bu">int</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    iz <span class="op">=</span> (df[<span class="st">"z"</span>] <span class="op">/</span> dx).<span class="bu">round</span>().astype(<span class="bu">int</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    cube[ix, iy, iz] <span class="op">=</span> df[component].values</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cube</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> to_cube(<span class="st">"velocity_x"</span>)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> to_cube(<span class="st">"velocity_y"</span>)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> to_cube(<span class="st">"velocity_z"</span>)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(u.shape, u.dtype)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<hr>
-</section>
-<section id="sec-task1" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="sec-task1"><span class="header-section-number">4</span> Task 1 — Reynolds decomposition</h2>
-<div class="callout callout-style-default callout-important callout-titled">
+<section id="get-the-case-on-the-cluster" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="get-the-case-on-the-cluster"><span class="header-section-number">2</span> Get the case on the cluster</h2>
+<p>Load the module and copy the tutorial case into your scratch space:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load openfoam/v2412                   <span class="co"># ESI OpenFOAM, sets FOAM_TUTORIALS etc.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /scratch/<span class="va">$USER</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-r</span> <span class="va">$FOAM_TUTORIALS</span>/incompressible/simpleFoam/pitzDaily .</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> pitzDaily</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Task 1
+<span class="screen-reader-only">Tip</span>Look before you leap: ParaView
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Because the flow is homogeneous, the ensemble average of lecture is, by ergodicity, the <strong>spatial average over the cube</strong>. Compute the mean of each velocity component, <span class="math inline">\(\langle u_i\rangle\)</span>, and confirm it is small compared to the fluctuations. Then form the fluctuations <span class="math inline">\(u_i' = u_i - \langle u_i\rangle\)</span> and compute the three component variances <span class="math inline">\(\langle u_i'^2\rangle\)</span>.</p>
-<p>Report the three variances and comment (1–2 sentences): are they approximately equal, and what does that tell you about <strong>isotropy</strong>?</p>
+<p>At any point you can open the case in <strong>ParaView</strong> to see the mesh, the boundary patches and the results. On the cluster ParaView is a graphical program, so it can only be opened from a <strong>remote desktop launched inside JupyterLab</strong> — not from the login-node shell. In the JupyterLab <strong>Launcher</strong>, open the <strong>Desktop</strong> (VNC) tile; in the desktop that appears, double-click the <strong>Paraview</strong> icon to start ParaView (<a href="#fig-paraview-vnc" class="quarto-xref">Fig.&nbsp;1</a>). Load a case with <strong>File → Open</strong> and choose its <code>.foam</code> file; if the case has none yet, create an empty marker file in the case folder first (this needs no graphics, so a plain terminal is fine):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> case.foam     <span class="co"># an empty &lt;name&gt;.foam file tells ParaView which case to read</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="fig-paraview-vnc" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-paraview-vnc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Figures/Paraview_VNC.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-paraview-vnc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: ParaView running in the JupyterLab remote desktop (VNC). Start it from the <strong>Paraview</strong> desktop icon, then load the case’s <code>.foam</code> file with <strong>File → Open</strong>. opening it from a terminal does not work here — there is no X-forwarding.
+</figcaption>
+</figure>
+</div>
+<p>Do this whenever you are unsure what a file did — visual feedback is the fastest way to learn OpenFOAM. For a full tour — fields, slices, glyphs, streamlines and profile plots on this same <code>pitzDaily</code> case — see the <a href="../openfoam/paraview.html">ParaView tutorial</a>.</p>
 </div>
 </div>
-</section>
-<section id="sec-task2" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="sec-task2"><span class="header-section-number">5</span> Task 2 — Turbulent kinetic energy</h2>
-<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Task 2
+<span class="screen-reader-only">Note</span>We run on the login node — for now
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Compute the turbulent kinetic energy</p>
-<p><span class="math display">\[
-k = \tfrac12\langle u_i' u_i'\rangle
-  = \tfrac12\!\left(\langle u_1'^2\rangle + \langle u_2'^2\rangle + \langle u_3'^2\rangle\right).
-\]</span></p>
-<p>Report <span class="math inline">\(k\)</span> and the equivalent single-component rms velocity <span class="math inline">\(u_{\mathrm{rms}} = \sqrt{2k/3}\)</span>.</p>
+<p>This case is small enough to run directly on the login node. Larger runs must go through the <strong>Slurm</strong> scheduler on a compute node; we introduce that in the next tutorial.</p>
 </div>
 </div>
 </section>
-<section id="sec-task3" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="sec-task3"><span class="header-section-number">6</span> Task 3 — Dissipation rate</h2>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
+<section id="the-case-files" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-case-files"><span class="header-section-number">3</span> The case files</h2>
+<p>Inspect any dictionary with <code>cat</code>. Do this once now, and use the same command for every file below:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> constant/turbulenceProperties</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>constant/turbulenceProperties</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="constant/turbulenceProperties"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>simulationType  RAS<span class="op">;</span>                 <span class="co">// Reynolds-Averaged Simulation (RANS): solve the mean flow</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>RAS</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    RASModel        kEpsilon<span class="op">;</span>         <span class="co">// the model from Assignment 2</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    turbulence      on<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    printCoeffs     on<span class="op">;</span>              <span class="co">// echoes C_mu, C_eps1, ... to the log</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="systemfvschemes-where-the-face-flux-is-chosen" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="systemfvschemes-where-the-face-flux-is-chosen"><span class="header-section-number">3.1</span> <code>system/fvSchemes</code> — where the face flux is chosen</h3>
+<p>The <code>divSchemes</code> block is the interpolation-scheme decision from the lectures (upwind vs.&nbsp;central; numerical diffusion vs.&nbsp;oscillations). The v2412 <code>pitzDaily</code> block:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>system/fvSchemes (divSchemes)</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="system/fvSchemes (divSchemes)"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>divSchemes</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">default</span>          none<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    div<span class="op">(</span>phi<span class="op">,</span>U<span class="op">)</span>       bounded Gauss linearUpwind grad<span class="op">(</span>U<span class="op">);</span>   <span class="co">// momentum: 2nd order</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    turbulence       bounded Gauss limitedLinear <span class="dv">1</span><span class="op">;</span>        <span class="co">// define a reusable scheme, name it 'turbulence'</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    div<span class="op">(</span>phi<span class="op">,</span>k<span class="op">)</span>       <span class="er">$</span>turbulence<span class="op">;</span>                          <span class="co">// $turbulence = reuse the entry above (a macro)</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    div<span class="op">(</span>phi<span class="op">,</span>epsilon<span class="op">)</span> <span class="er">$</span>turbulence<span class="op">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    div<span class="op">((</span>nuEff<span class="op">*</span>dev2<span class="op">(</span>T<span class="op">(</span>grad<span class="op">(</span>U<span class="op">)))))</span> Gauss linear<span class="op">;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Task 3
+<span class="screen-reader-only">Note</span>Why <code>bounded</code>, and why <code>limitedLinear</code> on <span class="math inline">\(k\)</span>, <span class="math inline">\(\varepsilon\)</span>?
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Evaluate the dissipation rate from its definition, <a href="#eq-eps" class="quarto-xref">Eq.&nbsp;2</a>. Use <code>numpy.gradient</code> with spacing <code>dx</code> to obtain the nine fluctuating velocity gradients <span class="math inline">\(\partial u_i'/\partial x_j\)</span>, build the fluctuating strain-rate tensor <span class="math inline">\(s_{ij}'\)</span>, and average:</p>
-<p><span class="math display">\[
-\varepsilon = 2\nu\,\langle s_{ij}' s_{ij}'\rangle .
-\]</span></p>
-<p>Then compute the <strong>isotropic surrogate</strong> <span class="math inline">\(\varepsilon_{\mathrm{iso}} = 15\,\nu\,\big\langle (\partial u_1'/\partial x_1)^2\big\rangle\)</span>, which uses a single gradient, and compare the two. How close are they, and why should they agree for this flow?</p>
+<p><code>bounded</code> adds a term that vanishes at convergence but keeps a steady run stable while <span class="math inline">\(\nabla\!\cdot\mathbf U\)</span> is not yet zero. The turbulence scalars use <code>limitedLinear</code> — a <strong>flux-limited (TVD)</strong> scheme: second-order where the field is smooth, but it clips the reconstruction near steep gradients so <span class="math inline">\(k\)</span> and <span class="math inline">\(\varepsilon\)</span> can never go <strong>negative</strong>. That bounded-but-accurate compromise is exactly the flux-limiter idea from the finite-volume lecture; momentum can use plain <code>linearUpwind</code> because <span class="math inline">\(\mathbf U\)</span> need not stay positive.</p>
+</div>
 </div>
 </div>
 </section>
-<section id="sec-task4" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="sec-task4"><span class="header-section-number">7</span> Task 4 — Characteristic scales</h2>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="systemfvsolution-the-simple-loop" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="systemfvsolution-the-simple-loop"><span class="header-section-number">3.2</span> <code>system/fvSolution</code> — the SIMPLE loop</h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>system/fvSolution (SIMPLE)</strong></pre>
 </div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Task 4
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="system/fvSolution (SIMPLE)"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>SIMPLE</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    nNonOrthogonalCorrectors <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    consistent      yes<span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    residualControl <span class="op">{</span> p <span class="fl">1e-4</span><span class="op">;</span> U <span class="fl">1e-4</span><span class="op">;</span> <span class="st">"(k|epsilon)"</span> <span class="fl">1e-4</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>relaxationFactors</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    equations <span class="op">{</span> U <span class="fl">0.9</span><span class="op">;</span> <span class="st">"(k|epsilon)"</span> <span class="fl">0.9</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    fields    <span class="op">{</span> p <span class="fl">0.3</span><span class="op">;</span> <span class="op">}</span>     <span class="co">// pressure is under-relaxed the most</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</div>
-<div class="callout-body-container callout-body">
-<p>From <span class="math inline">\(k\)</span>, <span class="math inline">\(\varepsilon\)</span> and <span class="math inline">\(\nu\)</span> alone, compute:</p>
-<ul>
-<li>the <strong>Kolmogorov scales</strong> <span class="math inline">\(\eta = (\nu^3/\varepsilon)^{1/4}\)</span>, <span class="math inline">\(\tau_\eta = (\nu/\varepsilon)^{1/2}\)</span>, <span class="math inline">\(u_\eta = (\nu\varepsilon)^{1/4}\)</span>;</li>
-<li>the <strong>Taylor microscale</strong> <span class="math inline">\(\lambda = \sqrt{10\,\nu k/\varepsilon}\)</span>;</li>
-<li>the <strong>Taylor-microscale Reynolds number</strong> <span class="math inline">\(\mathrm{Re}_\lambda = \dfrac{u_{\mathrm{rms}}\,\lambda}{\nu} = \sqrt{\dfrac{20\,k^2}{3\,\nu\,\varepsilon}}\)</span>.</li>
-</ul>
-<p>Compare your <span class="math inline">\(\mathrm{Re}_\lambda\)</span> to the published value for this dataset, <span class="math inline">\(\mathrm{Re}_\lambda \approx 433\)</span>. Do they agree?</p>
-</div>
-</div>
+<p><code>simpleFoam</code> solves the momentum predictor, then a pressure(-correction) Poisson equation, corrects, and repeats until the residuals fall below <code>residualControl</code>.</p>
 </section>
-<section id="sec-task5" class="level2" data-number="8">
-<h2 data-number="8" class="anchored" data-anchor-id="sec-task5"><span class="header-section-number">8</span> Task 5 — Resolution and the budget</h2>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="systemcontroldict-iteration-control-and-outputs" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="systemcontroldict-iteration-control-and-outputs"><span class="header-section-number">3.3</span> <code>system/controlDict</code> — iteration control and outputs</h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>system/controlDict</strong></pre>
 </div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Task 5
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Two short written answers, backed by a number each:</p>
-<ol type="1">
-<li><strong>Resolution.</strong> The largest resolved wavenumber is <span class="math inline">\(\kappa_{\max} = \pi/dx\)</span>. Compute <span class="math inline">\(\kappa_{\max}\eta\)</span>. A well-resolved DNS has <span class="math inline">\(\kappa_{\max}\eta \gtrsim 1\)</span>. Is this field well resolved at the dissipative scale?</li>
-<li><strong>The budget.</strong> Using <a href="#eq-tke" class="quarto-xref">Eq.&nbsp;1</a> and the argument in the callout above, explain in 2–3 sentences why, for this flow, your measured <span class="math inline">\(\varepsilon\)</span> is also (in the mean) the rate at which the forcing injects energy — even though you never computed the forcing.</li>
-</ol>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="system/controlDict"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>application     simpleFoam<span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>startTime       <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>endTime         <span class="dv">2000</span><span class="op">;</span>        <span class="co">// steady: "time" = SIMPLE iteration number</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>deltaT          <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>writeInterval   <span class="dv">100</span><span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Function objects
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>OpenFOAM lets you attach <strong>function objects</strong> in <code>controlDict</code> to compute things <em>while the solver runs</em> — a very common way to add post-processing. The case already ships with a <code>streamlines</code> function object; add <code>solverInfo</code> <strong>in addition</strong> so the solver records, each iteration, the initial/final residual and iteration count of every field — the residual history you plot to judge convergence:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>system/controlDict (functions)</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="system/controlDict (functions)"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>functions</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">#</span><span class="er">includeFunc streamlines            // already in the case</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    solverInfo                          <span class="co">// add this block: writes the residual history</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        type            solverInfo<span class="op">;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        libs            <span class="op">(</span>utilityFunctionObjects<span class="op">);</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        fields          <span class="op">(</span>p U k epsilon<span class="op">);</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The older <code>residuals</code> function object (and the <code>#includeFunc residuals(...)</code> shorthand) was <strong>removed in OpenFOAM v2412</strong> — <code>solverInfo</code> is its replacement.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="mesh-and-boundary-conditions" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="mesh-and-boundary-conditions"><span class="header-section-number">4</span> Mesh and boundary conditions</h2>
+<section id="build-the-mesh" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="build-the-mesh"><span class="header-section-number">4.1</span> Build the mesh</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">blockMesh</span>          <span class="co"># reads system/blockMeshDict → constant/polyMesh</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">checkMesh</span>          <span class="co"># sanity-check: should end with "Mesh OK."</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Open the case in ParaView (its <code>.foam</code> file, via <strong>File → Open</strong>) and colour by <code>patch</code> to see the inlet, outlet and walls of the step.</p>
+</section>
+<section id="boundary-conditions" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="boundary-conditions"><span class="header-section-number">4.2</span> Boundary conditions</h3>
+<p>The <code>0/</code> directory holds one file per field; each lists a <code>boundaryField</code> with a condition on every patch. Look at the velocity:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> 0/U</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>0/U (boundaryField)</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="0/U (boundaryField)"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>boundaryField</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    inlet        <span class="op">{</span> type fixedValue<span class="op">;</span> value uniform <span class="op">(</span><span class="dv">10</span> <span class="dv">0</span> <span class="dv">0</span><span class="op">);</span> <span class="op">}</span>  <span class="co">// 10 m/s in +x</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    outlet       <span class="op">{</span> type zeroGradient<span class="op">;</span> <span class="op">}</span>                        <span class="co">// let the flow leave freely</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    upperWall    <span class="op">{</span> type noSlip<span class="op">;</span> <span class="op">}</span>                              <span class="co">// solid wall: U = 0</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    lowerWall    <span class="op">{</span> type noSlip<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    frontAndBack <span class="op">{</span> type empty<span class="op">;</span> <span class="op">}</span>                               <span class="co">// 2-D case: no z-direction</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>p</code> gets a fixed value at the outlet and <code>zeroGradient</code> on the walls; <code>k</code>, <code>epsilon</code> and <code>nut</code> use inlet values plus wall functions. Inspect them the same way (<code>cat 0/p</code>, <code>cat 0/k</code>, …).</p>
+</section>
+</section>
+<section id="run-the-solver" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="run-the-solver"><span class="header-section-number">5</span> Run the solver</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">simpleFoam</span> <span class="kw">|</span> <span class="fu">tee</span> log.simpleFoam    <span class="co"># runs, and also saves the screen output to a log</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Each SIMPLE iteration prints one block; read it like this:</p>
+<pre class="text"><code>Time = 280
+
+smoothSolver:  Solving for Ux, Initial residual = 0.000120005, Final residual = 1.17549e-05, No Iterations 5
+smoothSolver:  Solving for Uy, Initial residual = 0.00098843, Final residual = 6.83453e-05, No Iterations 6
+GAMG:  Solving for p, Initial residual = 0.000770708, Final residual = 6.66094e-05, No Iterations 5
+time step continuity errors : sum local = 0.00317883, global = -0.000240337, cumulative = 1.06288
+smoothSolver:  Solving for epsilon, Initial residual = 0.000120694, Final residual = 7.02111e-06, No Iterations 3
+smoothSolver:  Solving for k, Initial residual = 0.000226192, Final residual = 1.4116e-05, No Iterations 4
+ExecutionTime = 7.7 s  ClockTime = 9 s
+
+
+SIMPLE solution converged in 280 iterations
+
+streamLine streamlines write:
+    seeded 10 particles
+    Tracks:10
+    Total samples:10885
+End</code></pre>
+<ul>
+<li><strong>Time</strong> — the SIMPLE <strong>iteration number</strong> (this is a steady run, so “time” is just the iteration counter).</li>
+<li><strong>Initial residual</strong> — how far the field is from satisfying its equation <em>at the start</em> of this iteration. This is the number to watch: it should fall over the run. Convergence is declared when every initial residual drops below the <code>residualControl</code> value (<span class="math inline">\(10^{-4}\)</span>) — here after <strong>280</strong> iterations.</li>
+<li><strong>Final residual / No Iterations</strong> — how well the <em>linear solver</em> solved that one equation this iteration (much smaller, less interesting).</li>
+<li><strong>continuity errors</strong> — how badly mass conservation is violated; the per-step <code>sum local</code> and <code>global</code> values should stay small (the <code>cumulative</code> figure just accumulates them and is not a convergence metric).</li>
+<li><strong>ExecutionTime / ClockTime</strong> — cumulative solver and wall-clock time; note these for the cost comparison across cases in Assignment 2b.</li>
+<li><strong>streamLine … write / End</strong> — the <code>streamlines</code> function object writing its tracks as the run finishes; <code>End</code> marks a clean exit.</li>
+</ul>
+</section>
+<section id="post-processing" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="post-processing"><span class="header-section-number">6</span> Post-processing</h2>
+<p><strong>Start in ParaView</strong> (open the case’s <code>.foam</code> file as above). It is the quickest way to see the physics: colour by velocity magnitude to see the jet and the recirculation bubble behind the step, and turn on the <code>streamlines</code> output to see the flow reattach. The <a href="../openfoam/paraview.html">ParaView tutorial</a> walks through fields, slices, glyphs, streamlines and profile plots on this case step by step.</p>
+<p>For plots you can reproduce, pull the fields into Python instead:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"postProcessing/solverInfo/0/solverInfo.dat"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># the last commented line holds the column names</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(path) <span class="im">as</span> fh:</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    names <span class="op">=</span> [ln <span class="cf">for</span> ln <span class="kw">in</span> fh <span class="cf">if</span> ln.startswith(<span class="st">"#"</span>)][<span class="op">-</span><span class="dv">1</span>].lstrip(<span class="st">"#"</span>).split()</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># solverInfo mixes text columns (the solver name) with numbers, so read ONLY</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># the Time column and the "&lt;field&gt;_initial" residual columns</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>init <span class="op">=</span> [j <span class="cf">for</span> j, n <span class="kw">in</span> <span class="bu">enumerate</span>(names) <span class="cf">if</span> n.endswith(<span class="st">"_initial"</span>)]</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> np.loadtxt(path, comments<span class="op">=</span><span class="st">"#"</span>, usecols<span class="op">=</span>[<span class="dv">0</span>] <span class="op">+</span> init)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> d[:, <span class="dv">0</span>]                                   <span class="co"># first column is the iteration counter</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, j <span class="kw">in</span> <span class="bu">enumerate</span>(init, start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    plt.semilogy(t, d[:, k], label<span class="op">=</span>names[j][:<span class="op">-</span><span class="bu">len</span>(<span class="st">"_initial"</span>)])</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"SIMPLE iteration"</span>)<span class="op">;</span> plt.ylabel(<span class="st">"initial residual"</span>)<span class="op">;</span> plt.legend()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="self-tests" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="self-tests"><span class="header-section-number">7</span> Self-tests</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Self-test 1 — Read the schemes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Open <code>system/fvSchemes</code>. Which scheme is used for <code>div(phi,U)</code>, and is it first- or second-order? What does that choice mean for numerical diffusion?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Looking ahead
+<span class="screen-reader-only">Note</span>Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The two-point correlation, the integral length scale and the full energy spectrum — the <em>scale-by-scale</em> picture of the same cube — are the subject of a later tutorial. Here you characterised the flow by its integral quantities (<span class="math inline">\(k\)</span>, <span class="math inline">\(\varepsilon\)</span>) and the scales built from them; next you will resolve how energy is distributed across wavenumbers.</p>
+<p><code>div(phi,U)</code> uses <code>linearUpwind grad(U)</code> — a <strong>second-order</strong> upwind-biased scheme. It is far less diffusive than first-order <code>upwind</code> (which would smear the shear layer behind the step), while more stable than pure central differencing (which can oscillate at high cell Péclet number).</p>
 </div>
 </div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Self-test 2 — The SIMPLE loop
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>From <code>system/fvSolution</code>, which fields does the solver iterate, and what is the under-relaxation factor on <strong>pressure</strong>? Why is pressure under-relaxed the most?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>It solves <span class="math inline">\(U\)</span>, <span class="math inline">\(p\)</span>, <span class="math inline">\(k\)</span>, <span class="math inline">\(\varepsilon\)</span>. Pressure is under-relaxed to <span class="math inline">\(0.3\)</span> (vs. <span class="math inline">\(0.9\)</span>). The pressure equation enforces incompressibility globally and reacts strongly to the not-yet-divergence-free velocity; heavy under-relaxation keeps the segregated SIMPLE loop from diverging.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Self-test 3 — Convergence
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>From your residual plot, has the run converged? What is the final initial-residual level of the pressure equation?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Converged when all initial residuals fall below <code>residualControl</code> (<span class="math inline">\(10^{-4}\)</span>) and level off; pressure is usually the last to get there. A monotone decrease over a few hundred iterations to <span class="math inline">\(\sim\!10^{-4}\)</span> is the expected picture.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Self-test 4 — The physics
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>From the velocity field, the flow <strong>separates</strong> at the step and <strong>reattaches</strong> downstream. Estimate the reattachment length (step to where the near-wall flow changes direction), in step heights.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The recirculation bubble reattaches at roughly <span class="math inline">\(6\)</span>–<span class="math inline">\(8\)</span> step heights for this Reynolds number and model; the exact value depends on mesh and scheme — which is what Assignment 2b explores.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="further-reading" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">8</span> Further reading</h2>
+<ul>
+<li>OpenFOAM tutorial guide — <a href="https://www.openfoam.com/documentation/tutorial-guide/3-compressible-flow/3.1-steady-turbulent-flow-over-a-backward-facing-step">steady turbulent flow over a backward-facing step</a> (the guide’s compressible variant of this case).</li>
+</ul>
+</section>
+<section id="references" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="references"><span class="header-section-number">9</span> References</h2>
+<div id="refs" role="list">
+
 </div>
 
 

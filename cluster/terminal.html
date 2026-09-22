@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="MECH 501/600 — Computational Turbulence">
-<meta name="dcterms.date" content="2026-09-09">
+<meta name="dcterms.date" content="2026-09-22">
 
-<title>Terminal (later) – MECH 501/600 — Computational Turbulence</title>
+<title>Terminal and vim – MECH 501/600 — Computational Turbulence</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -316,13 +316,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Python</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../openfoam/how-to.html"> 
+<span class="menu-text">OpenFOAM</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../tutorials/tutorial-00.html"> 
-<span class="menu-text">Tutorials</span></a>
+<span class="menu-text">Tutorials &amp; Assignments</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/YOUR_USERNAME/MECH501_Tutorial"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/mcgillteaching/MECH501_tutorial"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -338,7 +342,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../cluster/index.html">Cluster</a></li><li class="breadcrumb-item"><a href="../cluster/terminal.html">Terminal (later)</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../cluster/index.html">Cluster</a></li><li class="breadcrumb-item"><a href="../cluster/terminal.html">Terminal and vim</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -412,7 +416,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../cluster/terminal.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Terminal (later)</span></a>
+ <span class="menu-text">Terminal and vim</span></a>
   </div>
 </li>
       </ul>
@@ -479,12 +483,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
- <span class="menu-text">Tutorials</span></a>
+ <span class="menu-text">OpenFOAM</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/how-to.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">OpenFOAM How-To: your first RANS case</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/paraview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ParaView: visualising your OpenFOAM results</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Tutorials and Assignments</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../tutorials/tutorial-00.html" class="sidebar-item-text sidebar-link">
@@ -505,8 +532,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tutorials/assignment-01-kequation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 1 · Part B: The turbulent kinetic energy budget</span></a>
+  <a href="../tutorials/assignment-02-correlations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2a: Two-point correlations &amp; length scales</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/assignment-02b-openfoam.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2b: Do your own OpenFOAM simulation</span></a>
   </div>
 </li>
       </ul>
@@ -521,7 +554,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#preview-logging-in-over-ssh" id="toc-preview-logging-in-over-ssh" class="nav-link active" data-scroll-target="#preview-logging-in-over-ssh"><span class="header-section-number">1</span> Preview: logging in over SSH</a></li>
+  <li><a href="#the-terminal" id="toc-the-terminal" class="nav-link active" data-scroll-target="#the-terminal"><span class="header-section-number">1</span> The terminal</a>
+  <ul class="collapse">
+  <li><a href="#getting-around-and-looking-at-files" id="toc-getting-around-and-looking-at-files" class="nav-link" data-scroll-target="#getting-around-and-looking-at-files"><span class="header-section-number">1.1</span> Getting around and looking at files</a></li>
+  <li><a href="#make-your-shell-nicer-optional" id="toc-make-your-shell-nicer-optional" class="nav-link" data-scroll-target="#make-your-shell-nicer-optional"><span class="header-section-number">1.2</span> Make your shell nicer (optional)</a></li>
+  </ul></li>
+  <li><a href="#vim" id="toc-vim" class="nav-link" data-scroll-target="#vim"><span class="header-section-number">2</span> vim</a>
+  <ul class="collapse">
+  <li><a href="#make-vim-nicer-optional" id="toc-make-vim-nicer-optional" class="nav-link" data-scroll-target="#make-vim-nicer-optional"><span class="header-section-number">2.1</span> Make vim nicer (optional)</a></li>
+  </ul></li>
+  <li><a href="#ssh-advanced" id="toc-ssh-advanced" class="nav-link" data-scroll-target="#ssh-advanced"><span class="header-section-number">3</span> Connecting over SSH (advanced)</a>
+  <ul class="collapse">
+  <li><a href="#with-a-password" id="toc-with-a-password" class="nav-link" data-scroll-target="#with-a-password"><span class="header-section-number">3.1</span> With a password</a></li>
+  <li><a href="#with-an-ssh-key" id="toc-with-an-ssh-key" class="nav-link" data-scroll-target="#with-an-ssh-key"><span class="header-section-number">3.2</span> With an SSH key</a></li>
+  <li><a href="#a-shortcut-.sshconfig" id="toc-a-shortcut-.sshconfig" class="nav-link" data-scroll-target="#a-shortcut-.sshconfig"><span class="header-section-number">3.3</span> A shortcut: <code>~/.ssh/config</code></a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -529,10 +576,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../cluster/index.html">Cluster</a></li><li class="breadcrumb-item"><a href="../cluster/terminal.html">Terminal (later)</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../cluster/index.html">Cluster</a></li><li class="breadcrumb-item"><a href="../cluster/terminal.html">Terminal and vim</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Terminal (later)</h1>
-<p class="subtitle lead">Command-line access to the cluster</p>
+<h1 class="title">Terminal and vim</h1>
+<p class="subtitle lead">Bash basics, a first look at vim, and — later — SSH</p>
 </div>
 
 
@@ -549,7 +596,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 9, 2026</p>
+      <p class="date">September 22, 2026</p>
     </div>
   </div>
   
@@ -567,20 +614,305 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Coming soon
+<span class="screen-reader-only">Note</span>Two ways to get a terminal
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Later tutorials will use the cluster from the <strong>command line</strong> — logging in over SSH, loading modules, editing files, and submitting batch jobs with <strong>Slurm</strong>. This page will be expanded then. For now, use the <a href="../cluster/jupyterlab.html">JupyterLab</a> portal, which already gives you a terminal (<strong>File ▸ New ▸ Terminal</strong>).</p>
+<p>The <strong>default</strong> for this course is the terminal built into <strong>JupyterLab</strong> — it is already a shell on the cluster, with nothing to install. Connecting from a terminal on <strong>your own computer over SSH</strong> is a more advanced option we introduce <a href="#ssh-advanced">at the end of this page</a>.</p>
 </div>
 </div>
-<section id="preview-logging-in-over-ssh" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="preview-logging-in-over-ssh"><span class="header-section-number">1</span> Preview: logging in over SSH</h2>
-<p>Once command-line access is introduced, you will connect with:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>your-username<span class="op">&gt;</span>@<span class="op">&lt;</span>login-host<span class="op">&gt;</span>   <span class="co"># login host will be posted with this task</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>using the same username and password you created during <a href="../cluster/registration.html">Registration</a>.</p>
+<section id="the-terminal" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="the-terminal"><span class="header-section-number">1</span> The terminal</h2>
+<p>In JupyterLab click the <strong>+</strong> (new Launcher) and choose <strong>Terminal</strong> (or <strong>File ▸ New ▸ Terminal</strong>). You now have a <strong>bash</strong> shell running on the cluster — the same place your notebooks and files live.</p>
+<section id="getting-around-and-looking-at-files" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="getting-around-and-looking-at-files"><span class="header-section-number">1.1</span> Getting around and looking at files</h3>
+<p>A handful of commands cover almost everything you need:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span>                 <span class="co"># print working directory — where am I?</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>                  <span class="co"># list files here</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span>               <span class="co"># long listing: sizes, dates, permissions</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-a</span>               <span class="co"># also show hidden files (names starting with a dot)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> project          <span class="co"># go into a folder</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ..               <span class="co"># go up one level</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~                <span class="co"># go to your home directory</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> runs          <span class="co"># make a new folder</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Looking <em>inside</em> a file without opening an editor:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>  log.simpleFoam              <span class="co"># print the whole file</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> log.simpleFoam              <span class="co"># page through it (Space scrolls, q quits)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> log.simpleFoam              <span class="co"># first 10 lines</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> log.simpleFoam              <span class="co"># last 10 lines</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-f</span> log.simpleFoam           <span class="co"># follow a file as it grows (Ctrl-C to stop)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"converged"</span> log.simpleFoam  <span class="co"># show only lines containing a word</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Copying, moving and deleting files:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> file.txt backup.txt   <span class="co"># copy</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> old.txt new.txt       <span class="co"># rename / move</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> scratch.txt           <span class="co"># delete — there is no undo</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Press <strong>Tab</strong> to auto-complete file and folder names, and the <strong>↑ / ↓</strong> arrow keys to scroll back through commands you already typed.</p>
+</div>
+</div>
+</section>
+<section id="make-your-shell-nicer-optional" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="make-your-shell-nicer-optional"><span class="header-section-number">1.2</span> Make your shell nicer (optional)</h3>
+<p><code>~/.bashrc</code> runs every time you open a shell. The minimal setup below gives a readable two-line prompt, a longer timestamped history, and safer <code>rm</code>/<code>cp</code>/<code>mv</code>. Create it with <code>vim ~/.bashrc</code>, paste, save, then run <code>source ~/.bashrc</code> to apply it in the current shell.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span><code>~/.bashrc</code> — click to expand
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>~/.bashrc</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="~/.bashrc"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Prompt ────────────────────────────────────────────────────────────────────</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git_branch()</span> <span class="kw">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">git</span> branch <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">|</span> <span class="fu">grep</span> <span class="st">'^\*'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/\* //'</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Colors</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="va">_reset</span><span class="op">=</span><span class="st">"\[\e[0m\]"</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="va">_bold</span><span class="op">=</span><span class="st">"\[\e[1m\]"</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="va">_red</span><span class="op">=</span><span class="st">"\[\e[38;5;196m\]"</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="va">_orange</span><span class="op">=</span><span class="st">"\[\e[38;5;214m\]"</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="va">_yellow</span><span class="op">=</span><span class="st">"\[\e[38;5;226m\]"</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="va">_green</span><span class="op">=</span><span class="st">"\[\e[38;5;82m\]"</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="va">_blue</span><span class="op">=</span><span class="st">"\[\e[38;5;75m\]"</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="va">_gray</span><span class="op">=</span><span class="st">"\[\e[38;5;245m\]"</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="va">PS1</span><span class="op">=</span><span class="st">"</span><span class="va">${_gray}</span><span class="st">┌─</span><span class="va">${_reset}</span><span class="st">"</span>                        <span class="co"># top bar</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="va">PS1</span><span class="op">+=</span><span class="st">"</span><span class="va">${_bold}${_blue}</span><span class="st">\u</span><span class="va">${_reset}</span><span class="st">"</span>               <span class="co"># username</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="va">PS1</span><span class="op">+=</span><span class="st">"</span><span class="va">${_gray}</span><span class="st">@</span><span class="va">${_reset}</span><span class="st">"</span>                        <span class="co"># @</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="va">PS1</span><span class="op">+=</span><span class="st">"</span><span class="va">${_bold}${_orange}</span><span class="st">\h</span><span class="va">${_reset}</span><span class="st">"</span>             <span class="co"># hostname</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="va">PS1</span><span class="op">+=</span><span class="st">"</span><span class="va">${_gray}</span><span class="st"> in </span><span class="va">${_reset}</span><span class="st">"</span>                     <span class="co"># in</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="va">PS1</span><span class="op">+=</span><span class="st">"</span><span class="va">${_bold}${_yellow}</span><span class="st">\w</span><span class="va">${_reset}</span><span class="st">"</span>             <span class="co"># working directory</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="va">PS1</span><span class="op">+=</span><span class="st">"</span><span class="dt">\$</span><span class="st">(git_branch | sed 's/.*/ </span><span class="va">${_gray}</span><span class="st">(</span><span class="va">${_green}</span><span class="st">&amp;</span><span class="va">${_gray}</span><span class="st">)</span><span class="va">${_reset}</span><span class="st">/')"</span>  <span class="co"># git branch</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="va">PS1</span><span class="op">+=</span><span class="st">"\n</span><span class="va">${_gray}</span><span class="st">└─</span><span class="va">${_reset}</span><span class="st"> "</span>                   <span class="co"># second line prompt</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PS1</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co"># ── History ───────────────────────────────────────────────────────────────────</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="va">HISTSIZE</span><span class="op">=</span>10000</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="va">HISTFILESIZE</span><span class="op">=</span>20000</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="va">HISTCONTROL</span><span class="op">=</span>ignoredups:erasedups       <span class="co"># no duplicate entries</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="va">HISTTIMEFORMAT</span><span class="op">=</span><span class="st">"%Y-%m-%d %H:%M  "</span>     <span class="co"># timestamp every command</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="bu">shopt</span> <span class="at">-s</span> histappend                    <span class="co"># append instead of overwrite on exit</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="va">PROMPT_COMMAND</span><span class="op">=</span><span class="st">"history -a"</span>            <span class="co"># write to history immediately</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Navigation ────────────────────────────────────────────────────────────────</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="co">#shopt -s autocd                        # type a directory name to cd into it</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="bu">shopt</span> <span class="at">-s</span> cdspell                       <span class="co"># fix minor typos in cd paths</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="bu">shopt</span> <span class="at">-s</span> dirspell                      <span class="co"># fix minor typos in directory completion</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="co"># -- Alias</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> rm=<span class="st">'rm -i'</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> cp=<span class="st">'cp -i'</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> mv=<span class="st">'mv -i'</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> chmod=<span class="st">'chmod -v'</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ls=<span class="st">'ls --color=auto'</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ll=<span class="st">'ls -l --color=auto'</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> la=<span class="st">'ls -A --color=auto'</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ..=<span class="st">'cd ..'</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ...=<span class="st">'cd ../..'</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> grep=<span class="st">'grep --color=auto'</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> more=<span class="st">'/usr/bin/less'</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">EDITOR</span><span class="op">=</span>vim</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="vim" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="vim"><span class="header-section-number">2</span> vim</h2>
+<p><code>vim</code> is a text editor that lives in the terminal. The one idea to grasp is that it has <strong>modes</strong>: you <em>move around</em> in <strong>normal</strong> mode and <em>type text</em> in <strong>insert</strong> mode.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vim</span> system/controlDict     <span class="co"># open (or create) a file</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>To…</th>
+<th>do this</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>start typing</td>
+<td>press <strong><code>i</code></strong> (enter insert mode)</td>
+</tr>
+<tr class="even">
+<td>stop typing</td>
+<td>press <strong><code>Esc</code></strong> (back to normal mode)</td>
+</tr>
+<tr class="odd">
+<td>save</td>
+<td>type <code>:w</code> and Enter</td>
+</tr>
+<tr class="even">
+<td>save and quit</td>
+<td>type <code>:wq</code> and Enter</td>
+</tr>
+<tr class="odd">
+<td>quit without saving</td>
+<td>type <code>:q!</code> and Enter</td>
+</tr>
+</tbody>
+</table>
+<p>That is genuinely all you need to edit a case file; everything else in vim is a bonus.</p>
+<section id="make-vim-nicer-optional" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="make-vim-nicer-optional"><span class="header-section-number">2.1</span> Make vim nicer (optional)</h3>
+<p><code>~/.vimrc</code> configures vim: line numbers, sensible indentation, search highlighting and a few handy shortcuts. Create it with <code>vim ~/.vimrc</code> and paste. The persistent-undo option needs its folder, so run <code>mkdir -p ~/.vim/undodir</code> once.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span><code>~/.vimrc</code> — click to expand
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>~/.vimrc</strong></pre>
+</div>
+<pre class="vim" data-filename="~/.vimrc"><code>" ── General ───────────────────────────────────────────────────────────────────
+set nocompatible
+set encoding=utf-8
+set history=1000
+set undofile                        " persistent undo across sessions
+set undodir=~/.vim/undodir
+
+" ── Appearance ────────────────────────────────────────────────────────────────
+syntax on
+set number                          " line numbers
+set relativenumber                  " relative numbers (great for jumping)
+set cursorline                      " highlight current line
+set scrolloff=8                     " keep 8 lines above/below cursor
+set colorcolumn=80,120              " column rulers
+set laststatus=2                    " always show status line
+set showmatch                       " highlight matching brackets
+set termguicolors
+
+" ── Indentation ───────────────────────────────────────────────────────────────
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab                       " spaces not tabs
+set smartindent
+set autoindent
+
+" C++ / OpenFOAM often uses different style
+autocmd FileType cpp setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd FileType c   setlocal tabstop=4 shiftwidth=4 expandtab
+
+" ── Search ────────────────────────────────────────────────────────────────────
+set incsearch                       " search as you type
+set hlsearch                        " highlight matches
+set ignorecase
+set smartcase                       " case-sensitive if uppercase used
+nnoremap &lt;Esc&gt; :nohlsearch&lt;CR&gt;      " clear highlight with Escape
+
+" ── File handling ─────────────────────────────────────────────────────────────
+set autoread                        " reload file if changed outside vim
+set noswapfile
+set nobackup
+set hidden                          " switch buffers without saving
+
+" ── Splits ────────────────────────────────────────────────────────────────────
+set splitright                      " new vertical split opens on the right
+set splitbelow                      " new horizontal split opens below
+nnoremap &lt;C-h&gt; &lt;C-w&gt;h
+nnoremap &lt;C-j&gt; &lt;C-w&gt;j
+nnoremap &lt;C-k&gt; &lt;C-w&gt;k
+nnoremap &lt;C-l&gt; &lt;C-w&gt;l
+
+" ── Useful remaps ─────────────────────────────────────────────────────────────
+let mapleader = " "                 " space as leader key
+
+nnoremap &lt;leader&gt;w :w&lt;CR&gt;           " save with space-w
+nnoremap &lt;leader&gt;q :q&lt;CR&gt;           " quit with space-q
+nnoremap &lt;leader&gt;e :Ex&lt;CR&gt;          " open file explorer
+
+" Move lines up/down with Alt+j/k
+nnoremap &lt;A-j&gt; :m .+1&lt;CR&gt;==
+nnoremap &lt;A-k&gt; :m .-2&lt;CR&gt;==
+
+" Stay in visual mode after indenting
+vnoremap &lt; &lt;gv
+vnoremap &gt; &gt;gv
+
+" ── Netrw (built-in file browser) ─────────────────────────────────────────────
+let g:netrw_banner    = 0           " hide the banner
+let g:netrw_liststyle = 3           " tree view
+let g:netrw_winsize   = 25</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="ssh-advanced" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="ssh-advanced"><span class="header-section-number">3</span> Connecting over SSH (advanced)</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>For later
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You do <strong>not</strong> need this for the course: the JupyterLab terminal above is enough. Once command-line access is introduced, you can connect from a terminal on your own machine (macOS/Linux <code>Terminal</code>, or Windows PowerShell / WSL).</p>
+</div>
+</div>
+<section id="with-a-password" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="with-a-password"><span class="header-section-number">3.1</span> With a password</h3>
+<p>The simplest way is to log in with the username and password you created during <a href="../cluster/registration.html">Registration</a> (replace <code>&lt;username&gt;</code> with your cluster username):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>username<span class="op">&gt;</span>@mech501.calculquebec.cloud   <span class="co"># asks for your password each time</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="with-an-ssh-key" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="with-an-ssh-key"><span class="header-section-number">3.2</span> With an SSH key</h3>
+<p>An <strong>SSH key</strong> is a pair of files: a <em>private</em> key that never leaves your computer and a matching <em>public</em> key you place on the cluster. The server checks that the two match instead of asking for a password — so you log in without typing one, and it is more secure. Create a key once and copy the public half to the cluster:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519                              <span class="co"># creates ~/.ssh/id_ed25519 (+ .pub)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ssh-copy-id</span> <span class="op">&lt;</span>username<span class="op">&gt;</span>@mech501.calculquebec.cloud  <span class="co"># installs the public key there</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>From then on the same command logs you straight in, with no password:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>username<span class="op">&gt;</span>@mech501.calculquebec.cloud</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="a-shortcut-.sshconfig" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="a-shortcut-.sshconfig"><span class="header-section-number">3.3</span> A shortcut: <code>~/.ssh/config</code></h3>
+<p>Save the connection details under a short name in <code>~/.ssh/config</code>, so you can just type <code>ssh turb</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>~/.ssh/config</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="~/.ssh/config"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Host</span> turb</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">HostName</span> mech501.calculquebec.cloud</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">User</span> <span class="op">&lt;</span>username<span class="op">&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">IdentityFile</span> ~/.ssh/id_ed25519</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> turb        <span class="co"># uses the HostName, User and key from the block above</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Everything above — navigation, viewing files, vim, and the <code>~/.bashrc</code> / <code>~/.vimrc</code> setup — works exactly the same over SSH.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -689,7 +1021,7 @@ window.addEventListener('load', function () {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/McGillTeaching\.github\.io\/MECH501_tutorial\/");
+        var filterRegex = new RegExp("https:\/\/mcgillteaching\.github\.io\/MECH501_tutorial\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
