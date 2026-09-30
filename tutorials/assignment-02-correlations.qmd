@@ -1,6 +1,6 @@
 ---
-title: "Assignment 2a: Two-point correlations & length scales"
-subtitle: "Verifying isotropy relations on the JHTDB DNS cube"
+title: "Assignment 2a: Turbulent kinetic energy and two-point correlations"
+subtitle: "Verifying isotropy relations on JHTDB isotropic DNS data"
 author: "MECH 501/600 — Computational Turbulence"
 date: last-modified
 jupyter: python3
@@ -296,7 +296,7 @@ HIT has no mean flow, the fluctuations are the whole signal ($u_i'\approx u_i$).
 
 ## c.1 Load the box and prepare the fields
 
-The correlations use the **512³ periodic ensemble** (`isotropic_512_ens*.npy` --- the
+The correlations use the **512³ periodic ensemble** (`isotropic_512_t*.npy` --- the
 full $2\pi$ box sampled at stride 2), a much larger box than the budget sub-cube, so
 the large-scale correlations are far better resolved. Load one snapshot, split it
 into fluctuation components (HIT has no mean flow, so $u_i'\approx u_i$), and set up
@@ -307,7 +307,7 @@ the separation axis $r$:
 import glob
 dim = 512                                # 512^3 full periodic box
 dx  = 2*np.pi/dim                         # stride-2 grid spacing
-FILES = sorted(glob.glob('/project/60004/00_Assignment1/isotropic_512_ens*.npy'))
+FILES = sorted(glob.glob('/project/60004/01_Assignment2/isotropic_512_t*.npy'))
 
 arr = np.load(FILES[0]).astype(np.float32)   # (512, 512, 512, 3): components on the last axis
 u = arr[..., 0] - arr[..., 0].mean()         # fluctuations (raw JHTDB is already x,y,z aligned)
@@ -319,7 +319,7 @@ r = np.arange(dim//2)*dx                       # separation axis
 ```
 
 ::: {.callout-tip}
-Averaging $f$ and $g$ over all six `isotropic_512_ens*.npy` snapshots (loop over
+Averaging $f$ and $g$ over all `isotropic_512_t*.npy` snapshots (loop over
 `FILES`, loading one at a time) tightens the statistics --- do this for the final
 figure if you have time.
 :::
