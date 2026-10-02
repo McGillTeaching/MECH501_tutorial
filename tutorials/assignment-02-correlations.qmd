@@ -14,7 +14,7 @@ This assignment ties together the two ways we characterise a turbulent flow, bot
 on Johns Hopkins isotropic DNS data. **First** you measure the flow's integral
 quantities directly from the field — the turbulent kinetic energy $k$, the
 dissipation rate $\varepsilon$, and the characteristic scales built from them — on
-a small full-resolution $256^3$ cube (the small scales must be
+a small full-resolution $256^3$ ensemble (the small scales must be
 resolved for $\varepsilon$). **Then** you turn to the two-point correlation: you
 verify two classical isotropy results on a larger $512^3$
 periodic box (a fresh download that samples the large-scale correlations far
@@ -75,19 +75,25 @@ directly — and from them every characteristic scale of the flow.
 
 ## Loading the cube
 
-The budget tasks (1--4) use a small **full-resolution $256^3$ cube**, stored as a NumPy array of shape $(256,256,256,3)$ with the velocity components on the last axis (already axis-aligned). The grid spacing is that of the parent $1024^3$ simulation, $dx = 2\pi/1024$, so the small scales are resolved --- this matters for the dissipation surrogate $\varepsilon_{\mathrm{iso}}$. Part (c) loads a separate, larger cube for the correlations.
+The budget tasks (1--4) use a small **full-resolution $256^3$ ensemble** --- five time-separated snapshots `isotropic_256_t*.npy`, each a $(256,256,256,3)$ array with the velocity components on the last axis (already axis-aligned). The grid spacing is that of the parent $1024^3$ simulation, $dx = 2\pi/1024$, so the small scales are resolved. A single $256^3$ cube spans only about one integral scale, so **average each quantity over the five snapshots** --- the independent realizations converge the large-scale statistics ($k$, $\mathrm{Re}_\lambda$). Part (c) loads a separate, larger cube for the correlations.
 
 ```{python}
 #| eval: false
-import numpy as np, matplotlib.pyplot as plt
+import glob, numpy as np, matplotlib.pyplot as plt
 
 nu  = 1.85e-4                            # kinematic viscosity of the JHTDB isotropic DNS
-dim = 256                                # small full-resolution sub-cube is 256^3
 dx  = 2*np.pi/1024                       # grid spacing of the parent 1024^3 DNS
 
-arr = np.load('/project/60004/01_Assignment2/isotropic_256_t1.npy')  # (256,256,256,3), aligned
-u, v, w = arr[..., 0], arr[..., 1], arr[..., 2]   # components on the last axis (already x,y,z aligned)
-print("loaded", arr.shape)
+# five time-separated 256^3 snapshots (independent realizations of the large eddies)
+FILES = sorted(glob.glob('/project/60004/01_Assignment2/isotropic_256_t*.npy'))
+print(f"{len(FILES)} budget snapshots:", [p.split('/')[-1] for p in FILES])
+
+def load(path):
+    """Fluctuation fields [u', v', w'] from one aligned (256,256,256,3) cube."""
+    a = np.load(path).astype(np.float64)
+    return [a[..., i] - a[..., i].mean() for i in range(3)]
+
+u, v, w = load(FILES[0])                 # one snapshot, to illustrate the method below
 ```
 
 ## Task 1 — Reynolds decomposition {#sec-task1}
@@ -114,11 +120,11 @@ relative to the rms, confirming $\langle u_i\rangle \approx 0$.
 
 ```{python}
 #| eval: false
-means = {c: a.mean() for c, a in zip("uvw", (u, v, w))}
-up, vp, wp = (a - a.mean() for a in (u, v, w))
-var = {c: (a ** 2).mean() for c, a in zip("uvw", (up, vp, wp))}
-print("means    :", means)
-print("variances:", var)
+# means are ~0 on any single cube; variances are AVERAGED over the five snapshots
+print("means (one cube):", np.load(FILES[0]).reshape(-1, 3).mean(0))
+var = np.mean([[(f ** 2).mean() for f in load(p)] for p in FILES], axis=0)   # <u'^2>,<v'^2>,<w'^2>
+print("ensemble variances:", var)
+print("isotropy spread: {:.0%}".format((var.max() - var.min()) / var.mean()))
 ```
 :::
 :::
@@ -143,7 +149,7 @@ $u_{\mathrm{rms}} = \sqrt{2k/3}$.
 ::: {.solution-box}
 ```{python}
 #| eval: false
-k = 0.5 * (var["u"] + var["v"] + var["w"])
+k = 0.5 * var.sum()
 u_rms = np.sqrt(2 * k / 3)
 print(f"k       = {k:.4e} m^2/s^2")
 print(f"u_rms   = {u_rms:.4e} m/s")
@@ -180,23 +186,17 @@ would flag anisotropy or under-resolution.
 
 ```{python}
 #| eval: false
-# gradients: axis 0->x, 1->y, 2->z
-grad = {}
-for name, a in zip("uvw", (up, vp, wp)):
-    gx, gy, gz = np.gradient(a, dx, dx, dx)
-    grad[name] = (gx, gy, gz)
-
-# strain-rate tensor s_ij = 1/2 (du_i/dx_j + du_j/dx_i)
-comp = {"u": 0, "v": 1, "w": 2}
-S2 = np.zeros_like(up)
-for a in "uvw":
-    for b, j in comp.items():
+def dissipation(u, v, w):
+    grad = {c: np.gradient(a, dx, dx, dx) for c, a in zip("uvw", (u, v, w))}
+    comp = {"u": 0, "v": 1, "w": 2}
+    S2 = np.zeros_like(u)
+    for a in "uvw":
         i = comp[a]
-        s_ij = 0.5 * (grad[a][j] + grad[b][comp[a]])  # symmetric part
-        S2 += s_ij ** 2
-eps = 2 * nu * S2.mean()
+        for b in "uvw":                               # s_ij = 1/2 (du_i/dx_j + du_j/dx_i)
+            S2 += (0.5 * (grad[a][comp[b]] + grad[b][i])) ** 2
+    return 2 * nu * S2.mean(), 15 * nu * (grad["u"][0] ** 2).mean()   # eps, eps_iso
 
-eps_iso = 15 * nu * (grad["u"][0] ** 2).mean()
+eps, eps_iso = np.mean([dissipation(*load(p)) for p in FILES], axis=0)   # ensemble average
 print(f"eps      = {eps:.4e} m^2/s^3")
 print(f"eps_iso  = {eps_iso:.4e} m^2/s^3   (ratio {eps/eps_iso:.3f})")
 ```
@@ -216,16 +216,19 @@ From $k$, $\varepsilon$ and $\nu$ alone, compute:
 - the **Taylor-microscale Reynolds number**
   $\mathrm{Re}_\lambda = \dfrac{u_{\mathrm{rms}}\,\lambda}{\nu} = \sqrt{\dfrac{20\,k^2}{3\,\nu\,\varepsilon}}$.
 
-Report your measured $\mathrm{Re}_\lambda$. (For these files it comes out of order
-$280$ --- a single-realization estimate --- and it is \emph{not}
-the $433$ of the standard \texttt{isotropic1024coarse} dataset.)
+Report your measured $\mathrm{Re}_\lambda$. (A single $256^3$ cube is only
+$\sim$one integral scale wide, so averaging the five time-separated snapshots is what
+converges $k$ and $\mathrm{Re}_\lambda$ toward the $433$ of the full
+\texttt{isotropic1024coarse} dataset.)
 :::
 
 ::: {.content-visible when-profile="solutions"}
 ::: {.solution-box}
-With the correct $k$ and $\varepsilon$, $\mathrm{Re}_\lambda\approx 280$ for these
-files. A single $256^3$ snapshot scatters (few large-scale eddies); the small scales are only
-marginally resolved ($\kappa_{\max}\eta\approx1.4$), which biases $\varepsilon$.
+The small scales are already converged on any single cube ($\eta$, $\varepsilon$,
+$\kappa_{\max}\eta\approx1.4$); it is the large-scale statistics ($k$, $\mathrm{Re}_\lambda$)
+that need the ensemble. Averaging the five independent snapshots symmetrises the normal
+stresses and raises $\mathrm{Re}_\lambda$ from the single-cube value toward the dataset's
+$433$. Report your measured value.
 
 ```{python}
 #| eval: false
@@ -237,7 +240,8 @@ Re_lam = u_rms * lam / nu
 print(f"eta      = {eta:.4e} m")
 print(f"tau_eta  = {tau_e:.4e} s")
 print(f"lambda   = {lam:.4e} m")
-print(f"Re_lambda= {Re_lam:.1f}   (these files: ~280, not the 433 of isotropic1024coarse)")
+print(f"Re_lambda= {Re_lam:.1f}   (ensemble estimate; rises toward the 433 of")
+print( "           isotropic1024coarse as the independent snapshots are averaged)")
 ```
 :::
 :::
