@@ -651,7 +651,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This assignment ties together the two ways we characterise a turbulent flow, both on Johns Hopkins isotropic DNS data. <strong>First</strong> you measure the flow’s integral quantities directly from the field — the turbulent kinetic energy <span class="math inline">\(k\)</span>, the dissipation rate <span class="math inline">\(\varepsilon\)</span>, and the characteristic scales built from them — on a small full-resolution <span class="math inline">\(256^3\)</span> cube (the small scales must be resolved for <span class="math inline">\(\varepsilon\)</span>). <strong>Then</strong> you turn to the two-point correlation: you verify two classical isotropy results on a larger <span class="math inline">\(512^3\)</span> periodic box (a fresh download that samples the large-scale correlations far better), reproducing the longitudinal and transverse autocorrelations <span class="math inline">\(f(r)\)</span> and <span class="math inline">\(g(r)\)</span> (the classic grid-turbulence measurement) and the integral length scales.</p>
+<p>This assignment ties together the two ways we characterise a turbulent flow, both on Johns Hopkins isotropic DNS data. <strong>First</strong> you measure the flow’s integral quantities directly from the field — the turbulent kinetic energy <span class="math inline">\(k\)</span>, the dissipation rate <span class="math inline">\(\varepsilon\)</span>, and the characteristic scales built from them — on a small full-resolution <span class="math inline">\(256^3\)</span> ensemble (the small scales must be resolved for <span class="math inline">\(\varepsilon\)</span>). <strong>Then</strong> you turn to the two-point correlation: you verify two classical isotropy results on a larger <span class="math inline">\(512^3\)</span> periodic box (a fresh download that samples the large-scale correlations far better), reproducing the longitudinal and transverse autocorrelations <span class="math inline">\(f(r)\)</span> and <span class="math inline">\(g(r)\)</span> (the classic grid-turbulence measurement) and the integral length scales.</p>
 </div>
 </div>
 <section id="the-turbulent-kinetic-energy-budget" class="level1">
@@ -695,17 +695,23 @@ s_{ij}' = \tfrac12\!\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_
 </section>
 <section id="loading-the-cube" class="level2">
 <h2 class="anchored" data-anchor-id="loading-the-cube">Loading the cube</h2>
-<p>The budget tasks (1–4) use a small <strong>full-resolution <span class="math inline">\(256^3\)</span> cube</strong>, stored as a NumPy array of shape <span class="math inline">\((256,256,256,3)\)</span> with the velocity components on the last axis (already axis-aligned). The grid spacing is that of the parent <span class="math inline">\(1024^3\)</span> simulation, <span class="math inline">\(dx = 2\pi/1024\)</span>, so the small scales are resolved — this matters for the dissipation surrogate <span class="math inline">\(\varepsilon_{\mathrm{iso}}\)</span>. Part (c) loads a separate, larger cube for the correlations.</p>
-<div id="51d3de97" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
+<p>The budget tasks (1–4) use a small <strong>full-resolution <span class="math inline">\(256^3\)</span> ensemble</strong> — five time-separated snapshots <code>isotropic_256_t*.npy</code>, each a <span class="math inline">\((256,256,256,3)\)</span> array with the velocity components on the last axis (already axis-aligned). The grid spacing is that of the parent <span class="math inline">\(1024^3\)</span> simulation, <span class="math inline">\(dx = 2\pi/1024\)</span>, so the small scales are resolved. A single <span class="math inline">\(256^3\)</span> cube spans only about one integral scale, so <strong>average each quantity over the five snapshots</strong> — the independent realizations converge the large-scale statistics (<span class="math inline">\(k\)</span>, <span class="math inline">\(\mathrm{Re}_\lambda\)</span>). Part (c) loads a separate, larger cube for the correlations.</p>
+<div id="2c2cff98" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> glob, numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>nu  <span class="op">=</span> <span class="fl">1.85e-4</span>                            <span class="co"># kinematic viscosity of the JHTDB isotropic DNS</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>dim <span class="op">=</span> <span class="dv">256</span>                                <span class="co"># small full-resolution sub-cube is 256^3</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>dx  <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">/</span><span class="dv">1024</span>                       <span class="co"># grid spacing of the parent 1024^3 DNS</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.load(<span class="st">'/project/60004/01_Assignment2/isotropic_256_t1.npy'</span>)  <span class="co"># (256,256,256,3), aligned</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>u, v, w <span class="op">=</span> arr[..., <span class="dv">0</span>], arr[..., <span class="dv">1</span>], arr[..., <span class="dv">2</span>]   <span class="co"># components on the last axis (already x,y,z aligned)</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"loaded"</span>, arr.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>dx  <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">/</span><span class="dv">1024</span>                       <span class="co"># grid spacing of the parent 1024^3 DNS</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># five time-separated 256^3 snapshots (independent realizations of the large eddies)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>FILES <span class="op">=</span> <span class="bu">sorted</span>(glob.glob(<span class="st">'/project/60004/01_Assignment2/isotropic_256_t*.npy'</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(FILES)<span class="sc">}</span><span class="ss"> budget snapshots:"</span>, [p.split(<span class="st">'/'</span>)[<span class="op">-</span><span class="dv">1</span>] <span class="cf">for</span> p <span class="kw">in</span> FILES])</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load(path):</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Fluctuation fields [u', v', w'] from one aligned (256,256,256,3) cube."""</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> np.load(path).astype(np.float64)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [a[..., i] <span class="op">-</span> a[..., i].mean() <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>)]</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>u, v, w <span class="op">=</span> load(FILES[<span class="dv">0</span>])                 <span class="co"># one snapshot, to illustrate the method below</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="sec-task1" class="level2">
@@ -784,7 +790,7 @@ k = \tfrac12\langle u_i' u_i'\rangle
 <li>the <strong>Taylor microscale</strong> <span class="math inline">\(\lambda = \sqrt{10\,\nu k/\varepsilon}\)</span>;</li>
 <li>the <strong>Taylor-microscale Reynolds number</strong> <span class="math inline">\(\mathrm{Re}_\lambda = \dfrac{u_{\mathrm{rms}}\,\lambda}{\nu} = \sqrt{\dfrac{20\,k^2}{3\,\nu\,\varepsilon}}\)</span>.</li>
 </ul>
-<p>Report your measured <span class="math inline">\(\mathrm{Re}_\lambda\)</span>. (For these files it comes out of order <span class="math inline">\(280\)</span> — a single-realization estimate — and it is the <span class="math inline">\(433\)</span> of the standard dataset.)</p>
+<p>Report your measured <span class="math inline">\(\mathrm{Re}_\lambda\)</span>. (A single <span class="math inline">\(256^3\)</span> cube is only <span class="math inline">\(\sim\)</span>one integral scale wide, so averaging the five time-separated snapshots is what converges <span class="math inline">\(k\)</span> and <span class="math inline">\(\mathrm{Re}_\lambda\)</span> toward the <span class="math inline">\(433\)</span> of the full dataset.)</p>
 </div>
 </div>
 </section>
@@ -810,7 +816,7 @@ L_{11}=\int_0^\infty f(r)\,dr,\qquad L_{22}=\int_0^\infty g(r)\,dr .
 <section id="c.1-load-the-box-and-prepare-the-fields" class="level2">
 <h2 class="anchored" data-anchor-id="c.1-load-the-box-and-prepare-the-fields">c.1 Load the box and prepare the fields</h2>
 <p>The correlations use the <strong>512³ periodic ensemble</strong> (<code>isotropic_512_t*.npy</code> — the full <span class="math inline">\(2\pi\)</span> box sampled at stride 2), a much larger box than the budget sub-cube, so the large-scale correlations are far better resolved. Load one snapshot, split it into fluctuation components (HIT has no mean flow, so <span class="math inline">\(u_i'\approx u_i\)</span>), and set up the separation axis <span class="math inline">\(r\)</span>:</p>
-<div id="c5856dad" class="cell" data-execution_count="6">
+<div id="11741602" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> glob</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dim <span class="op">=</span> <span class="dv">512</span>                                <span class="co"># 512^3 full periodic box</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>dx  <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">/</span>dim                         <span class="co"># stride-2 grid spacing</span></span>
@@ -841,7 +847,7 @@ Tip
 <section id="c.2-an-autocorrelation-helper-fft" class="level2">
 <h2 class="anchored" data-anchor-id="c.2-an-autocorrelation-helper-fft">c.2 An autocorrelation helper (FFT)</h2>
 <p>The two-point correlation along one axis is an autocorrelation, so the FFT (Wiener–Khinchin theorem) computes it in one shot; average over the two perpendicular directions to reduce the noise:</p>
-<div id="0aba21fe" class="cell" data-execution_count="7">
+<div id="b629e1da" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> corr_axis(field, axis):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Normalized autocorrelation of `field` along `axis`, averaged over the plane."""</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> np.fft.fft(field, axis<span class="op">=</span>axis)</span>
@@ -859,7 +865,7 @@ R(m)=\frac{\big\langle\, u(\mathbf{x})\,u(\mathbf{x}+m\,\mathbf{e})\,\big\rangle
 {\big\langle\, u(\mathbf{x})^2\,\big\rangle_{\mathbf{x}}},
 \]</span></p>
 <p>the product of the field with a copy of itself shifted by <span class="math inline">\(m\)</span> cells, averaged over <strong>all</strong> starting points. The DNS box is periodic, so use a <em>circular</em> shift (<code>np.roll</code>) — that is exactly the correlation the FFT helper returns via Wiener–Khinchin, so the two must match to round-off.</p>
-<div id="269a4f66" class="cell" data-execution_count="8">
+<div id="945a982a" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> corr_direct(field, axis):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Same result as corr_axis, but computed straight from the definition (no FFT)."""</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> field.shape[axis]</span>
@@ -872,7 +878,7 @@ R(m)=\frac{\big\langle\, u(\mathbf{x})\,u(\mathbf{x}+m\,\mathbf{e})\,\big\rangle
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> R <span class="op">/</span> R[<span class="dv">0</span>]                          <span class="co"># normalize so R(0) = 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now check the two implementations against each other on one axis, and time them:</p>
-<div id="e0575134" class="cell" data-execution_count="9">
+<div id="47a79c4a" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>R_fft    <span class="op">=</span> corr_axis(u, <span class="dv">0</span>)</span>
@@ -894,7 +900,7 @@ R(m)=\frac{\big\langle\, u(\mathbf{x})\,u(\mathbf{x}+m\,\mathbf{e})\,\big\rangle
 <li><strong>Longitudinal</strong> <span class="math inline">\(f\)</span>: velocity component <strong>parallel</strong> to the separation (along <span class="math inline">\(x\)</span> use <span class="math inline">\(u\)</span>, along <span class="math inline">\(y\)</span> use <span class="math inline">\(v\)</span>, along <span class="math inline">\(z\)</span> use <span class="math inline">\(w\)</span>).</li>
 <li><strong>Transverse</strong> <span class="math inline">\(g\)</span>: component <strong>perpendicular</strong> to the separation (two per axis).</li>
 </ul>
-<div id="9080f0fb" class="cell" data-execution_count="10">
+<div id="5dc263dd" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Longitudinal (worked example — note the pattern):</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> ( corr_axis(u, <span class="dv">0</span>) <span class="op">+</span> corr_axis(v, <span class="dv">1</span>) <span class="op">+</span> corr_axis(w, <span class="dv">2</span>) ) <span class="op">/</span> <span class="dv">3</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -905,7 +911,7 @@ R(m)=\frac{\big\langle\, u(\mathbf{x})\,u(\mathbf{x}+m\,\mathbf{e})\,\big\rangle
 </section>
 <section id="c.5-the-correlation-figure-and-the-integral-scales" class="level2">
 <h2 class="anchored" data-anchor-id="c.5-the-correlation-figure-and-the-integral-scales">c.5 The correlation figure and the integral scales</h2>
-<div id="2dd1362c" class="cell" data-execution_count="11">
+<div id="5ec968c1" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>trapz <span class="op">=</span> <span class="bu">getattr</span>(np, <span class="st">"trapezoid"</span>, np.trapz)     <span class="co"># numpy&gt;=2 renamed trapz -&gt; trapezoid</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>L11 <span class="op">=</span> trapz(f, r)<span class="op">;</span>  L22 <span class="op">=</span> trapz(g, r)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"L11 = </span><span class="sc">{</span>L11<span class="sc">:.3f}</span><span class="ss">,  L22 = </span><span class="sc">{</span>L22<span class="sc">:.3f}</span><span class="ss">,  ratio L22/L11 = </span><span class="sc">{</span>L22<span class="op">/</span>L11<span class="sc">:.2f}</span><span class="ss">  (expect ~0.5)"</span>)</span>
@@ -920,7 +926,7 @@ R(m)=\frac{\big\langle\, u(\mathbf{x})\,u(\mathbf{x}+m\,\mathbf{e})\,\big\rangle
 </section>
 <section id="c.6-check-the-isotropy-relations-against-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="c.6-check-the-isotropy-relations-against-the-data">c.6 Check the isotropy relations against the data</h2>
-<div id="e5b9f105" class="cell" data-execution_count="12">
+<div id="c8cb7666" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># L22/L11 should come out ~ 1/2</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the first moment of g should vanish:</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"∫ r g dr ="</span>, trapz(r<span class="op">*</span>g, r), <span class="st">"   (expect ~ 0)"</span>)</span>
