@@ -14,7 +14,7 @@ This assignment ties together the two ways we characterise a turbulent flow, bot
 on Johns Hopkins isotropic DNS data. **First** you measure the flow's integral
 quantities directly from the field — the turbulent kinetic energy $k$, the
 dissipation rate $\varepsilon$, and the characteristic scales built from them — on
-the full-resolution $200^3$ sub-cube from Tutorial 1 (the small scales must be
+a small full-resolution $256^3$ cube (the small scales must be
 resolved for $\varepsilon$). **Then** you turn to the two-point correlation: you
 verify two classical isotropy results on a larger $512^3$
 periodic box (a fresh download that samples the large-scale correlations far
@@ -75,38 +75,19 @@ directly — and from them every characteristic scale of the flow.
 
 ## Loading the cube
 
-The tasks below assume the field has been reshaped from the flat table into a
-$200^3$ NumPy array per velocity component, exactly as in Tutorial 1. The grid
-spacing is that of the parent $1024^3$ simulation, $dx = 2\pi/1024$. This load
-serves the **budget part** (Tasks 1--4); Part (c) loads a separate, larger cube. These files store the velocity components \emph{transposed} relative to the
-coordinate axes, so the loader also **aligns** them (a component's longitudinal
-gradient is the smallest of its three) --- this matters for both the dissipation
-surrogate $\varepsilon_{\mathrm{iso}}$ and the longitudinal/transverse correlations below.
+The budget tasks (1--4) use a small **full-resolution $256^3$ cube**, stored as a NumPy array of shape $(256,256,256,3)$ with the velocity components on the last axis (already axis-aligned). The grid spacing is that of the parent $1024^3$ simulation, $dx = 2\pi/1024$, so the small scales are resolved --- this matters for the dissipation surrogate $\varepsilon_{\mathrm{iso}}$. Part (c) loads a separate, larger cube for the correlations.
 
 ```{python}
 #| eval: false
-import numpy as np, pandas as pd, matplotlib.pyplot as plt
+import numpy as np, matplotlib.pyplot as plt
 
 nu  = 1.85e-4                            # kinematic viscosity of the JHTDB isotropic DNS
-dim = 200                                # our sub-cube is 200^3
+dim = 256                                # small full-resolution sub-cube is 256^3
 dx  = 2*np.pi/1024                       # grid spacing of the parent 1024^3 DNS
 
-df  = pd.read_parquet('/project/60004/00_Assignment1/isotropic_t1.parquet')
-ii  = lambda c: (df[c]/dx).round().astype(int)
-
-raw = []
-for col in ('velocity_x', 'velocity_y', 'velocity_z'):
-    a = np.zeros((dim,)*3, np.float64); a[ii('x'),ii('y'),ii('z')] = df[col].values
-    raw.append(a)
-
-# align components with the axes: a component's longitudinal (parallel) gradient
-# is the smallest, so each component's own axis = argmin of its mean-square gradients
-g = [np.gradient(a - a.mean(), dx, dx, dx) for a in raw]
-G = np.array([[(g[i][j]**2).mean() for j in range(3)] for i in range(3)])
-long_axis = [int(np.argmin(G[i])) for i in range(3)]
-assert sorted(long_axis) == [0, 1, 2], "component-axis alignment ambiguous"
-u, v, w = (raw[long_axis.index(k)] for k in range(3))
-print("aligned (x,y,z) = components", [long_axis.index(k) for k in range(3)], u.shape)
+arr = np.load('/project/60004/01_Assignment2/isotropic_256_t1.npy')  # (256,256,256,3), aligned
+u, v, w = arr[..., 0], arr[..., 1], arr[..., 2]   # components on the last axis (already x,y,z aligned)
+print("loaded", arr.shape)
 ```
 
 ## Task 1 — Reynolds decomposition {#sec-task1}
@@ -236,15 +217,14 @@ From $k$, $\varepsilon$ and $\nu$ alone, compute:
   $\mathrm{Re}_\lambda = \dfrac{u_{\mathrm{rms}}\,\lambda}{\nu} = \sqrt{\dfrac{20\,k^2}{3\,\nu\,\varepsilon}}$.
 
 Report your measured $\mathrm{Re}_\lambda$. (For these files it comes out of order
-$280$ --- averaging the four snapshots $t_1$--$t_4$ tightens it --- and it is \emph{not}
+$280$ --- a single-realization estimate --- and it is \emph{not}
 the $433$ of the standard \texttt{isotropic1024coarse} dataset.)
 :::
 
 ::: {.content-visible when-profile="solutions"}
 ::: {.solution-box}
 With the correct $k$ and $\varepsilon$, $\mathrm{Re}_\lambda\approx 280$ for these
-files. A single $200^3$ snapshot scatters (few large-scale eddies), so averaging
-over the four snapshots tightens the estimate; the small scales are only
+files. A single $256^3$ snapshot scatters (few large-scale eddies); the small scales are only
 marginally resolved ($\kappa_{\max}\eta\approx1.4$), which biases $\varepsilon$.
 
 ```{python}
