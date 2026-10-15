@@ -43,3 +43,11 @@ module load python/3.11  # load a specific version
 ```
 
 Inside JupyterLab the Python environment is already set up for you.
+
+
+## Running jobs
+
+Compute nodes are not used directly: you request them through the **Slurm**
+scheduler, which queues your request and runs it when resources are free. See the
+dedicated [Slurm](slurm.qmd) page for the batch script and the commands to submit and
+monitor jobs.

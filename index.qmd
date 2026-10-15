@@ -81,6 +81,7 @@ setup to post-processing — no prior CFD-software experience assumed.
 | # | Topic | Crowdmark due |
 |---|-------|:-------------:|
 | 0 | [Prerequisites — what you should already know](tutorials/tutorial-00.qmd) | — |
+| 3 | [Turbulent channel flow: from simulation to statistics](tutorials/tutorial-03-channel.qmd) | Background reading |
 
 : More tutorials will appear here as the term progresses. {.striped tbl-colwidths="[8,72,20]"}
 
@@ -91,6 +92,7 @@ setup to post-processing — no prior CFD-software experience assumed.
 | 1 | [DNS turbulence \& the $k$-equation](tutorials/assignment-01-dns.qmd) | **22 September 2026** |
 | 2a | [Two-point correlations & length scales](tutorials/assignment-02-correlations.qmd) | **5 October 2026** |
 | 2b | [Do your own OpenFOAM simulation](tutorials/assignment-02b-openfoam.qmd) | **5 October 2026** |
+| 3, Q3 | [OpenFOAM: model comparison and wall treatment](tutorials/assignment-03-openfoam.qmd) | **30 October 2026** |
 
 : {.striped tbl-colwidths="[8,62,30]"}
 

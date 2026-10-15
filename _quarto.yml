@@ -37,6 +37,7 @@ website:
           - cluster/index.qmd
           - cluster/registration.qmd
           - cluster/intro.qmd
+          - cluster/slurm.qmd
           - cluster/jupyterlab.qmd
           - cluster/vscode.qmd
           - cluster/terminal.qmd
@@ -53,7 +54,10 @@ website:
       - section: "OpenFOAM"
         contents:
           - openfoam/how-to.qmd
+          - openfoam/parallel.qmd
+          - openfoam/meshing.qmd
           - openfoam/paraview.qmd
+          - openfoam/tips-and-tricks.qmd
       - section: "Tutorials and Assignments"
         contents:
           - tutorials/tutorial-00.qmd
@@ -61,6 +65,8 @@ website:
           - tutorials/assignment-01-processing.ipynb
           - tutorials/assignment-02-correlations.qmd
           - tutorials/assignment-02b-openfoam.qmd
+          - tutorials/tutorial-03-channel.qmd
+          - tutorials/assignment-03-openfoam.qmd
   page-footer:
     left: "© 2026 Hendrik Nicolai · MECH 501/600 · McGill University"
     right: "Built with [Quarto](https://quarto.org)"

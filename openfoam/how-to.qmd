@@ -362,6 +362,8 @@ what Assignment 2b explores.
 
 - OpenFOAM tutorial guide — [steady turbulent flow over a backward-facing step](https://www.openfoam.com/documentation/tutorial-guide/3-compressible-flow/3.1-steady-turbulent-flow-over-a-backward-facing-step)
   (the guide's compressible variant of this case).
+- [Running in parallel](parallel.qmd) — splitting the case across cores with
+  `decomposePar` / `reconstructPar`, and launching it under Slurm.
 
 ## References
 
