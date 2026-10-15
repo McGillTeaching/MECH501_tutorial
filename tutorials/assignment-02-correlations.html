@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="MECH 501/600 — Computational Turbulence">
-<meta name="dcterms.date" content="2026-10-02">
+<meta name="dcterms.date" content="2026-10-15">
 
 <title>Assignment 2a: Turbulent kinetic energy and two-point correlations – MECH 501/600 — Computational Turbulence</title>
 <style>
@@ -80,9 +80,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-d5e46415c29d9d8c13eb6bbdb046d278.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-de796b6c22395099d9080256ea69e99e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-d5e46415c29d9d8c13eb6bbdb046d278.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-6ac05f3bcb9b74dc05dabfbf673debf2.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-9ce599401464bca4da1c66249a1ca190.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-6ac05f3bcb9b74dc05dabfbf673debf2.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-2ab34d229e36e9266f298aec10a19c82.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
@@ -432,6 +432,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../cluster/slurm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slurm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../cluster/jupyterlab.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">JupyterLab</span></a>
   </div>
@@ -526,8 +532,26 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../openfoam/parallel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Running in parallel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/meshing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Meshing in OpenFOAM: blockMesh and snappyHexMesh</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../openfoam/paraview.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ParaView: visualising your OpenFOAM results</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/tips-and-tricks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">OpenFOAM Tips and Tricks</span></a>
   </div>
 </li>
       </ul>
@@ -569,6 +593,18 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../tutorials/assignment-02b-openfoam.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Assignment 2b: Do your own OpenFOAM simulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/tutorial-03-channel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 3: Turbulent channel flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/assignment-03-openfoam.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3: OpenFOAM guide</span></a>
   </div>
 </li>
       </ul>
@@ -629,7 +665,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 2, 2026</p>
+      <p class="date">October 15, 2026</p>
     </div>
   </div>
   
@@ -696,7 +732,7 @@ s_{ij}' = \tfrac12\!\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_
 <section id="loading-the-cube" class="level2">
 <h2 class="anchored" data-anchor-id="loading-the-cube">Loading the cube</h2>
 <p>The budget tasks (1–4) use a small <strong>full-resolution <span class="math inline">\(256^3\)</span> ensemble</strong> — five time-separated snapshots <code>isotropic_256_t*.npy</code>, each a <span class="math inline">\((256,256,256,3)\)</span> array with the velocity components on the last axis (already axis-aligned). The grid spacing is that of the parent <span class="math inline">\(1024^3\)</span> simulation, <span class="math inline">\(dx = 2\pi/1024\)</span>, so the small scales are resolved. A single <span class="math inline">\(256^3\)</span> cube spans only about one integral scale, so <strong>average each quantity over the five snapshots</strong> — the independent realizations converge the large-scale statistics (<span class="math inline">\(k\)</span>, <span class="math inline">\(\mathrm{Re}_\lambda\)</span>). Part (c) loads a separate, larger cube for the correlations.</p>
-<div id="2c2cff98" class="cell" data-execution_count="1">
+<div id="230be591" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> glob, numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>nu  <span class="op">=</span> <span class="fl">1.85e-4</span>                            <span class="co"># kinematic viscosity of the JHTDB isotropic DNS</span></span>
@@ -816,7 +852,7 @@ L_{11}=\int_0^\infty f(r)\,dr,\qquad L_{22}=\int_0^\infty g(r)\,dr .
 <section id="c.1-load-the-box-and-prepare-the-fields" class="level2">
 <h2 class="anchored" data-anchor-id="c.1-load-the-box-and-prepare-the-fields">c.1 Load the box and prepare the fields</h2>
 <p>The correlations use the <strong>512³ periodic ensemble</strong> (<code>isotropic_512_t*.npy</code> — the full <span class="math inline">\(2\pi\)</span> box sampled at stride 2), a much larger box than the budget sub-cube, so the large-scale correlations are far better resolved. Load one snapshot, split it into fluctuation components (HIT has no mean flow, so <span class="math inline">\(u_i'\approx u_i\)</span>), and set up the separation axis <span class="math inline">\(r\)</span>:</p>
-<div id="11741602" class="cell" data-execution_count="6">
+<div id="18fbc040" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> glob</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dim <span class="op">=</span> <span class="dv">512</span>                                <span class="co"># 512^3 full periodic box</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>dx  <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">/</span>dim                         <span class="co"># stride-2 grid spacing</span></span>
@@ -847,7 +883,7 @@ Tip
 <section id="c.2-an-autocorrelation-helper-fft" class="level2">
 <h2 class="anchored" data-anchor-id="c.2-an-autocorrelation-helper-fft">c.2 An autocorrelation helper (FFT)</h2>
 <p>The two-point correlation along one axis is an autocorrelation, so the FFT (Wiener–Khinchin theorem) computes it in one shot; average over the two perpendicular directions to reduce the noise:</p>
-<div id="b629e1da" class="cell" data-execution_count="7">
+<div id="a2b3a7a8" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> corr_axis(field, axis):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Normalized autocorrelation of `field` along `axis`, averaged over the plane."""</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> np.fft.fft(field, axis<span class="op">=</span>axis)</span>
@@ -865,7 +901,7 @@ R(m)=\frac{\big\langle\, u(\mathbf{x})\,u(\mathbf{x}+m\,\mathbf{e})\,\big\rangle
 {\big\langle\, u(\mathbf{x})^2\,\big\rangle_{\mathbf{x}}},
 \]</span></p>
 <p>the product of the field with a copy of itself shifted by <span class="math inline">\(m\)</span> cells, averaged over <strong>all</strong> starting points. The DNS box is periodic, so use a <em>circular</em> shift (<code>np.roll</code>) — that is exactly the correlation the FFT helper returns via Wiener–Khinchin, so the two must match to round-off.</p>
-<div id="945a982a" class="cell" data-execution_count="8">
+<div id="44cf6c3b" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> corr_direct(field, axis):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Same result as corr_axis, but computed straight from the definition (no FFT)."""</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> field.shape[axis]</span>
@@ -878,7 +914,7 @@ R(m)=\frac{\big\langle\, u(\mathbf{x})\,u(\mathbf{x}+m\,\mathbf{e})\,\big\rangle
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> R <span class="op">/</span> R[<span class="dv">0</span>]                          <span class="co"># normalize so R(0) = 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now check the two implementations against each other on one axis, and time them:</p>
-<div id="47a79c4a" class="cell" data-execution_count="9">
+<div id="7c0399e2" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>R_fft    <span class="op">=</span> corr_axis(u, <span class="dv">0</span>)</span>
@@ -900,7 +936,7 @@ R(m)=\frac{\big\langle\, u(\mathbf{x})\,u(\mathbf{x}+m\,\mathbf{e})\,\big\rangle
 <li><strong>Longitudinal</strong> <span class="math inline">\(f\)</span>: velocity component <strong>parallel</strong> to the separation (along <span class="math inline">\(x\)</span> use <span class="math inline">\(u\)</span>, along <span class="math inline">\(y\)</span> use <span class="math inline">\(v\)</span>, along <span class="math inline">\(z\)</span> use <span class="math inline">\(w\)</span>).</li>
 <li><strong>Transverse</strong> <span class="math inline">\(g\)</span>: component <strong>perpendicular</strong> to the separation (two per axis).</li>
 </ul>
-<div id="5dc263dd" class="cell" data-execution_count="10">
+<div id="5893e8cf" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Longitudinal (worked example — note the pattern):</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> ( corr_axis(u, <span class="dv">0</span>) <span class="op">+</span> corr_axis(v, <span class="dv">1</span>) <span class="op">+</span> corr_axis(w, <span class="dv">2</span>) ) <span class="op">/</span> <span class="dv">3</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -911,7 +947,7 @@ R(m)=\frac{\big\langle\, u(\mathbf{x})\,u(\mathbf{x}+m\,\mathbf{e})\,\big\rangle
 </section>
 <section id="c.5-the-correlation-figure-and-the-integral-scales" class="level2">
 <h2 class="anchored" data-anchor-id="c.5-the-correlation-figure-and-the-integral-scales">c.5 The correlation figure and the integral scales</h2>
-<div id="5ec968c1" class="cell" data-execution_count="11">
+<div id="643a2331" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>trapz <span class="op">=</span> <span class="bu">getattr</span>(np, <span class="st">"trapezoid"</span>, np.trapz)     <span class="co"># numpy&gt;=2 renamed trapz -&gt; trapezoid</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>L11 <span class="op">=</span> trapz(f, r)<span class="op">;</span>  L22 <span class="op">=</span> trapz(g, r)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"L11 = </span><span class="sc">{</span>L11<span class="sc">:.3f}</span><span class="ss">,  L22 = </span><span class="sc">{</span>L22<span class="sc">:.3f}</span><span class="ss">,  ratio L22/L11 = </span><span class="sc">{</span>L22<span class="op">/</span>L11<span class="sc">:.2f}</span><span class="ss">  (expect ~0.5)"</span>)</span>
@@ -926,7 +962,7 @@ R(m)=\frac{\big\langle\, u(\mathbf{x})\,u(\mathbf{x}+m\,\mathbf{e})\,\big\rangle
 </section>
 <section id="c.6-check-the-isotropy-relations-against-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="c.6-check-the-isotropy-relations-against-the-data">c.6 Check the isotropy relations against the data</h2>
-<div id="c8cb7666" class="cell" data-execution_count="12">
+<div id="6601f2f1" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># L22/L11 should come out ~ 1/2</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the first moment of g should vanish:</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"∫ r g dr ="</span>, trapz(r<span class="op">*</span>g, r), <span class="st">"   (expect ~ 0)"</span>)</span>

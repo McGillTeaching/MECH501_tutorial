@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="MECH 501/600 — Computational Turbulence">
+<meta name="dcterms.date" content="2026-10-15">
+
+<title>OpenFOAM Tips and Tricks – MECH 501/600 — Computational Turbulence</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/logo.svg" rel="icon" type="image/svg+xml">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-6ac05f3bcb9b74dc05dabfbf673debf2.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-9ce599401464bca4da1c66249a1ca190.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-6ac05f3bcb9b74dc05dabfbf673debf2.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-2ab34d229e36e9266f298aec10a19c82.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-3f860e4c559be2b7fe5e13c555e00a74.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-2ab34d229e36e9266f298aec10a19c82.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../assets/logo.svg" alt="MECH 501/600 vortex logo" class="navbar-logo light-content">
+    <img src="../assets/logo.svg" alt="MECH 501/600 vortex logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">MECH 501/600 — Computational Turbulence</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../cluster/index.html"> 
+<span class="menu-text">Cluster</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../python/index.html"> 
+<span class="menu-text">Python</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../openfoam/how-to.html"> 
+<span class="menu-text">OpenFOAM</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../tutorials/tutorial-00.html"> 
+<span class="menu-text">Tutorials &amp; Assignments</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mcgillteaching/MECH501_tutorial"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../openfoam/how-to.html">OpenFOAM</a></li><li class="breadcrumb-item"><a href="../openfoam/tips-and-tricks.html">OpenFOAM Tips and Tricks</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../assets/logo-full.svg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../assets/logo-full.svg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">MECH 501/600 — Computational Turbulence</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Cluster</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../cluster/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Using the Cluster</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../cluster/registration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Registration</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../cluster/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Intro</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../cluster/slurm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slurm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../cluster/jupyterlab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">JupyterLab</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../cluster/vscode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">VS Code</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../cluster/terminal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Terminal and vim</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Python</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../python/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Intermediate &amp; advanced Python</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../python/01-plotting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Efficient scientific plotting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../python/02-foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Python foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../python/03-oop.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Object-oriented programming</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../python/04-functional.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functional programming</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../python/05-internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Advanced Python internals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../python/06-engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Software engineering practices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../python/07-packaging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Packaging &amp; distribution</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">OpenFOAM</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/how-to.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">OpenFOAM How-To: your first RANS case</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/parallel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Running in parallel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/meshing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Meshing in OpenFOAM: blockMesh and snappyHexMesh</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/paraview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ParaView: visualising your OpenFOAM results</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../openfoam/tips-and-tricks.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">OpenFOAM Tips and Tricks</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Tutorials and Assignments</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/tutorial-00.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 0: Prerequisites</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/assignment-01-dns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 1: Isotropic DNS turbulence</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/assignment-01-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1 · Part A: Processing data in Python</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/assignment-02-correlations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2a: Turbulent kinetic energy and two-point correlations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/assignment-02b-openfoam.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2b: Do your own OpenFOAM simulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/tutorial-03-channel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 3: Turbulent channel flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/assignment-03-openfoam.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3: OpenFOAM guide</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-workflow-and-where-the-effort-goes" id="toc-the-workflow-and-where-the-effort-goes" class="nav-link active" data-scroll-target="#the-workflow-and-where-the-effort-goes"><span class="header-section-number">1</span> The workflow, and where the effort goes</a></li>
+  <li><a href="#finding-your-way-around-openfoam" id="toc-finding-your-way-around-openfoam" class="nav-link" data-scroll-target="#finding-your-way-around-openfoam"><span class="header-section-number">2</span> Finding your way around OpenFOAM</a></li>
+  <li><a href="#keep-a-tidy-case-it-matters-on-clusters" id="toc-keep-a-tidy-case-it-matters-on-clusters" class="nav-link" data-scroll-target="#keep-a-tidy-case-it-matters-on-clusters"><span class="header-section-number">3</span> Keep a tidy case (it matters on clusters)</a></li>
+  <li><a href="#mesh-quality-and-checkmesh" id="toc-mesh-quality-and-checkmesh" class="nav-link" data-scroll-target="#mesh-quality-and-checkmesh"><span class="header-section-number">4</span> Mesh quality and <code>checkMesh</code></a></li>
+  <li><a href="#boundary-and-initial-conditions" id="toc-boundary-and-initial-conditions" class="nav-link" data-scroll-target="#boundary-and-initial-conditions"><span class="header-section-number">5</span> Boundary and initial conditions</a></li>
+  <li><a href="#running-the-solver-start-robust-end-accurate" id="toc-running-the-solver-start-robust-end-accurate" class="nav-link" data-scroll-target="#running-the-solver-start-robust-end-accurate"><span class="header-section-number">6</span> Running the solver: start robust, end accurate</a></li>
+  <li><a href="#discretization-schemes-fvschemes" id="toc-discretization-schemes-fvschemes" class="nav-link" data-scroll-target="#discretization-schemes-fvschemes"><span class="header-section-number">7</span> Discretization schemes (<code>fvSchemes</code>)</a>
+  <ul class="collapse">
+  <li><a href="#convective-terms-divschemes" id="toc-convective-terms-divschemes" class="nav-link" data-scroll-target="#convective-terms-divschemes"><span class="header-section-number">7.1</span> Convective terms — <code>divSchemes</code></a></li>
+  <li><a href="#diffusive-terms-laplacianschemes-and-non-orthogonality" id="toc-diffusive-terms-laplacianschemes-and-non-orthogonality" class="nav-link" data-scroll-target="#diffusive-terms-laplacianschemes-and-non-orthogonality"><span class="header-section-number">7.2</span> Diffusive terms — <code>laplacianSchemes</code> and non-orthogonality</a></li>
+  <li><a href="#gradient-terms-gradschemes" id="toc-gradient-terms-gradschemes" class="nav-link" data-scroll-target="#gradient-terms-gradschemes"><span class="header-section-number">7.3</span> Gradient terms — <code>gradSchemes</code></a></li>
+  </ul></li>
+  <li><a href="#running-on-the-cluster-and-heavy-io" id="toc-running-on-the-cluster-and-heavy-io" class="nav-link" data-scroll-target="#running-on-the-cluster-and-heavy-io"><span class="header-section-number">8</span> Running on the cluster and heavy I/O</a></li>
+  <li><a href="#when-it-blows-up-a-quick-checklist" id="toc-when-it-blows-up-a-quick-checklist" class="nav-link" data-scroll-target="#when-it-blows-up-a-quick-checklist"><span class="header-section-number">9</span> When it blows up: a quick checklist</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">10</span> Further reading</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">11</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../openfoam/how-to.html">OpenFOAM</a></li><li class="breadcrumb-item"><a href="../openfoam/tips-and-tricks.html">OpenFOAM Tips and Tricks</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">OpenFOAM Tips and Tricks</h1>
+<p class="subtitle lead">Practical habits for getting trustworthy CFD out of OpenFOAM</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>MECH 501/600 — Computational Turbulence </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 15, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What this page is about
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A collected set of practical tips for running OpenFOAM well, aimed at the course <strong>project</strong> (design, verify and validate a RANS case). None of it is new physics; it is the kind of hard-won, rule-of-thumb advice that saves you days of wasted compute. Treat it as a reference you come back to, not a recipe to follow blindly: every case is different, so understand <em>why</em> each tip works before you apply it. If you have not run a case yet, start with the <a href="../openfoam/how-to.html">OpenFOAM how-to</a> and come back here once you are setting up your own geometry.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>The one rule to remember
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Good mesh, good results. Garbage in, garbage out.</strong> Most OpenFOAM pain, divergence, smeared gradients, wrong forces, traces back to a poor mesh or a boundary condition that does not represent the physics. Spend your time there first. And when you run: <strong>start robustly, end accurately</strong> — begin with stable, low-order settings and tighten toward accuracy as the solution settles.</p>
+</div>
+</div>
+<section id="the-workflow-and-where-the-effort-goes" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="the-workflow-and-where-the-effort-goes"><span class="header-section-number">1</span> The workflow, and where the effort goes</h2>
+<p>Every case follows the same path, and the earlier a mistake enters it, the more expensive it is to fix:</p>
+<pre class="text"><code>geometry  →  mesh  →  case set-up (0/, constant/, system/)  →  solve  →  post-process</code></pre>
+<p>Aim for a <strong>clean, watertight geometry</strong>, then a <strong>good-quality mesh</strong>, before you touch schemes or turbulence models. A beautiful discretization scheme cannot rescue a bad mesh, and no amount of post-processing can rescue an unconverged run.</p>
+</section>
+<section id="finding-your-way-around-openfoam" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="finding-your-way-around-openfoam"><span class="header-section-number">2</span> Finding your way around OpenFOAM</h2>
+<p>The installation ships with its own documentation: thousands of working tutorial cases and the full source code. Learn to search them, and you rarely need anything else.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$FOAM_TUTORIALS</span>   <span class="co"># ready-to-run example cases — your best templates</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$FOAM_SRC</span>         <span class="co"># the library source code</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$FOAM_SOLVERS</span>     <span class="co"># the solver applications</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find a case that uses a given boundary condition, keyword or solver:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="va">$FOAM_TUTORIALS</span> <span class="at">-type</span> f <span class="kw">|</span> <span class="fu">xargs</span> grep <span class="at">-sl</span> <span class="st">'limitedLinear'</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># locate the source file behind a keyword (e.g. a BC or scheme):</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="va">$FOAM_SRC</span> <span class="at">-iname</span> <span class="st">'*slip*'</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># list every dictionary file ending in "Dict" in the tutorials:</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="va">$FOAM_TUTORIALS</span> <span class="at">-iname</span> <span class="st">'*Dict'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>The “banana” trick
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>OpenFOAM keyword wrong or unsure of the options? Put a deliberately invalid value (the community favourite is <code>banana</code>) and run the application. It stops and prints <strong>the full list of valid entries</strong> for that keyword:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># in system/fvSchemes, set:  div(phi,U)  Gauss banana;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">simpleFoam</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># -&gt; error message lists every available div scheme</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p>The single best way to set up a new case is to <strong>copy the closest tutorial case</strong> and modify it, rather than writing dictionaries from scratch.</p>
+</section>
+<section id="keep-a-tidy-case-it-matters-on-clusters" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="keep-a-tidy-case-it-matters-on-clusters"><span class="header-section-number">3</span> Keep a tidy case (it matters on clusters)</h2>
+<ul>
+<li><strong>No spaces or special characters</strong> in file, directory or variable names, and do not start a name with an underscore. Use <code>my_case</code>, not <code>my case!</code> or <code>_my_case</code>. Funny characters break scripts, especially on clusters.</li>
+<li>Keep the case self-contained and scripted. Most tutorials ship an <code>Allrun</code> and <code>Allclean</code> script — use the same pattern so a grader (or future-you) can reproduce the result with one command. This is exactly the <strong>reproducibility</strong> the project asks for.</li>
+<li>Always pipe the solver output to a log so you can plot residuals later:</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">simpleFoam</span> <span class="kw">|</span> <span class="fu">tee</span> log.simpleFoam</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">foamCleanTutorials</span>        <span class="co"># or ./Allclean — reset the case to its initial state</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="mesh-quality-and-checkmesh" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="mesh-quality-and-checkmesh"><span class="header-section-number">4</span> Mesh quality and <code>checkMesh</code></h2>
+<p>For how <code>blockMesh</code> and <code>snappyHexMesh</code> actually build a mesh, see the <a href="../openfoam/meshing.html">meshing overview</a>. Whichever you use, check it before you run. Always.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">blockMesh</span>        <span class="co"># or your meshing tool / snappyHexMesh</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">checkMesh</span>        <span class="co"># should end with "Mesh OK."</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>checkMesh</code> reports the metrics that control accuracy and stability, and flags topological errors (which you <em>must</em> fix). Watch especially:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>What to watch for</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>non-orthogonality</td>
+<td>max should be well below 70°</td>
+<td>controls the Laplacian scheme and corrections</td>
+</tr>
+<tr class="even">
+<td>skewness</td>
+<td>keep low (&lt; ~4)</td>
+<td>smears gradients, hurts accuracy</td>
+</tr>
+<tr class="odd">
+<td>aspect ratio</td>
+<td>moderate, except in the boundary layer</td>
+<td>very high AR slows the solver</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(y^+\)</span></td>
+<td>consistent with your wall treatment</td>
+<td>wall-resolved <span class="math inline">\(y^+\!\lesssim\!1\)</span> vs.&nbsp;wall-function <span class="math inline">\(30\!\lesssim\!y^+\!\lesssim\!300\)</span></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>A mesh that “runs” is not a mesh that is right
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>OpenFOAM will often run on a poor mesh, but skewness, high aspect ratio and non-orthogonality <strong>silently degrade accuracy</strong> and can make the solver crawl or diverge. If <code>checkMesh</code> complains, fix the mesh — usually that means remeshing. To <em>see</em> the offending cells, convert the failed sets and open them in ParaView:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">checkMesh</span>            <span class="co"># writes faulty cells/faces to constant/polyMesh/sets/</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">foamToVTK</span> <span class="at">-faceSet</span> skewFaces   <span class="co"># (or the set name checkMesh reported)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Renumber for speed
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>On larger meshes, run <code>renumberMesh -overwrite</code> after meshing. It reorders the cells to reduce the matrix bandwidth, which makes the linear solver faster — a free speed-up.</p>
+</div>
+</div>
+</section>
+<section id="boundary-and-initial-conditions" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="boundary-and-initial-conditions"><span class="header-section-number">5</span> Boundary and initial conditions</h2>
+<ul>
+<li><strong>They must be physically realistic.</strong> For every field you solve you need a boundary condition on every patch (and a sensible initial field).</li>
+<li><strong>Put boundaries far from the action.</strong> Keep inlets and outlets away from separation, recirculation and strong gradients so they do not contaminate the solution; this also feeds the domain-independence argument in your report.</li>
+<li><strong>Do not over-specify the outlet.</strong> Use <code>zeroGradient</code> (or an <code>inletOutlet</code>/<code>pressureOutlet</code>-type condition) so the solver extrapolates the flow leaving the domain; forcing values there causes trouble. Watch for <strong>back-flow</strong> at outlets.</li>
+<li><strong>Good initial conditions speed convergence.</strong> A <code>potentialFoam</code> solution, a solution mapped from a coarse mesh (<code>mapFields</code>), or a converged laminar/steady field all make a good starting point. Unphysical starts slow convergence or cause divergence.</li>
+</ul>
+</section>
+<section id="running-the-solver-start-robust-end-accurate" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="running-the-solver-start-robust-end-accurate"><span class="header-section-number">6</span> Running the solver: start robust, end accurate</h2>
+<ul>
+<li><strong>Change settings on the fly.</strong> Set <code>runTimeModifiable yes;</code> in <code>controlDict</code> and you can edit <code>fvSchemes</code>, <code>fvSolution</code> and <code>controlDict</code> while the solver runs.</li>
+<li><strong>Ramp toward accuracy.</strong> Begin with a robust, low-order configuration (e.g. <code>upwind</code>, loose linear-solver tolerances, heavier under-relaxation), then switch to a second-order scheme and tighten tolerances once the solution stabilises. If it starts to oscillate, drop back to upwind, let it settle, and climb again.</li>
+<li><strong>Monitor a quantity of interest, not just residuals.</strong> Residuals falling is necessary but not sufficient. Add a <code>solverInfo</code> function object for the residual history, and monitor your QoI (a force coefficient, a reattachment length, a pressure drop) until it levels off — that is your real convergence criterion, and the one the project asks you to report.</li>
+<li><strong>Watch the continuity errors.</strong> The per-step <code>time step continuity errors</code> should stay small; if they grow, something is wrong (mesh, BCs, or time step).</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>system/fvSolution (SIMPLE)</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="system/fvSolution (SIMPLE)"><pre class="sourceCode cpp code-with-copy"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>SIMPLE</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    nNonOrthogonalCorrectors <span class="dv">1</span><span class="op">;</span>      <span class="co">// raise to 1–2 on non-orthogonal meshes</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    consistent      yes<span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    residualControl <span class="op">{</span> p <span class="fl">1e-4</span><span class="op">;</span> U <span class="fl">1e-4</span><span class="op">;</span> <span class="st">"(k|epsilon|omega)"</span> <span class="fl">1e-4</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>relaxationFactors</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    equations <span class="op">{</span> U <span class="fl">0.7</span><span class="op">;</span> <span class="st">"(k|epsilon|omega)"</span> <span class="fl">0.7</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    fields    <span class="op">{</span> p <span class="fl">0.3</span><span class="op">;</span> <span class="op">}</span>             <span class="co">// pressure is under-relaxed the most</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="discretization-schemes-fvschemes" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="discretization-schemes-fvschemes"><span class="header-section-number">7</span> Discretization schemes (<code>fvSchemes</code>)</h2>
+<section id="convective-terms-divschemes" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="convective-terms-divschemes"><span class="header-section-number">7.1</span> Convective terms — <code>divSchemes</code></h3>
+<p>Pick by the stability/accuracy trade-off; these are the ones you will actually use:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Scheme</th>
+<th>Order / behaviour</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>upwind</code></td>
+<td>1st order, very stable, diffusive</td>
+<td>to start a run, or to stabilise a blow-up</td>
+</tr>
+<tr class="even">
+<td><code>linearUpwind grad(U)</code></td>
+<td>2nd order, bounded</td>
+<td>a good default for momentum</td>
+</tr>
+<tr class="odd">
+<td><code>limitedLinear 1</code></td>
+<td>2nd order, TVD, bounded</td>
+<td>the turbulence scalars <span class="math inline">\(k\)</span>, <span class="math inline">\(\varepsilon\)</span>, <span class="math inline">\(\omega\)</span> (keeps them positive)</td>
+</tr>
+<tr class="even">
+<td><code>vanLeer</code> / <code>Minmod</code></td>
+<td>2nd order, TVD, bounded</td>
+<td>scalars where you want a classic limiter</td>
+</tr>
+<tr class="odd">
+<td><code>linear</code></td>
+<td>2nd order, unbounded</td>
+<td>smooth fields on good meshes; can oscillate</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Never submit a final result computed with first-order schemes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>First-order upwind is for <em>starting</em> and <em>stabilising</em> only — it is too diffusive, it smears gradients and under-predicts forces. Your reported, validated result must use a second-order scheme. (This is also why the verification study matters: mesh refinement and scheme order together set your numerical uncertainty.)</p>
+</div>
+</div>
+</section>
+<section id="diffusive-terms-laplacianschemes-and-non-orthogonality" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="diffusive-terms-laplacianschemes-and-non-orthogonality"><span class="header-section-number">7.2</span> Diffusive terms — <code>laplacianSchemes</code> and non-orthogonality</h3>
+<p>The Laplacian (and surface-normal gradient) scheme is tied directly to mesh non-orthogonality through a blending factor <span class="math inline">\(\psi\)</span> in <code>Gauss linear limited ψ</code>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Max non-orthogonality</th>
+<th>Scheme</th>
+<th>Blending <span class="math inline">\(\psi\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>low (&lt; 70°)</td>
+<td><code>Gauss linear corrected</code></td>
+<td>full correction (most accurate)</td>
+</tr>
+<tr class="even">
+<td>moderate (70–85°)</td>
+<td><code>Gauss linear limited 0.5</code></td>
+<td><span class="math inline">\(\psi = 0.5\)</span> (stable compromise)</td>
+</tr>
+<tr class="odd">
+<td>high (&gt; 85°)</td>
+<td><code>Gauss linear limited 0.333</code></td>
+<td>low <span class="math inline">\(\psi\)</span> + more <code>nNonOrthogonalCorrectors</code> — or remesh</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\psi = 1\)</span> keeps full accuracy on a good mesh; lowering <span class="math inline">\(\psi\)</span> trades accuracy for stability on a poor one. The right answer is almost always a better mesh.</p>
+</section>
+<section id="gradient-terms-gradschemes" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="gradient-terms-gradschemes"><span class="header-section-number">7.3</span> Gradient terms — <code>gradSchemes</code></h3>
+<p><code>Gauss linear</code> is the robust default; <code>leastSquares</code> is more accurate but can be oscillatory on tetrahedral meshes. Both are second order.</p>
+</section>
+</section>
+<section id="running-on-the-cluster-and-heavy-io" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="running-on-the-cluster-and-heavy-io"><span class="header-section-number">8</span> Running on the cluster and heavy I/O</h2>
+<ul>
+<li><strong>Save in binary.</strong> Set <code>writeFormat binary;</code> in <code>controlDict</code> for faster, smaller output — a real difference on big cases. (See the <a href="../cluster/index.html">cluster</a> pages for Slurm, modules and parallel runs with <code>decomposePar</code>/<code>mpirun</code>.)</li>
+<li><strong>Do not write too often.</strong> I/O is frequently the bottleneck and can fill your scratch quota; pick a sensible <code>writeInterval</code>, but make sure you write <em>before</em> the job hits its time limit.</li>
+<li><strong>Double-check your job script before you queue.</strong> A two-day wait followed by a typo’d script that never starts is the most common cluster time-sink.</li>
+</ul>
+</section>
+<section id="when-it-blows-up-a-quick-checklist" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="when-it-blows-up-a-quick-checklist"><span class="header-section-number">9</span> When it blows up: a quick checklist</h2>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Divergence / “floating point exception” — work through this list
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><strong>Check the mesh</strong> (<code>checkMesh</code>): fix topological errors, reduce skewness/non-orthogonality.</li>
+<li><strong>Drop to first order</strong> (<code>upwind</code>) and loosen tolerances to get <em>a</em> solution, then climb back up.</li>
+<li><strong>Under-relax more</strong> (steady) or <strong>cut the time step / Courant number</strong> (transient).</li>
+<li><strong>Re-read the boundary conditions</strong> — a wrong inlet/outlet or missing wall function is a classic cause.</li>
+<li><strong>Raise <code>nNonOrthogonalCorrectors</code></strong> if the mesh is non-orthogonal.</li>
+<li><strong>Start from a better initial field</strong> (<code>potentialFoam</code>, or map a coarse solution).</li>
+</ol>
+<p>Change one thing at a time so you learn what actually fixed it.</p>
+</div>
+</div>
+</section>
+<section id="further-reading" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">10</span> Further reading</h2>
+<ul>
+<li>J. Guerrero (Wolf Dynamics), <em>Tips and tricks in OpenFOAM</em> — the training deck this page is modelled on: <a href="http://www.wolfdynamics.com/training.html">wolfdynamics.com/training.html</a></li>
+<li>OpenFOAM User Guide — <a href="https://www.openfoam.com/documentation/user-guide/">numerical schemes (<code>fvSchemes</code>)</a> and the <code>checkMesh</code> / mesh-quality utilities.</li>
+<li><a href="../openfoam/meshing.html">Meshing in OpenFOAM</a> for how <code>blockMesh</code> and <code>snappyHexMesh</code> work, with recommended learning resources.</li>
+<li><a href="../openfoam/how-to.html">OpenFOAM how-to</a> and the <a href="../openfoam/paraview.html">ParaView tutorial</a> for the hands-on <code>pitzDaily</code> walk-through these tips build on.</li>
+</ul>
+</section>
+<section id="references" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="references"><span class="header-section-number">11</span> References</h2>
+<div id="refs" role="list">
+
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script>
+// Keep the "Tutorials" sidebar section expanded by default (Cluster & Python
+// start collapsed via collapse-level: 1). Progressive enhancement — guarded.
+window.addEventListener('load', function () {
+  try {
+    document.querySelectorAll('.sidebar-item-section').forEach(function (sec) {
+      var label = sec.querySelector('.menu-text');
+      if (label && label.textContent.trim() === 'Tutorials') {
+        var ul = sec.querySelector('ul');
+        if (ul) { ul.classList.add('show'); ul.classList.remove('collapse'); }
+        sec.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function (b) {
+          b.classList.remove('collapsed');
+          b.setAttribute('aria-expanded', 'true');
+        });
+      }
+    });
+  } catch (e) { /* no-op */ }
+});
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mcgillteaching\.github\.io\/MECH501_tutorial\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Hendrik Nicolai · MECH 501/600 · McGill University</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
