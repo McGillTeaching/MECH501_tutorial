@@ -1,0 +1,263 @@
+---
+title: "OpenFOAM Tips and Tricks"
+subtitle: "Practical habits for getting trustworthy CFD out of OpenFOAM"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+---
+
+::: {.callout-note}
+## What this page is about
+
+A collected set of practical tips for running OpenFOAM well, aimed at the course
+**project** (design, verify and validate a RANS case). None of it is new physics;
+it is the kind of hard-won, rule-of-thumb advice that saves you days of wasted
+compute. Treat it as a reference you come back to, not a recipe to follow blindly:
+every case is different, so understand *why* each tip works before you apply it.
+If you have not run a case yet, start with the
+[OpenFOAM how-to](how-to.qmd) and come back here once you are setting up your own
+geometry.
+:::
+
+::: {.callout-tip}
+## The one rule to remember
+**Good mesh, good results. Garbage in, garbage out.** Most OpenFOAM pain, divergence,
+smeared gradients, wrong forces, traces back to a poor mesh or a boundary condition
+that does not represent the physics. Spend your time there first. And when you run:
+**start robustly, end accurately** — begin with stable, low-order settings and tighten
+toward accuracy as the solution settles.
+:::
+
+## The workflow, and where the effort goes
+
+Every case follows the same path, and the earlier a mistake enters it, the more
+expensive it is to fix:
+
+```text
+geometry  →  mesh  →  case set-up (0/, constant/, system/)  →  solve  →  post-process
+```
+
+Aim for a **clean, watertight geometry**, then a **good-quality mesh**, before you
+touch schemes or turbulence models. A beautiful discretization scheme cannot rescue
+a bad mesh, and no amount of post-processing can rescue an unconverged run.
+
+## Finding your way around OpenFOAM
+
+The installation ships with its own documentation: thousands of working tutorial
+cases and the full source code. Learn to search them, and you rarely need anything
+else.
+
+```bash
+echo $FOAM_TUTORIALS   # ready-to-run example cases — your best templates
+echo $FOAM_SRC         # the library source code
+echo $FOAM_SOLVERS     # the solver applications
+```
+
+```bash
+# find a case that uses a given boundary condition, keyword or solver:
+find $FOAM_TUTORIALS -type f | xargs grep -sl 'limitedLinear'
+
+# locate the source file behind a keyword (e.g. a BC or scheme):
+find $FOAM_SRC -iname '*slip*'
+
+# list every dictionary file ending in "Dict" in the tutorials:
+find $FOAM_TUTORIALS -iname '*Dict'
+```
+
+::: {.callout-tip}
+## The "banana" trick
+OpenFOAM keyword wrong or unsure of the options? Put a deliberately invalid value
+(the community favourite is `banana`) and run the application. It stops and prints
+**the full list of valid entries** for that keyword:
+
+```bash
+# in system/fvSchemes, set:  div(phi,U)  Gauss banana;
+simpleFoam
+# -> error message lists every available div scheme
+```
+:::
+
+The single best way to set up a new case is to **copy the closest tutorial case** and
+modify it, rather than writing dictionaries from scratch.
+
+## Keep a tidy case (it matters on clusters)
+
+- **No spaces or special characters** in file, directory or variable names, and do
+  not start a name with an underscore. Use `my_case`, not `my case!` or `_my_case`.
+  Funny characters break scripts, especially on clusters.
+- Keep the case self-contained and scripted. Most tutorials ship an `Allrun` and
+  `Allclean` script — use the same pattern so a grader (or future-you) can
+  reproduce the result with one command. This is exactly the **reproducibility**
+  the project asks for.
+- Always pipe the solver output to a log so you can plot residuals later:
+
+```bash
+simpleFoam | tee log.simpleFoam
+foamCleanTutorials        # or ./Allclean — reset the case to its initial state
+```
+
+## Mesh quality and `checkMesh`
+
+For how `blockMesh` and `snappyHexMesh` actually build a mesh, see the
+[meshing overview](meshing.qmd). Whichever you use, check it before you run. Always.
+
+```bash
+blockMesh        # or your meshing tool / snappyHexMesh
+checkMesh        # should end with "Mesh OK."
+```
+
+`checkMesh` reports the metrics that control accuracy and stability, and flags
+topological errors (which you *must* fix). Watch especially:
+
+| Metric | What to watch for | Why it matters |
+|---|---|---|
+| non-orthogonality | max should be well below 70° | controls the Laplacian scheme and corrections |
+| skewness | keep low (< ~4) | smears gradients, hurts accuracy |
+| aspect ratio | moderate, except in the boundary layer | very high AR slows the solver |
+| $y^+$ | consistent with your wall treatment | wall-resolved $y^+\!\lesssim\!1$ vs. wall-function $30\!\lesssim\!y^+\!\lesssim\!300$ |
+
+::: {.callout-warning}
+## A mesh that "runs" is not a mesh that is right
+OpenFOAM will often run on a poor mesh, but skewness, high aspect ratio and
+non-orthogonality **silently degrade accuracy** and can make the solver crawl or
+diverge. If `checkMesh` complains, fix the mesh — usually that means remeshing.
+To *see* the offending cells, convert the failed sets and open them in ParaView:
+
+```bash
+checkMesh            # writes faulty cells/faces to constant/polyMesh/sets/
+foamToVTK -faceSet skewFaces   # (or the set name checkMesh reported)
+```
+:::
+
+::: {.callout-tip}
+## Renumber for speed
+On larger meshes, run `renumberMesh -overwrite` after meshing. It reorders the cells
+to reduce the matrix bandwidth, which makes the linear solver faster — a free speed-up.
+:::
+
+## Boundary and initial conditions
+
+- **They must be physically realistic.** For every field you solve you need a
+  boundary condition on every patch (and a sensible initial field).
+- **Put boundaries far from the action.** Keep inlets and outlets away from
+  separation, recirculation and strong gradients so they do not contaminate the
+  solution; this also feeds the domain-independence argument in your report.
+- **Do not over-specify the outlet.** Use `zeroGradient` (or an
+  `inletOutlet`/`pressureOutlet`-type condition) so the solver extrapolates the
+  flow leaving the domain; forcing values there causes trouble. Watch for
+  **back-flow** at outlets.
+- **Good initial conditions speed convergence.** A `potentialFoam` solution, a
+  solution mapped from a coarse mesh (`mapFields`), or a converged laminar/steady
+  field all make a good starting point. Unphysical starts slow convergence or
+  cause divergence.
+
+## Running the solver: start robust, end accurate
+
+- **Change settings on the fly.** Set `runTimeModifiable yes;` in `controlDict` and
+  you can edit `fvSchemes`, `fvSolution` and `controlDict` while the solver runs.
+- **Ramp toward accuracy.** Begin with a robust, low-order configuration (e.g.
+  `upwind`, loose linear-solver tolerances, heavier under-relaxation), then switch to
+  a second-order scheme and tighten tolerances once the solution stabilises. If it
+  starts to oscillate, drop back to upwind, let it settle, and climb again.
+- **Monitor a quantity of interest, not just residuals.** Residuals falling is
+  necessary but not sufficient. Add a `solverInfo` function object for the residual
+  history, and monitor your QoI (a force coefficient, a reattachment length, a
+  pressure drop) until it levels off — that is your real convergence criterion, and
+  the one the project asks you to report.
+- **Watch the continuity errors.** The per-step `time step continuity errors` should
+  stay small; if they grow, something is wrong (mesh, BCs, or time step).
+
+```{.cpp filename="system/fvSolution (SIMPLE)"}
+SIMPLE
+{
+    nNonOrthogonalCorrectors 1;      // raise to 1–2 on non-orthogonal meshes
+    consistent      yes;
+    residualControl { p 1e-4; U 1e-4; "(k|epsilon|omega)" 1e-4; }
+}
+relaxationFactors
+{
+    equations { U 0.7; "(k|epsilon|omega)" 0.7; }
+    fields    { p 0.3; }             // pressure is under-relaxed the most
+}
+```
+
+## Discretization schemes (`fvSchemes`)
+
+### Convective terms — `divSchemes`
+
+Pick by the stability/accuracy trade-off; these are the ones you will actually use:
+
+| Scheme | Order / behaviour | When |
+|---|---|---|
+| `upwind` | 1st order, very stable, diffusive | to start a run, or to stabilise a blow-up |
+| `linearUpwind grad(U)` | 2nd order, bounded | a good default for momentum |
+| `limitedLinear 1` | 2nd order, TVD, bounded | the turbulence scalars $k$, $\varepsilon$, $\omega$ (keeps them positive) |
+| `vanLeer` / `Minmod` | 2nd order, TVD, bounded | scalars where you want a classic limiter |
+| `linear` | 2nd order, unbounded | smooth fields on good meshes; can oscillate |
+
+::: {.callout-important}
+## Never submit a final result computed with first-order schemes
+First-order upwind is for *starting* and *stabilising* only — it is too diffusive, it
+smears gradients and under-predicts forces. Your reported, validated result must use a
+second-order scheme. (This is also why the verification study matters: mesh refinement
+and scheme order together set your numerical uncertainty.)
+:::
+
+### Diffusive terms — `laplacianSchemes` and non-orthogonality
+
+The Laplacian (and surface-normal gradient) scheme is tied directly to mesh
+non-orthogonality through a blending factor $\psi$ in `Gauss linear limited ψ`:
+
+| Max non-orthogonality | Scheme | Blending $\psi$ |
+|---|---|---|
+| low (< 70°) | `Gauss linear corrected` | full correction (most accurate) |
+| moderate (70–85°) | `Gauss linear limited 0.5` | $\psi = 0.5$ (stable compromise) |
+| high (> 85°) | `Gauss linear limited 0.333` | low $\psi$ + more `nNonOrthogonalCorrectors` — or remesh |
+
+$\psi = 1$ keeps full accuracy on a good mesh; lowering $\psi$ trades accuracy for
+stability on a poor one. The right answer is almost always a better mesh.
+
+### Gradient terms — `gradSchemes`
+
+`Gauss linear` is the robust default; `leastSquares` is more accurate but can be
+oscillatory on tetrahedral meshes. Both are second order.
+
+## Running on the cluster and heavy I/O
+
+- **Save in binary.** Set `writeFormat binary;` in `controlDict` for faster, smaller
+  output — a real difference on big cases. (See the [cluster](../cluster/index.qmd)
+  pages for Slurm, modules and parallel runs with `decomposePar`/`mpirun`.)
+- **Do not write too often.** I/O is frequently the bottleneck and can fill your
+  scratch quota; pick a sensible `writeInterval`, but make sure you write *before*
+  the job hits its time limit.
+- **Double-check your job script before you queue.** A two-day wait followed by a
+  typo'd script that never starts is the most common cluster time-sink.
+
+## When it blows up: a quick checklist
+
+::: {.callout-warning}
+## Divergence / "floating point exception" — work through this list
+1. **Check the mesh** (`checkMesh`): fix topological errors, reduce skewness/non-orthogonality.
+2. **Drop to first order** (`upwind`) and loosen tolerances to get *a* solution, then climb back up.
+3. **Under-relax more** (steady) or **cut the time step / Courant number** (transient).
+4. **Re-read the boundary conditions** — a wrong inlet/outlet or missing wall function is a classic cause.
+5. **Raise `nNonOrthogonalCorrectors`** if the mesh is non-orthogonal.
+6. **Start from a better initial field** (`potentialFoam`, or map a coarse solution).
+
+Change one thing at a time so you learn what actually fixed it.
+:::
+
+## Further reading
+
+- J. Guerrero (Wolf Dynamics), *Tips and tricks in OpenFOAM* — the training deck this
+  page is modelled on: [wolfdynamics.com/training.html](http://www.wolfdynamics.com/training.html)
+- OpenFOAM User Guide — [numerical schemes (`fvSchemes`)](https://www.openfoam.com/documentation/user-guide/)
+  and the `checkMesh` / mesh-quality utilities.
+- [Meshing in OpenFOAM](meshing.qmd) for how `blockMesh` and `snappyHexMesh` work, with
+  recommended learning resources.
+- [OpenFOAM how-to](how-to.qmd) and the [ParaView tutorial](paraview.qmd) for the
+  hands-on `pitzDaily` walk-through these tips build on.
+
+## References
+
+::: {#refs}
+:::

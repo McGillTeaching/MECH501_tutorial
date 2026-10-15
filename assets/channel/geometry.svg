@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="350" viewBox="0 0 900 350" role="img" aria-labelledby="title desc">
+<title id="title">Plane channel geometry</title><desc id="desc">Two no-slip walls at y zero and two delta. Flow is in positive x. A mean velocity profile is zero at the walls and greatest at the centerline. The spanwise z direction is perpendicular to the drawing.</desc>
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#333"/></marker></defs>
+<rect width="900" height="350" fill="white"/>
+<g font-family="Arial,sans-serif" fill="#222" font-size="18">
+<rect x="100" y="60" width="610" height="14" fill="#bbb"/><rect x="100" y="280" width="610" height="14" fill="#bbb"/>
+<path d="M100 74H710 M100 280H710" stroke="#222" stroke-width="3"/>
+<path d="M100 177H710" stroke="#999" stroke-dasharray="7 6"/>
+<text x="100" y="45">Stationary no-slip walls</text><text x="720" y="80">y = 2δ</text><text x="720" y="181">y = δ</text><text x="720" y="286">y = 0</text>
+<path d="M365 74Q640 177 365 280" fill="none" stroke="#c51930" stroke-width="3"/>
+<g stroke="#333" stroke-width="2" marker-end="url(#arr)"><path d="M365 107H435"/><path d="M365 142H480"/><path d="M365 177H500"/><path d="M365 212H480"/><path d="M365 247H435"/>
+<path d="M155 250V130"/><path d="M155 250H275"/></g>
+<text x="142" y="119">y</text><text x="285" y="257">x</text><text x="522" y="157" fill="#b01028">U(y)</text>
+<circle cx="155" cy="250" r="7" fill="white" stroke="#333"/><circle cx="155" cy="250" r="2"/><text x="116" y="269">z</text>
+<text x="100" y="330">Periodic in x and z • Driven by a mean pressure gradient</text>
+</g></svg>

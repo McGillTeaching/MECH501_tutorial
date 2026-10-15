@@ -1,0 +1,101 @@
+---
+title: "Slurm"
+subtitle: "Requesting compute nodes with the job scheduler"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+---
+
+Real computations run on the **compute nodes**, which you do not use directly: you
+**request** them from **Slurm**, the cluster's job scheduler, by submitting a short
+**batch script**. For how the login and compute nodes differ, see the
+[cluster intro](intro.qmd).
+
+::: {.callout-important}
+## Current course-cluster setup time and job limit
+
+The setup phase for a Slurm job on our cluster currently takes approximately **10 minutes**. We are investigating a solution to reduce this delay. Until then, use Slurm batch jobs mainly for longer computations, where this startup overhead is small compared with the run itself. Allow for this setup delay when planning your work; queue waiting time may add further delay.
+
+The maximum time limit is **8 hours per job**. Set `#SBATCH --time=HH:MM:SS` to the time your job needs, up to `#SBATCH --time=08:00:00`. Request less time when appropriate. Slurm terminates the job when its requested time limit is reached, so save results regularly.
+:::
+
+## The batch script
+
+The script states the resources you need (walltime, cores, memory) in `#SBATCH`
+lines, then runs your commands:
+
+```bash
+#!/bin/bash
+#SBATCH --account=<account>     # your course allocation (shown after you log in)
+#SBATCH --time=00:30:00         # walltime HH:MM:SS — the job is killed after this
+#SBATCH --ntasks=4              # number of parallel tasks (e.g. MPI ranks)
+#SBATCH --mem-per-cpu=2G        # memory per task
+
+module load openfoam/v2412
+srun myParallelCommand          # Slurm launches the tasks across the requested cores
+```
+
+## An OpenFOAM batch job
+
+A real parallel OpenFOAM run follows the decompose → solve → reconstruct pattern from
+the [Running in parallel](../openfoam/parallel.qmd) page, wrapped in one script. Save
+this as `job.sh` inside your case folder:
+
+```bash
+#!/bin/bash
+#SBATCH --account=<account>     # your course allocation
+#SBATCH --job-name=channel395   # a name you will recognise in the queue
+#SBATCH --time=01:00:00         # walltime HH:MM:SS
+#SBATCH --ntasks=8              # 8 MPI ranks  ==  8 subdomains
+#SBATCH --mem-per-cpu=2G        # memory per rank
+#SBATCH --output=%x-%j.out      # log file named <job-name>-<jobid>.out
+
+module load openfoam/v2412      # make the OpenFOAM commands available
+
+decomposePar -force             # split the case into processor0/ ... processor7/
+srun simpleFoam -parallel       # run the solver across the 8 ranks
+reconstructPar -latestTime      # merge the final result back into one case
+```
+
+::: {.callout-important}
+## Keep `--ntasks` and `numberOfSubdomains` in step
+The `--ntasks=8` here **must** equal `numberOfSubdomains` in `system/decomposeParDict`
+(and hence the number of `processor*` folders). If they disagree, the parallel run
+aborts immediately. Change one, change the other.
+:::
+
+## Submitting your job, step by step
+
+1. **Get the case onto the cluster** and `cd` into it (see
+   [Get the case on the cluster](../openfoam/how-to.qmd#get-the-case-on-the-cluster)).
+2. **Mesh and check on the login node first.** `blockMesh` / `snappyHexMesh` and
+   `checkMesh` are cheap — run them interactively so you never waste a queued job on a
+   broken mesh.
+3. **Match the counts.** Set `numberOfSubdomains` in `system/decomposeParDict` equal to
+   the `--ntasks` in `job.sh`.
+4. **Edit `job.sh`** — set `--account`, a realistic `--time`, and `--ntasks`.
+5. **Submit it:** `sbatch job.sh`. Slurm prints a job id and places the job in the queue.
+6. **Watch it** with `squeue -u $USER`; once it starts, the solver output streams to the
+   `channel395-<jobid>.out` log named by `--output`.
+7. **Collect the result.** `reconstructPar` has already merged the final time, so copy
+   the case back (or open it directly in ParaView) when the job finishes.
+
+## Monitoring and managing jobs
+
+| Command | What it does |
+|---|---|
+| `sbatch job.sh` | submit the script to the queue |
+| `squeue -u $USER` | show your queued / running jobs |
+| `scancel <jobid>` | cancel a job |
+| `sacct -j <jobid>` | resource usage of a finished job |
+| `sinfo` | state of the cluster's nodes and partitions |
+
+The job waits in the queue until the resources are free, then runs unattended. Request
+**only what you need** — a smaller, shorter job starts sooner.
+
+## More on Slurm
+
+- [Running jobs — Digital Research Alliance of Canada](https://docs.alliancecan.ca/wiki/Running_jobs) —
+  the job-scheduling guide for the real national clusters this course cluster mirrors;
+  the reference for `#SBATCH` options, accounts and job types.
+- [Slurm Quick Start — SchedMD](https://slurm.schedmd.com/quickstart.html) — the official
+  documentation, with the `sbatch`, `srun`, `squeue` and `sacct` man pages.

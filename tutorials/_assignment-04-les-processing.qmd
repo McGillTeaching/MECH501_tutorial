@@ -1,0 +1,69 @@
+---
+title: "Assignment 4: LES post-processing"
+subtitle: "Analyze the supplied simulation and compare with RANS"
+author: "MECH 501/600 · Computational Turbulence"
+date: last-modified
+---
+
+::: {.callout-note}
+## Analyze results, not another simulation
+
+The instructor will run the LES and provide the results. You do not need to set up a mesh, generate turbulent inflow, submit a parallel LES job or advance the solver. This page supports Assignment 4. The data download and final averaging interval will be added when the instructor's run is ready.
+:::
+
+## What the dataset will contain
+
+The planned package contains a mesh or exported visualization files, at least one instantaneous velocity field `U`, the time-mean velocity `UMean`, the resolved covariance `UPrime2Mean`, and the time-mean downstream wall shear. Metadata will specify the coordinate origin, step height, bulk velocity, model, averaging interval and any spanwise averaging already applied. These statistics must use compatible averaging intervals.
+
+The existing reference tutorial's archived LES is not automatically the final dataset for this task. Use the instructor's released results and their metadata.
+
+## Visualize instantaneous and mean flow
+
+Open the supplied OpenFOAM case or visualization files in ParaView. If necessary for a case, create a `.foam` marker file. Inspect the field list before choosing a time: the latest saved time is not necessarily the start of the averaging interval.
+
+Choose a streamwise/wall-normal slice at the documented spanwise location. Show streamwise `U` and `UMean` on that same plane with the same camera, velocity normalization and color limits. A slice through a time mean need not equal a spanwise-averaged mean; state which you use.
+
+Describe motion of the shear layer, resolved structures and reverse flow. Streamlines of an instantaneous velocity field describe that instant's vector field, not the trajectories of fluid particles through an unsteady flow.
+
+## Extract mean profiles
+
+Use `Plot Over Line` at $x/h=0.2,3,6,9,12$, spanning the fluid section, and export the `UMean` streamwise component and coordinates as CSV. If spanwise-averaged statistics are supplied, use those for the main profile comparisons. Otherwise identify the sampled plane and the resulting limitation.
+
+Plot $U/U_b$ against $y/h$ with the supplied reference and one selected RANS configuration from Assignment 3, Q3. Reuse the reference CSVs from the [Q3 starter package](../assets/downloads/OpenFOAM_Q3.zip). Those reference profiles are already normalized; the LES exports may be dimensional. Read the metadata before normalizing.
+
+If the supplied results use OpenFOAM format, `foamToVTK -latestTime` can export fields without running a flow simulation. For line sampling, adapt Assignment 3's `velocityProfiles` field list to `(UMean)`. Do not overwrite the instructor's statistics by starting a new averaging operation on a single saved field.
+
+## Mean reattachment
+
+Use the supplied **time-mean wall shear**, isolate the downstream horizontal wall and find the zero crossing that ends the primary recirculation region. With samples bracketing zero,
+
+$$
+x_r=x_i-\overline{\tau}_i
+\frac{x_{i+1}-x_i}{\overline{\tau}_{i+1}-\overline{\tau}_i}.
+$$
+
+Check the traction sign convention and report the local spacing. If the supplied field is not spanwise averaged, perform or request the appropriate spanwise average rather than mixing different wall locations.
+
+Do not average instantaneous reattachment positions as a substitute: averaging and finding a zero crossing do not generally commute. Likewise, computing a turbulent wall-stress model from a mean velocity field need not reproduce the mean LES wall stress. The instructor will provide the averaged wall diagnostic directly.
+
+## What does UPrime2Mean measure?
+
+For resolved velocity $\widetilde u_i$, the covariance is
+
+$$
+R^{\mathrm{res}}_{ij}
+=\overline{(\widetilde u_i-\overline{\widetilde u_i})
+(\widetilde u_j-\overline{\widetilde u_j})},
+\qquad
+k_{\mathrm{res}}=\frac12R^{\mathrm{res}}_{ii}.
+$$
+
+Inspect the component names before taking the trace; exported tensor-component ordering depends on the file format. This is the energy in resolved fluctuations about the averaging mean. It excludes unresolved subgrid energy and can include coherent unsteadiness.
+
+If a compatible subgrid-energy estimate is supplied, a total-energy estimate can include its mean. Do not infer subgrid energy directly from `nut`, which is a viscosity. Explain the statistical distinction when comparing with RANS `k`; no additional subgrid-energy reconstruction is required in Assignment 4.
+
+## Submission and interpretation
+
+Submit the paired instantaneous/mean visualization, five profile comparisons, the mean reattachment comparison and a short explanation of resolved versus modeled fluctuation energy. State the averaging interval and data normalization. Discuss inlet, mesh, subgrid-model and finite-averaging effects; LES is not automatically more accurate than RANS for every quantity.
+
+The backward-facing-step reference is [Pont-Vilchez et al. (2019)](https://doi.org/10.1017/jfm.2018.1000), as identified in the original teaching tutorial. The supplied LES is an instructor-run comparison, not that reference DNS.

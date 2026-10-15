@@ -1,0 +1,117 @@
+---
+title: "Running in parallel"
+subtitle: "Domain decomposition: decompose, solve, reconstruct"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+---
+
+::: {.callout-note}
+## What this page is about
+
+Any case worth running for the project is too large for a single core. This page
+covers how OpenFOAM spreads a case across many cores by **domain decomposition**, and
+the three-step wrapper around the solver. To launch the parallel run as a batch job on
+the cluster, see the [Slurm](../cluster/slurm.qmd) page; to set up the case in the
+first place, the [OpenFOAM how-to](how-to.qmd).
+:::
+
+## The idea: domain decomposition
+
+OpenFOAM parallelizes by **domain decomposition**: the mesh and fields are split into
+$N$ subdomains, one per MPI rank, each solved on its own core, with the ranks
+exchanging data across the subdomain boundaries. Three steps wrap the solver:
+
+1. **Decompose** the case into $N$ pieces.
+2. **Run the solver in parallel** across those pieces.
+3. **Reconstruct** the pieces back into a single case for post-processing.
+
+## Decompose, run, reconstruct
+
+The split is controlled by `system/decomposeParDict`:
+
+```{.cpp filename="system/decomposeParDict"}
+numberOfSubdomains 4;       // = number of MPI ranks / cores
+method             scotch;  // automatic, load-balanced partitioning (no manual input)
+```
+
+```bash
+decomposePar                              # creates processor0/ ... processor3/
+mpirun -np 4 simpleFoam -parallel | tee log.simpleFoam
+reconstructPar                            # merge processor*/ back into the time directories
+```
+
+::: {.callout-tip}
+## On the cluster, let Slurm launch it
+Run the solver step inside a Slurm batch job: request the same number of tasks as
+`numberOfSubdomains` and launch with `srun` in place of `mpirun`. See the
+[Slurm](../cluster/slurm.qmd) page for the full job script.
+
+```bash
+#SBATCH --ntasks=4
+srun simpleFoam -parallel
+```
+:::
+
+## A few practical points
+
+**The counts must match.** `numberOfSubdomains`, the `-np` / `--ntasks` count, and the
+number of `processor*` folders `decomposePar` creates are all the *same* number. Set it
+once and carry it through every step:
+
+```{.cpp filename="system/decomposeParDict"}
+numberOfSubdomains 8;       // split the case into 8 pieces
+method             scotch;
+```
+
+```bash
+decomposePar                        # -> processor0/ processor1/ ... processor7/  (8 folders)
+mpirun -np 8 simpleFoam -parallel   # -np 8 matches the 8 subdomains
+reconstructPar                      # merge the 8 pieces back together
+# on the cluster:  #SBATCH --ntasks=8   then   srun simpleFoam -parallel
+```
+
+**Choosing the method.** `scotch` needs no hand-tuning: it partitions automatically for
+a balanced load and is the right default. `simple` and `hierarchical` instead cut the
+domain along the coordinate directions, which you may want on a structured mesh or to
+keep a cut away from a sensitive region. With both, the product of the per-direction
+counts in `n` must equal `numberOfSubdomains`:
+
+```{.cpp filename="system/decomposeParDict (simple)"}
+numberOfSubdomains 4;
+method simple;
+simpleCoeffs
+{
+    n (2 2 1);          // 2 cuts in x, 2 in y, 1 in z  ->  2 x 2 x 1 = 4
+}
+```
+
+```{.cpp filename="system/decomposeParDict (hierarchical)"}
+numberOfSubdomains 4;
+method hierarchical;
+hierarchicalCoeffs
+{
+    n     (2 2 1);      // same 4-way split ...
+    order xyz;          // ... decomposed in x first, then y, then z
+}
+```
+
+**Viewing without reconstructing.** You need not reconstruct to look at results:
+ParaView opens a decomposed case directly (tick **Decomposed Case** in the reader), and
+most `postProcess` functions run in parallel too
+(e.g.\ `simpleFoam -postProcess -parallel -func ...`).
+
+::: {.callout-important}
+## Do not over-decompose
+Very small subdomains spend more time communicating across their boundaries than
+computing inside them, so past a point adding cores makes the run *slower*. Keep on the
+order of $5\times10^{4}$ cells per core, and decompose for that target rather than for
+every core you can grab.
+:::
+
+## References
+
+The `decomposeParDict` keywords and the full set of decomposition methods are documented
+in the OpenFOAM User Guide [@openfoamUserGuide].
+
+::: {#refs}
+:::

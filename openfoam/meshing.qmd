@@ -1,0 +1,204 @@
+---
+title: "Meshing in OpenFOAM: blockMesh and snappyHexMesh"
+subtitle: "How the two native meshers work, and where to learn them"
+author: "MECH 501/600 — Computational Turbulence"
+date: last-modified
+---
+
+::: {.callout-note}
+## What this page is about
+
+OpenFOAM ships with two mesh generators, and the project expects you to build and
+justify your own mesh. This page explains **how each one works conceptually** — what
+it takes as input, what it produces, and when to reach for it — so the dictionary
+files stop looking like magic. It is not a click-by-click tutorial; for that, follow
+the curated resources at the end. For *why* mesh quality matters and how to check it,
+see the [tips and tricks](tips-and-tricks.qmd) page; for running a case on the mesh
+you build, the [OpenFOAM how-to](how-to.qmd).
+:::
+
+## Two ways to make a mesh
+
+Both meshers produce the same thing — a `constant/polyMesh` of finite volumes — but
+they get there from opposite directions:
+
+| | `blockMesh` | `snappyHexMesh` |
+|---|---|---|
+| Idea | you **build** the mesh from hand-defined blocks | it **carves** a mesh out of a background grid to fit a surface |
+| Input | a text file of vertices and blocks | a background mesh + a triangulated surface (STL/OBJ) |
+| Best for | simple, parametric, structured domains | complex CAD geometry |
+| Cell type | pure hexahedra | hex-dominant (hex + split-hex + polyhedra near the surface) |
+| Effort | tedious for complex shapes, but total control | automated, but quality needs tuning |
+
+In practice you often use **both**: `blockMesh` makes the background box that
+`snappyHexMesh` then carves. Pick the simplest tool that captures your geometry and
+its boundary layers.
+
+## blockMesh — building a mesh from blocks
+
+`blockMesh` divides the domain into one or more **hexahedral blocks**. You give it the
+corner points (vertices) of each block, how many cells to put along each edge, and how
+to grade (stretch) them; it fills every block with structured hex cells and builds the
+boundary patches from the block faces. Everything lives in one dictionary:
+
+```{.cpp filename="system/blockMeshDict"}
+scale   0.001;                 // all coordinates below are in mm
+
+vertices
+(
+    (0 0 0) (1 0 0) (1 1 0) (0 1 0)        // 0–3  (back face,  z = 0)
+    (0 0 1) (1 0 1) (1 1 1) (0 1 1)        // 4–7  (front face, z = 1)
+);
+
+blocks
+(
+    // hex of the 8 vertices,  cell counts (x y z),  grading (expansion ratios)
+    hex (0 1 2 3 4 5 6 7) (40 40 1) simpleGrading (1 1 1)
+);
+
+edges ( );                      // arcs / splines for curved edges go here
+
+boundary
+(
+    movingWall { type wall;  faces ((3 7 6 2)); }
+    fixedWalls { type wall;  faces ((0 4 7 3) (2 6 5 1) (1 5 4 0)); }
+    frontAndBack { type empty; faces ((0 3 2 1) (4 5 6 7)); }   // 2-D: empty
+);
+
+mergePatchPairs ( );            // stitch block faces together for multi-block meshes
+```
+
+- **Vertices** are numbered in the order listed; a block references its 8 corners by
+  those numbers, in a fixed right-handed order.
+- **Cell counts** set resolution; **`simpleGrading (gx gy gz)`** stretches cells toward
+  a face — essential for clustering cells in the boundary layer (e.g. `simpleGrading
+  (1 1 20)` puts 20× finer cells at one wall to control $y^+$).
+- **`edges`** turn straight block edges into arcs or splines for curved geometry.
+- **Patch `type`** matters: `wall` (for wall functions and $y^+$), `patch`
+  (inlet/outlet), `empty` (the front/back of a 2-D case), `symmetry`, etc.
+- Multi-block meshes stitch several blocks together (shared faces or
+  `mergePatchPairs`) to mesh L-shapes, steps and simple curved ducts.
+
+```bash
+blockMesh        # reads system/blockMeshDict -> constant/polyMesh
+checkMesh        # should end with "Mesh OK."
+```
+
+::: {.callout-tip}
+## Strengths and limits
+`blockMesh` gives **pure-hex, high-quality, perfectly controlled** meshes and is ideal
+for the canonical validation cases (flat plate, channel, backward-facing step,
+periodic hills). The catch: you define it **by hand**, so anything beyond a few blocks
+becomes painful. Once the geometry gets complicated, switch to `snappyHexMesh`.
+:::
+
+## snappyHexMesh — carving a mesh around a surface
+
+`snappyHexMesh` starts from a **background hex mesh** (made with `blockMesh`) that fully
+encloses your geometry, plus a **triangulated surface** of that geometry (an `.stl` or
+`.obj` from CAD). It then runs up to three stages, each controlled by its own block in
+`system/snappyHexMeshDict`:
+
+1. **Castellation** — refine cells near the surface and along feature edges, then delete
+   the cells on the wrong side of the surface, leaving a "castellated" (stair-stepped)
+   mesh. Controlled by `castellatedMeshControls` (refinement levels on surfaces and in
+   regions, feature edges, and `locationInMesh` — the point that marks which side to
+   keep).
+2. **Snapping** — move the stair-step boundary points onto the actual surface so the mesh
+   conforms to the geometry (`snapControls`).
+3. **Layer addition** — insert prismatic **boundary-layer cells** at the walls so you can
+   hit your target $y^+$ (`addLayersControls`). This stage is the finicky one.
+
+```{.cpp filename="system/snappyHexMeshDict (skeleton)"}
+castellatedMesh true;   snap true;   addLayers true;   // run which stages
+
+geometry
+{
+    body.stl { type triSurfaceMesh; name body; }        // your CAD surface
+    refineBox { type searchableBox; min (-1 -1 -1); max (2 1 1); }
+}
+
+castellatedMeshControls
+{
+    maxGlobalCells      2000000;
+    nCellsBetweenLevels 3;
+    features ( { file "body.eMesh"; level 2; } );        // sharp edges
+    refinementSurfaces { body { level (2 3); } }          // (min max) refinement
+    refinementRegions  { refineBox { mode inside; levels ((1e15 2)); } }
+    locationInMesh (0.5 0.001 0.001);                     // a point INSIDE the fluid
+}
+
+snapControls       { nSmoothPatch 3; tolerance 2.0; nSolveIter 30; nFeatureSnapIter 10; }
+
+addLayersControls
+{
+    relativeSizes true;
+    layers { body { nSurfaceLayers 5; } }                 // 5 prism layers on the wall
+    expansionRatio 1.2;   finalLayerThickness 0.5;   minThickness 0.1;
+}
+
+meshQualityControls { #include "meshQualityDict" }        // keep skewness/non-orth in check
+```
+
+The usual command sequence:
+
+```bash
+surfaceFeatures      # extract sharp edges (body.eMesh) from the STL  (ESI: surfaceFeatures)
+blockMesh            # the background box that encloses the geometry
+snappyHexMesh -overwrite
+checkMesh
+```
+
+::: {.callout-tip}
+## Build it in stages, and look at each one
+Run with `snap false; addLayers false;` first and inspect the **castellated** mesh in
+ParaView; then enable `snap`; then enable `addLayers` last. Debugging all three stages
+at once is the fastest way to get lost. Layer addition is where most people struggle —
+if layers refuse to grow, coarsen the surface refinement, relax `minThickness`, or
+improve the local mesh quality before trying again.
+:::
+
+::: {.callout-warning}
+## `locationInMesh` must be in the fluid
+The single most common snappy mistake: `locationInMesh` points to a cell that gets
+deleted (outside the fluid region), and you end up with an empty or inside-out mesh.
+Pick a point you are sure sits in the flow domain.
+:::
+
+## Which one for your project case?
+
+- **Simple / structured geometry** (flat plate, channel, step, periodic hills, a 2-D
+  airfoil C-grid): use **`blockMesh`**. You get a clean hex mesh and full control of the
+  near-wall spacing — ideal for a convincing grid-independence study.
+- **Complex geometry from CAD** (the Ahmed body, a real duct, an immersed object): use
+  **`snappyHexMesh`** with a `blockMesh` background box and an STL surface.
+
+Either way, the mesh is only done when `checkMesh` is happy and your $y^+$ is consistent
+with your wall treatment — see the [mesh-quality tips](tips-and-tricks.qmd) and the
+verification requirements in the project description.
+
+## Where to learn them (recommended resources)
+
+Ranked for this course:
+
+- **The official tutorial cases** — your best templates. `cavity` and `pitzDaily`
+  (`$FOAM_TUTORIALS/incompressible`) for `blockMesh`; the **`motorBike`** case
+  (`$FOAM_TUTORIALS/incompressible/simpleFoam/motorBike`) is the canonical
+  `snappyHexMesh` example (castellation → snapping → layers around an STL).
+- **OpenFOAM Basic Training** (B. Haddadi / J. Nagy, TU Wien) — a free, step-by-step PDF
+  with cases that cover both meshers cleanly:
+  [download (TU Wien repository)](https://repositum.tuwien.at/handle/20.500.12708/16579).
+- **József Nagy's video tutorials** — slow, beginner-friendly screencasts, including
+  dedicated blockMesh and snappyHexMesh videos:
+  [index on the OpenFOAM wiki](https://wiki.openfoam.com/Tutorials/JozsefsYouTubeVideoTutorials).
+- **Wolf Dynamics meshing modules** (J. Guerrero) — in-depth free PDFs + cases on
+  multi-block `blockMesh` and `snappyHexMesh` refinement/layer control:
+  [wolfdynamics.com/training.html](http://www.wolfdynamics.com/training.html).
+- **Reference docs** — the [User Guide mesh-generation section](https://doc.cfd.direct/openfoam/user-guide-v13/mesh)
+  and the [OpenFOAM wiki Meshing hub](https://wiki.openfoam.com/Meshing) for every
+  dictionary keyword.
+
+## References
+
+::: {#refs}
+:::
