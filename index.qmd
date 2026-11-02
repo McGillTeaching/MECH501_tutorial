@@ -93,6 +93,7 @@ setup to post-processing — no prior CFD-software experience assumed.
 | 2a | [Two-point correlations & length scales](tutorials/assignment-02-correlations.qmd) | **5 October 2026** |
 | 2b | [Do your own OpenFOAM simulation](tutorials/assignment-02b-openfoam.qmd) | **5 October 2026** |
 | 3, Q3 | [OpenFOAM: model comparison and wall treatment](tutorials/assignment-03-openfoam.qmd) | **30 October 2026** |
+| 4, Q3–Q4 | [LES guide: filtering DNS and the backward-facing step](tutorials/assignment-04-les.qmd) | See assignment PDF |
 
 : {.striped tbl-colwidths="[8,62,30]"}
 
