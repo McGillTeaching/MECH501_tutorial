@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="380" viewBox="0 0 1000 380" role="img" aria-labelledby="title desc">
+<title id="title">LES of the backward-facing step: periodic precursor and mapped inlet</title>
+<desc id="desc">A periodic precursor channel of height h and length 5h sits in the same mesh as the step domain but is not connected to it. A driving force holds the bulk velocity, and flow leaving the precursor re-enters at its inlet. At every time step, velocity and eddy viscosity on a sampling plane inside the precursor are copied to the inlet of the step domain, 6h upstream of the step. The lower wall drops by h at x equals zero and the outlet lies 32h downstream. Both parts are periodic in the spanwise direction with a span of pi h over 2.</desc>
+<defs><marker id="arrow4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#326b94"/></marker></defs>
+<rect width="1000" height="380" rx="10" fill="#fff"/>
+<g font-family="Arial, sans-serif" font-size="17" fill="#202b35">
+<text x="30" y="34" font-weight="bold">Precursor channel (periodic in x)</text>
+<text x="400" y="34" font-weight="bold">Step domain</text>
+<rect x="40" y="110" width="220" height="95" fill="#eaf1f6"/>
+<path d="M40 110H260 M40 205H260" stroke="#202b35" stroke-width="4"/>
+<path d="M40 111V204 M260 111V204" stroke="#8b98a3" stroke-dasharray="4 4"/>
+<path d="M52 170H122" stroke="#326b94" stroke-width="2.5" marker-end="url(#arrow4)"/>
+<text x="50" y="160" font-size="14">Driving force</text>
+<path d="M170 112V203" stroke="#ed1b2f" stroke-width="2.5" stroke-dasharray="6 4"/>
+<text x="118" y="96" font-size="14" fill="#ed1b2f">Sampling plane</text>
+<path d="M250 212V240H50V212" fill="none" stroke="#326b94" stroke-width="2" marker-end="url(#arrow4)"/>
+<text x="50" y="264" font-size="15">Outflow re-enters at the inlet</text>
+<text x="50" y="290" font-size="15">Length 5h, height h, 52 500 cells</text>
+<path d="M176 157H394" stroke="#326b94" stroke-width="2.5" stroke-dasharray="8 5" marker-end="url(#arrow4)"/>
+<text x="276" y="142" font-size="15">Mapped inlet</text>
+<text x="262" y="182" font-size="14">U and ν<tspan baseline-shift="sub" font-size="10">t</tspan> every step</text>
+<path d="M400 110H945 M400 205H540V300H945" stroke="#202b35" stroke-width="4" fill="none"/>
+<path d="M400 111V204 M945 111V299" stroke="#8b98a3" stroke-dasharray="4 4"/>
+<path d="M430 192H500" stroke="#326b94" stroke-width="2" marker-end="url(#arrow4)"/>
+<text x="402" y="96" font-size="15">Inlet: H = h</text>
+<text x="690" y="96" font-size="15">Upper wall: y = h (no-slip)</text>
+<text x="548" y="258" font-size="15">Step h</text>
+<text x="518" y="334" font-size="15">x = 0</text>
+<path d="M404 224H536" stroke="#8b98a3" stroke-width="1.5" marker-start="url(#arrow4)" marker-end="url(#arrow4)"/>
+<text x="461" y="245" font-size="15">6h</text>
+<text x="640" y="290" font-size="15">Lower wall: y = −h (no-slip)</text>
+<path d="M546 314H939" stroke="#8b98a3" stroke-width="1.5" marker-start="url(#arrow4)" marker-end="url(#arrow4)"/>
+<text x="726" y="336" font-size="15">32h</text>
+<text x="880" y="150" font-size="15">Outlet</text>
+<text x="880" y="172" font-size="14">p = 0</text>
+<text x="30" y="366" font-size="15">Both parts belong to one mesh but are not connected; both are periodic in z with span πh/2. Schematic, not to scale.</text>
+</g>
+</svg>
